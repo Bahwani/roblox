@@ -36,7 +36,7 @@ borderFrame.Size = UDim2.new(0, 56, 0, 56) -- lebih besar sedikit dari miniFrame
 borderFrame.Position = UDim2.new(0.5, -28, 0.5, -28)
 borderFrame.BackgroundColor3 = Color3.new(1, 0, 0) -- warna awal merah
 borderFrame.BorderSizePixel = 0
-borderFrame.Parent = borderFrame
+borderFrame.Parent = miniFrame
 borderFrame.Visible = false
 
 local borderCorner = Instance.new("UICorner")
