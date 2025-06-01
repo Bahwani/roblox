@@ -41,7 +41,7 @@ borderFrame.Visible = false
 
 local borderCorner = Instance.new("UICorner")
 borderCorner.CornerRadius = UDim.new(1, 0)
-borderCorner.Parent = miniFrame
+borderCorner.Parent = borderFrame
 
 -- ImageButton miniFrame (lingkaran dalam)
 local miniFrame = Instance.new("ImageButton")
