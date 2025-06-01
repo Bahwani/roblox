@@ -11,10 +11,10 @@ frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Parent = gui
 frame.Active = true
-frame.Draggable = true  -- Biar bisa drag
+frame.Draggable = true
 
--- Frame kecil (minimized)
-local miniFrame = Instance.new("Frame")
+-- Frame kecil (minimized) jadi TextButton agar bisa klik
+local miniFrame = Instance.new("TextButton")
 miniFrame.Size = UDim2.new(0, 50, 0, 30)
 miniFrame.Position = UDim2.new(0.5, -25, 0.5, -15)
 miniFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
@@ -22,7 +22,8 @@ miniFrame.BorderSizePixel = 0
 miniFrame.Parent = gui
 miniFrame.Visible = false
 miniFrame.Active = true
-miniFrame.Draggable = true  -- Bisa drag juga
+miniFrame.Draggable = true
+miniFrame.Text = ""  -- Supaya kosong
 
 -- Label di miniFrame sebagai logo kecil
 local miniLabel = Instance.new("TextLabel")
@@ -32,6 +33,7 @@ miniLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 miniLabel.Text = "P"
 miniLabel.TextScaled = true
 miniLabel.Parent = miniFrame
+miniLabel.Active = false  -- supaya event di miniFrame tetap bisa jalan
 
 -- Tombol Fly
 local flyButton = Instance.new("TextButton")
@@ -53,6 +55,7 @@ minimizeButton.Size = UDim2.new(0, 30, 0, 30)
 minimizeButton.Position = UDim2.new(1, -65, 0, 0)
 minimizeButton.Text = "-"
 minimizeButton.Parent = frame
+minimizeButton.Active = true
 
 -- Tombol Close
 local closeButton = Instance.new("TextButton")
@@ -60,12 +63,13 @@ closeButton.Size = UDim2.new(0, 30, 0, 30)
 closeButton.Position = UDim2.new(1, -35, 0, 0)
 closeButton.Text = "X"
 closeButton.Parent = frame
+closeButton.Active = true
 
 -- Title Label (opsional)
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -70, 0, 30)
 title.Position = UDim2.new(0, 5, 0, 0)
-title.Text = "My Cheat Menu"
+title.Text = "List Menu"
 title.BackgroundTransparency = 1
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
