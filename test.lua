@@ -5,8 +5,8 @@ gui.Parent = game.CoreGui
 
 -- Frame utama
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 200, 0, 160) -- tambah tinggi biar muat tombol tambahan
-frame.Position = UDim2.new(0.5, -100, 0.5, -80)
+frame.Size = UDim2.new(0, 200, 0, 150)
+frame.Position = UDim2.new(0.5, -100, 0.5, -75)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Parent = gui
@@ -44,7 +44,7 @@ flyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 flyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 flyButton.Parent = frame
 
--- Tombol Speed Boost Toggle
+-- Tombol Speed Toggle
 local speedButton = Instance.new("TextButton")
 speedButton.Size = UDim2.new(1, -10, 0, 30)
 speedButton.Position = UDim2.new(0, 5, 0, 75)
@@ -91,95 +91,98 @@ miniFrame.MouseButton1Click:Connect(function()
     frame.Visible = true
 end)
 
--- Fly dan Speed Logic
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
+
+local flyEnabled = false
+local flyConnection = nil
+
+local speedEnabled = false
+local speedConnection = nil
+
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
 
-local flyEnabled = false
-local speedEnabled = false
-local flyBodyVelocity = nil
-
-local normalWalkSpeed = humanoid.WalkSpeed
-local boostedWalkSpeed = normalWalkSpeed * 2.5 -- kecepatan jalan saat speed boost
-
+-- Fungsi Fly versi lama kamu
 local function toggleFly()
     flyEnabled = not flyEnabled
     flyButton.Text = flyEnabled and "Fly: ON" or "Fly: OFF"
 
+    if flyConnection then
+        flyConnection:Disconnect()
+        flyConnection = nil
+    end
+
     if flyEnabled then
-        -- Buat BodyVelocity untuk terbang
-        flyBodyVelocity = Instance.new("BodyVelocity")
-        flyBodyVelocity.Velocity = Vector3.new(0, 0, 0)
-        flyBodyVelocity.MaxForce = Vector3.new(math.huge, math.huge, math.huge)
-        flyBodyVelocity.P = 1250
-        flyBodyVelocity.Parent = humanoidRootPart
-    else
-        if flyBodyVelocity then
-            flyBodyVelocity:Destroy()
-            flyBodyVelocity = nil
-        end
-        -- Reset kecepatan berjalan ke normal jika speed tidak aktif
-        if not speedEnabled then
-            humanoid.WalkSpeed = normalWalkSpeed
-        end
+        flyConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+            if gameProcessed then return end
+            if input.KeyCode == Enum.KeyCode.Space then
+                if humanoid and humanoidRootPart then
+                    humanoidRootPart.Velocity = Vector3.new(0, 50, 0)
+                end
+            end
+        end)
     end
 end
 
+flyButton.MouseButton1Click:Connect(toggleFly)
+
+-- Fungsi Speed untuk jalan cepat
 local function toggleSpeed()
     speedEnabled = not speedEnabled
     speedButton.Text = speedEnabled and "Speed: ON" or "Speed: OFF"
 
-    if speedEnabled then
-        humanoid.WalkSpeed = boostedWalkSpeed
-    else
-        if not flyEnabled then
-            humanoid.WalkSpeed = normalWalkSpeed
+    if speedConnection then
+        speedConnection:Disconnect()
+        speedConnection = nil
+        -- Reset kecepatan normal
+        if humanoid then
+            humanoid.WalkSpeed = 16
         end
+    end
+
+    if speedEnabled then
+        -- Set kecepatan jalan cepat
+        if humanoid then
+            humanoid.WalkSpeed = 32 -- bisa ubah sesuai kebutuhan
+        end
+
+        -- Bisa juga dipasang event untuk cek input lain kalau mau
+        -- tapi ini cukup langsung set WalkSpeed
     end
 end
 
--- Update gerakan saat fly aktif
-game:GetService("RunService").RenderStepped:Connect(function()
-    if flyEnabled and flyBodyVelocity then
-        local moveDirection = humanoid.MoveDirection
-        local speed = 50
-        -- Tambah gerakan vertikal dengan tombol space
-        if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
-            moveDirection = moveDirection + Vector3.new(0, 1, 0)
-        end
-        -- Tambah gerakan turun dengan tombol left shift
-        if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then
-            moveDirection = moveDirection + Vector3.new(0, -1, 0)
-        end
-        flyBodyVelocity.Velocity = moveDirection.Unit * speed
-    end
-end)
-
--- Tombol toggle
-flyButton.MouseButton1Click:Connect(toggleFly)
 speedButton.MouseButton1Click:Connect(toggleSpeed)
 
--- Close GUI dan reset state
+-- Tutup GUI, matikan fly dan speed juga
 closeButton.MouseButton1Click:Connect(function()
-    -- Matikan fly jika aktif
     if flyEnabled then
         flyEnabled = false
         flyButton.Text = "Fly: OFF"
-        if flyBodyVelocity then
-            flyBodyVelocity:Destroy()
-            flyBodyVelocity = nil
+        if flyConnection then
+            flyConnection:Disconnect()
+            flyConnection = nil
+        end
+        -- Reset velocity supaya karakter jatuh normal
+        if humanoidRootPart then
+            humanoidRootPart.Velocity = Vector3.new(0, 0, 0)
         end
     end
 
-    -- Reset kecepatan jalan jika speed aktif
     if speedEnabled then
         speedEnabled = false
         speedButton.Text = "Speed: OFF"
-        humanoid.WalkSpeed = normalWalkSpeed
+        if speedConnection then
+            speedConnection:Disconnect()
+            speedConnection = nil
+        end
+        if humanoid then
+            humanoid.WalkSpeed = 16
+        end
     end
 
     gui:Destroy()
