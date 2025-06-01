@@ -3,7 +3,7 @@ local gui = Instance.new("ScreenGui")
 gui.Name = "PetoGacorrawr"
 gui.Parent = game.CoreGui
 
--- Frame utama (maximized)
+-- Frame utama
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 200, 0, 120)
 frame.Position = UDim2.new(0.5, -100, 0.5, -60)
@@ -13,7 +13,7 @@ frame.Parent = gui
 frame.Active = true
 frame.Draggable = true
 
--- Frame kecil (minimized) jadi TextButton agar bisa klik
+-- Frame kecil (minimized)
 local miniFrame = Instance.new("TextButton")
 miniFrame.Size = UDim2.new(0, 50, 0, 30)
 miniFrame.Position = UDim2.new(0.5, -25, 0.5, -15)
@@ -23,9 +23,9 @@ miniFrame.Parent = gui
 miniFrame.Visible = false
 miniFrame.Active = true
 miniFrame.Draggable = true
-miniFrame.Text = ""  -- Supaya kosong
+miniFrame.Text = ""
 
--- Label di miniFrame sebagai logo kecil
+-- Label logo kecil di miniFrame
 local miniLabel = Instance.new("TextLabel")
 miniLabel.Size = UDim2.new(1, 0, 1, 0)
 miniLabel.BackgroundTransparency = 1
@@ -33,48 +33,16 @@ miniLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 miniLabel.Text = "P"
 miniLabel.TextScaled = true
 miniLabel.Parent = miniFrame
-miniLabel.Active = false  -- supaya event di miniFrame tetap bisa jalan
+miniLabel.Active = false
 
--- Tombol Fly Toggle (ON/OFF)
+-- Tombol Fly Toggle
 local flyButton = Instance.new("TextButton")
 flyButton.Size = UDim2.new(1, -10, 0, 30)
 flyButton.Position = UDim2.new(0, 5, 0, 35)
-flyButton.Text = "Terbang: OFF"
+flyButton.Text = "Fly: OFF"
 flyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 flyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 flyButton.Parent = frame
-
-local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
-local player = Players.LocalPlayer
-
-local flyEnabled = false
-local flyConnection -- Untuk menyimpan koneksi agar bisa di-disconnect
-
-flyButton.MouseButton1Click:Connect(function()
-    flyEnabled = not flyEnabled
-    flyButton.Text = flyEnabled and "Terbang: ON" or "Terbang: OFF"
-    
-    -- Hapus koneksi lama jika ada
-    if flyConnection then
-        flyConnection:Disconnect()
-        flyConnection = nil
-    end
-
-    if flyEnabled then
-        flyConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
-            if gameProcessed then return end
-            if input.KeyCode == Enum.KeyCode.Space then
-                local character = player.Character or player.CharacterAdded:Wait()
-                local hum = character:FindFirstChildOfClass("Humanoid")
-                local root = character:FindFirstChild("HumanoidRootPart")
-                if hum and root then
-                    root.Velocity = Vector3.new(0, 50, 0) -- Dorongan ke atas
-                end
-            end
-        end)
-    end
-end)
 
 -- Tombol Minimize
 local minimizeButton = Instance.new("TextButton")
@@ -92,7 +60,7 @@ closeButton.Text = "X"
 closeButton.Parent = frame
 closeButton.Active = true
 
--- Title Label (opsional)
+-- Label Judul
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -70, 0, 30)
 title.Position = UDim2.new(0, 5, 0, 0)
@@ -102,22 +70,60 @@ title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = frame
 
--- Logic minimize / maximize
+-- Minimalkan GUI
 minimizeButton.MouseButton1Click:Connect(function()
     frame.Visible = false
     miniFrame.Visible = true
 end)
 
+-- Maksimalkan GUI
 miniFrame.MouseButton1Click:Connect(function()
     miniFrame.Visible = false
     frame.Visible = true
 end)
 
--- Close logic
+-- Tutup GUI
 closeButton.MouseButton1Click:Connect(function()
     if flyConnection then
         flyConnection:Disconnect()
         flyConnection = nil
     end
+    if flyBodyVelocity then
+        flyBodyVelocity:Destroy()
+        flyBodyVelocity = nil
+    end
     gui:Destroy()
 end)
+
+-- Fly Logic
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+local flyEnabled = false
+local flyBodyVelocity = nil
+
+local function toggleFly()
+    flyEnabled = not flyEnabled
+    flyButton.Text = flyEnabled and "Fly: ON" or "Fly: OFF"
+
+    if flyEnabled then
+        -- Tambahkan BodyVelocity ke HRP
+        flyBodyVelocity = Instance.new("BodyVelocity")
+        flyBodyVelocity.Velocity = Vector3.new(0, 50, 0)
+        flyBodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+        flyBodyVelocity.P = 1250
+        flyBodyVelocity.Parent = humanoidRootPart
+    else
+        -- Hapus BodyVelocity
+        if flyBodyVelocity then
+            flyBodyVelocity:Destroy()
+            flyBodyVelocity = nil
+        end
+    end
+end
+
+-- Tombol Fly diklik
+flyButton.MouseButton1Click:Connect(toggleFly)
