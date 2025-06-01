@@ -84,14 +84,28 @@ end)
 
 -- Tutup GUI
 closeButton.MouseButton1Click:Connect(function()
-    if flyConnection then
-        flyConnection:Disconnect()
-        flyConnection = nil
+    -- Matikan fly jika masih aktif
+    if flyEnabled then
+        flyEnabled = false
+        flyButton.Text = "Terbang: OFF"
+
+        -- Hentikan koneksi fly
+        if flyConnection then
+            flyConnection:Disconnect()
+            flyConnection = nil
+        end
+
+        -- Hapus BodyVelocity jika ada
+        local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+        if root then
+            local existing = root:FindFirstChild("FlyVelocity")
+            if existing then
+                existing:Destroy()
+            end
+        end
     end
-    if flyBodyVelocity then
-        flyBodyVelocity:Destroy()
-        flyBodyVelocity = nil
-    end
+
+    -- Hancurkan GUI
     gui:Destroy()
 end)
 
