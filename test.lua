@@ -32,12 +32,13 @@ frame.Draggable = true
 
 -- Tambahan: Border frame untuk miniFrame (lingkaran luar)
 local borderFrame = Instance.new("Frame")
-borderFrame.Size = UDim2.new(0, 56, 0, 56) -- lebih besar sedikit dari miniFrame (50x50)
-borderFrame.Position = UDim2.new(0.5, -28, 0.5, -28)
+borderFrame.Size = UDim2.new(1, 6, 1, 6) -- 6 piksel lebih besar dari miniFrame
+borderFrame.Position = UDim2.new(0, -3, 0, -3) -- geser keluar 3 piksel di setiap arah
 borderFrame.BackgroundColor3 = Color3.new(1, 0, 0) -- warna awal merah
 borderFrame.BorderSizePixel = 0
 borderFrame.Parent = miniFrame
 borderFrame.Visible = false
+borderFrame.ZIndex = miniFrame.ZIndex - 1 -- pastikan ada di belakang logo
 
 local borderCorner = Instance.new("UICorner")
 borderCorner.CornerRadius = UDim.new(1, 0)
