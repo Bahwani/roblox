@@ -30,6 +30,20 @@ frame.Parent = gui
 frame.Active = true
 frame.Draggable = true
 
+-- Tambahan: Border frame untuk miniFrame (lingkaran luar)
+local borderFrame = Instance.new("Frame")
+borderFrame.Size = UDim2.new(0, 56, 0, 56) -- lebih besar sedikit dari miniFrame (50x50)
+borderFrame.Position = UDim2.new(0.5, -28, 0.5, -28)
+borderFrame.BackgroundColor3 = Color3.new(1, 0, 0) -- warna awal merah
+borderFrame.BorderSizePixel = 0
+borderFrame.Parent = gui
+borderFrame.Visible = false
+
+local borderCorner = Instance.new("UICorner")
+borderCorner.CornerRadius = UDim.new(1, 0)
+borderCorner.Parent = borderFrame
+
+-- ImageButton miniFrame (lingkaran dalam)
 local miniFrame = Instance.new("ImageButton")
 miniFrame.Size = UDim2.new(0, 50, 0, 50)
 miniFrame.Position = UDim2.new(0.5, -25, 0.5, -25)
@@ -126,12 +140,14 @@ speedButton.MouseButton1Click:Connect(toggleSpeed)
 -- Minimalkan GUI
 minimizeButton.MouseButton1Click:Connect(function()
     frame.Visible = false
+    borderFrame.Visible = true
     miniFrame.Visible = true
 end)
 
 -- Maksimalkan GUI
 miniFrame.MouseButton1Click:Connect(function()
     miniFrame.Visible = false
+    borderFrame.Visible = false
     frame.Visible = true
 end)
 
@@ -156,4 +172,15 @@ closeButton.MouseButton1Click:Connect(function()
 
     -- Hancurkan GUI
     gui:Destroy()
+end)
+
+-- Animasi RGB untuk border frame
+spawn(function()
+    local hue = 0
+    while true do
+        hue = (hue + 1) % 360
+        local color = Color3.fromHSV(hue / 360, 1, 1)
+        borderFrame.BackgroundColor3 = color
+        wait(0.03)
+    end
 end)
