@@ -206,17 +206,13 @@ local mt = getrawmetatable(game)
 setreadonly(mt, false)
 local oldNamecall = mt.__namecall
 
-local function enableDebugHook()
-    mt.__namecall = function(self, ...)
-        local args = {...}
-        local method = getnamecallmethod()
-        if method == "FireServer" and tostring(self) == "Remote" then
-            if debugGui and debugGui.AddLog then
-                debugGui.AddLog("Remote FireServer called with args: " .. debugGui.ArgsToString(args))
-            end
-        end
-        return oldNamecall(self, ...)
+mt.__namecall = function(self, ...)
+    local args = {...}
+    local method = getnamecallmethod()
+    if debugEnabled and debugGui and (method == "FireServer" or method == "InvokeServer") then
+        debugGui.AddLog(method.." fired: "..tostring(self).." Args: "..debugGui.ArgsToString(args))
     end
+    return oldNamecall(self, ...)
 end
 
 local function disableDebugHook()
