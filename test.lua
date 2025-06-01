@@ -30,25 +30,12 @@ frame.Parent = gui
 frame.Active = true
 frame.Draggable = true
 
-local borderFrame = Instance.new("Frame")
-borderFrame.Size = UDim2.new(1, 6, 1, 6)
-borderFrame.Position = UDim2.new(0, -3, 0, -3)
-borderFrame.BackgroundColor3 = Color3.new(1, 0, 0)
-borderFrame.BorderSizePixel = 0
-borderFrame.Parent = miniFrame
-borderFrame.ZIndex = 6
-borderFrame.Visible = false
-
-local borderCorner = Instance.new("UICorner")
-borderCorner.CornerRadius = UDim.new(1, 0)
-borderCorner.Parent = borderFrame
-
--- ImageButton miniFrame (lingkaran dalam)
+-- Buat miniFrame dulu
 local miniFrame = Instance.new("ImageButton")
 miniFrame.Size = UDim2.new(0, 50, 0, 50)
 miniFrame.Position = UDim2.new(0.5, -25, 0.5, -25)
 miniFrame.BackgroundTransparency = 1
-miniFrame.Image = "rbxassetid://116056354483334" -- ganti URL sesuai gambar kamu
+miniFrame.Image = "rbxassetid://116056354483334" -- ganti sesuai gambar kamu
 miniFrame.Parent = gui
 miniFrame.Visible = false
 miniFrame.Active = true
@@ -57,6 +44,20 @@ miniFrame.ZIndex = 5
 
 local corner = Instance.new("UICorner", miniFrame)
 corner.CornerRadius = UDim.new(1, 0)
+
+-- Baru buat borderFrame dan masukkan ke dalam miniFrame
+local borderFrame = Instance.new("Frame")
+borderFrame.Size = UDim2.new(1, 6, 1, 6)
+borderFrame.Position = UDim2.new(0, -3, 0, -3)
+borderFrame.BackgroundColor3 = Color3.new(1, 0, 0)
+borderFrame.BorderSizePixel = 0
+borderFrame.ZIndex = 6
+borderFrame.Visible = false
+borderFrame.Parent = miniFrame
+
+local borderCorner = Instance.new("UICorner")
+borderCorner.CornerRadius = UDim.new(1, 0)
+borderCorner.Parent = borderFrame
 
 -- Tombol Fly Toggle
 local flyButton = Instance.new("TextButton")
