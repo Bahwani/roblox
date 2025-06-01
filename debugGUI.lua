@@ -1,7 +1,10 @@
+-- Ambil player
+local player = game.Players.LocalPlayer
+
 -- Buat ScreenGui
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "DebugLogGui"
-screenGui.Parent = game:GetService("CoreGui")
+screenGui.Parent = player:WaitForChild("PlayerGui") -- pakai PlayerGui agar lebih kompatibel
 
 -- Buat Frame untuk tempat log
 local frame = Instance.new("Frame")
@@ -27,6 +30,15 @@ local uiList = Instance.new("UIListLayout")
 uiList.SortOrder = Enum.SortOrder.LayoutOrder
 uiList.Parent = scrollFrame
 
+-- Fungsi untuk konversi tabel argumen ke string
+local function argsToString(args)
+    local parts = {}
+    for i, v in ipairs(args) do
+        parts[#parts + 1] = tostring(v)
+    end
+    return table.concat(parts, ", ")
+end
+
 -- Fungsi untuk menambahkan pesan ke log
 local function addLog(message)
     local textLabel = Instance.new("TextLabel")
@@ -46,19 +58,18 @@ local function addLog(message)
     scrollFrame.CanvasPosition = Vector2.new(0, uiList.AbsoluteContentSize.Y)
 end
 
--- Contoh penggunaan: tampilkan pesan debug
 addLog("Debug Log GUI ready!")
 
--- Contoh: hook remote call dan tampilkan log
+-- Hook remote call
 local mt = getrawmetatable(game)
 setreadonly(mt, false)
 local oldNamecall = mt.__namecall
 
-mt.__namecall = newcclosure(function(self, ...)
+mt.__namecall = function(self, ...)
     local args = {...}
     local method = getnamecallmethod()
     if method == "FireServer" then
-        addLog("Remote fired: "..tostring(self.Name).." Args: "..table.concat(table.map(args, tostring), ", "))
+        addLog("Remote fired: "..tostring(self.Name).." Args: "..argsToString(args))
     end
     return oldNamecall(self, ...)
-end)
+end
