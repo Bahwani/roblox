@@ -30,27 +30,15 @@ frame.Parent = gui
 frame.Active = true
 frame.Draggable = true
 
--- Frame kecil (minimized)
-local miniFrame = Instance.new("TextButton")
-miniFrame.Size = UDim2.new(0, 50, 0, 30)
-miniFrame.Position = UDim2.new(0.5, -25, 0.5, -15)
-miniFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-miniFrame.BorderSizePixel = 0
+local miniFrame = Instance.new("ImageButton")
+miniFrame.Size = UDim2.new(0, 50, 0, 50)
+miniFrame.Position = UDim2.new(0.5, -25, 0.5, -25)
+miniFrame.BackgroundTransparency = 1
+miniFrame.Image = "https://i.imgur.com/JRbf1rl.jpeg" -- ganti URL sesuai gambar kamu
 miniFrame.Parent = gui
-miniFrame.Visible = false
-miniFrame.Active = true
-miniFrame.Draggable = true
-miniFrame.Text = ""
 
--- Label logo kecil di miniFrame
-local miniLabel = Instance.new("TextLabel")
-miniLabel.Size = UDim2.new(1, 0, 1, 0)
-miniLabel.BackgroundTransparency = 1
-miniLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-miniLabel.Text = "P"
-miniLabel.TextScaled = true
-miniLabel.Parent = miniFrame
-miniLabel.Active = false
+local corner = Instance.new("UICorner", miniFrame)
+corner.CornerRadius = UDim.new(1, 0)
 
 -- Tombol Fly Toggle
 local flyButton = Instance.new("TextButton")
