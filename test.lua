@@ -40,7 +40,7 @@ miniFrame.Parent = gui
 miniFrame.Visible = false
 miniFrame.Active = true
 miniFrame.Draggable = true
-miniFrame.ZIndex = 5
+miniFrame.ZIndex = 6
 
 local corner = Instance.new("UICorner", miniFrame)
 corner.CornerRadius = UDim.new(1, 0)
@@ -51,7 +51,7 @@ borderFrame.Size = UDim2.new(1, 6, 1, 6)
 borderFrame.Position = UDim2.new(0, -3, 0, -3)
 borderFrame.BackgroundColor3 = Color3.new(1, 0, 0)
 borderFrame.BorderSizePixel = 0
-borderFrame.ZIndex = 6
+borderFrame.ZIndex = 5
 borderFrame.Visible = false
 borderFrame.Parent = miniFrame
 
