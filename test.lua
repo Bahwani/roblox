@@ -44,8 +44,13 @@ flyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 flyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 flyButton.Parent = frame
 
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+
 local flyEnabled = false
-local jumpConnection = nil
+local flyConnection -- Untuk menyimpan koneksi agar tidak duplikat
 
 local UserInputService = game:GetService("UserInputService")
 
@@ -63,19 +68,25 @@ end
 
 flyButton.MouseButton1Click:Connect(function()
     flyEnabled = not flyEnabled
+    flyButton.Text = flyEnabled and "Terbang: ON" or "Terbang: OFF"
+    
+    -- Hapus koneksi lama jika ada
+    if flyConnection then
+        flyConnection:Disconnect()
+        flyConnection = nil
+    end
+
     if flyEnabled then
-        flyButton.Text = "Fly ON"
-        -- Connect jump request jika belum terhubung
-        if not jumpConnection then
-            jumpConnection = UserInputService.JumpRequest:Connect(onJumpRequest)
-        end
-    else
-        flyButton.Text = "Fly OFF"
-        -- Disconnect jump request
-        if jumpConnection then
-            jumpConnection:Disconnect()
-            jumpConnection = nil
-        end
+        flyConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
+            if gameProcessed then return end
+            if input.KeyCode == Enum.KeyCode.Space then
+                local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
+                local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                if hum and root then
+                    root.Velocity = Vector3.new(0, 50, 0) -- Dorongan ke atas
+                end
+            end
+        end)
     end
 end)
 
