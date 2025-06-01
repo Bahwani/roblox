@@ -30,18 +30,20 @@ frame.Parent = gui
 frame.Active = true
 frame.Draggable = true
 
--- Tambahan: Border frame untuk miniFrame (lingkaran luar)
 local borderFrame = Instance.new("Frame")
-borderFrame.Size = UDim2.new(1, 6, 1, 6) -- 6 piksel lebih besar dari miniFrame
-borderFrame.Position = UDim2.new(0, -3, 0, -3) -- geser keluar 3 piksel di setiap arah
-borderFrame.BackgroundColor3 = Color3.new(1, 0, 0) -- warna awal merah
+borderFrame.Size = UDim2.new(1, 6, 1, 6)
+borderFrame.Position = UDim2.new(0, -3, 0, -3)
+borderFrame.BackgroundColor3 = Color3.new(1, 0, 0)
 borderFrame.BorderSizePixel = 0
 borderFrame.Parent = miniFrame
+borderFrame.ZIndex = 6
 borderFrame.Visible = false
 
 local borderCorner = Instance.new("UICorner")
 borderCorner.CornerRadius = UDim.new(1, 0)
 borderCorner.Parent = borderFrame
+
+miniFrame.ZIndex = 5
 
 -- ImageButton miniFrame (lingkaran dalam)
 local miniFrame = Instance.new("ImageButton")
