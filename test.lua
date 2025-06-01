@@ -34,7 +34,7 @@ local miniFrame = Instance.new("ImageButton")
 miniFrame.Size = UDim2.new(0, 50, 0, 50)
 miniFrame.Position = UDim2.new(0.5, -25, 0.5, -25)
 miniFrame.BackgroundTransparency = 1
-miniFrame.Image = "https://i.imgur.com/JRbf1rl.jpeg" -- ganti URL sesuai gambar kamu
+miniFrame.Image = "https://i.imgur.com/JRbf1rl.jpg" -- ganti URL sesuai gambar kamu
 miniFrame.Parent = gui
 
 local corner = Instance.new("UICorner", miniFrame)
