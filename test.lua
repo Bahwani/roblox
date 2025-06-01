@@ -37,11 +37,11 @@ borderFrame.Position = UDim2.new(0.5, -28, 0.5, -28)
 borderFrame.BackgroundColor3 = Color3.new(1, 0, 0) -- warna awal merah
 borderFrame.BorderSizePixel = 0
 borderFrame.Parent = miniFrame
-borderFrame.ZIndex = miniFrame.ZIndex - 1
+borderFrame.Visible = false
 
 local borderCorner = Instance.new("UICorner")
 borderCorner.CornerRadius = UDim.new(1, 0)
-borderCorner.Parent = borderFrame
+borderCorner.Parent = miniFrame
 
 -- ImageButton miniFrame (lingkaran dalam)
 local miniFrame = Instance.new("ImageButton")
