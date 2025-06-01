@@ -36,6 +36,9 @@ miniFrame.Position = UDim2.new(0.5, -25, 0.5, -25)
 miniFrame.BackgroundTransparency = 1
 miniFrame.Image = "rbxassetid://116056354483334" -- ganti URL sesuai gambar kamu
 miniFrame.Parent = gui
+miniFrame.Visible = false
+miniFrame.Active = true
+miniFrame.Draggable = true
 
 local corner = Instance.new("UICorner", miniFrame)
 corner.CornerRadius = UDim.new(1, 0)
