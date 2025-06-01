@@ -1,3 +1,14 @@
+-- Layanan Roblox
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local player = Players.LocalPlayer
+local character = player.Character or player.CharacterAdded:Wait()
+local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
+
+-- Variabel Fly
+local flyEnabled = false
+local flyBodyVelocity = nil
+
 -- Buat GUI utama
 local gui = Instance.new("ScreenGui")
 gui.Name = "PetoGacorrawr"
@@ -70,6 +81,29 @@ title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = frame
 
+-- Fungsi toggle fly
+local function toggleFly()
+    flyEnabled = not flyEnabled
+    flyButton.Text = flyEnabled and "Fly: ON" or "Fly: OFF"
+
+    if flyEnabled then
+        flyBodyVelocity = Instance.new("BodyVelocity")
+        flyBodyVelocity.Name = "FlyVelocity"
+        flyBodyVelocity.Velocity = Vector3.new(0, 50, 0)
+        flyBodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
+        flyBodyVelocity.P = 1250
+        flyBodyVelocity.Parent = humanoidRootPart
+    else
+        if flyBodyVelocity then
+            flyBodyVelocity:Destroy()
+            flyBodyVelocity = nil
+        end
+    end
+end
+
+-- Klik tombol Fly
+flyButton.MouseButton1Click:Connect(toggleFly)
+
 -- Minimalkan GUI
 minimizeButton.MouseButton1Click:Connect(function()
     frame.Visible = false
@@ -84,60 +118,16 @@ end)
 
 -- Tutup GUI
 closeButton.MouseButton1Click:Connect(function()
-    -- Matikan fly jika masih aktif
+    -- Jika fly masih aktif, matikan
     if flyEnabled then
         flyEnabled = false
-        flyButton.Text = "Terbang: OFF"
-
-        -- Hentikan koneksi fly
-        if flyConnection then
-            flyConnection:Disconnect()
-            flyConnection = nil
-        end
-
-        -- Hapus BodyVelocity jika ada
-        local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-        if root then
-            local existing = root:FindFirstChild("FlyVelocity")
-            if existing then
-                existing:Destroy()
-            end
+        flyButton.Text = "Fly: OFF"
+        if flyBodyVelocity then
+            flyBodyVelocity:Destroy()
+            flyBodyVelocity = nil
         end
     end
 
     -- Hancurkan GUI
     gui:Destroy()
 end)
-
--- Fly Logic
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
-
-local flyEnabled = false
-local flyBodyVelocity = nil
-
-local function toggleFly()
-    flyEnabled = not flyEnabled
-    flyButton.Text = flyEnabled and "Fly: ON" or "Fly: OFF"
-
-    if flyEnabled then
-        -- Tambahkan BodyVelocity ke HRP
-        flyBodyVelocity = Instance.new("BodyVelocity")
-        flyBodyVelocity.Velocity = Vector3.new(0, 50, 0)
-        flyBodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
-        flyBodyVelocity.P = 1250
-        flyBodyVelocity.Parent = humanoidRootPart
-    else
-        -- Hapus BodyVelocity
-        if flyBodyVelocity then
-            flyBodyVelocity:Destroy()
-            flyBodyVelocity = nil
-        end
-    end
-end
-
--- Tombol Fly diklik
-flyButton.MouseButton1Click:Connect(toggleFly)
