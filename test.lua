@@ -1,21 +1,43 @@
 -- Buat GUI utama
 local gui = Instance.new("ScreenGui")
-gui.Name = "MyCheatGui"
+gui.Name = "PetoGacorrawr"
 gui.Parent = game.CoreGui
 
--- Frame utama
+-- Frame utama (maximized)
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 200, 0, 120)
 frame.Position = UDim2.new(0.5, -100, 0.5, -60)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Parent = gui
+frame.Active = true
+frame.Draggable = true  -- Biar bisa drag
+
+-- Frame kecil (minimized)
+local miniFrame = Instance.new("Frame")
+miniFrame.Size = UDim2.new(0, 50, 0, 30)
+miniFrame.Position = UDim2.new(0.5, -25, 0.5, -15)
+miniFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+miniFrame.BorderSizePixel = 0
+miniFrame.Parent = gui
+miniFrame.Visible = false
+miniFrame.Active = true
+miniFrame.Draggable = true  -- Bisa drag juga
+
+-- Label di miniFrame sebagai logo kecil
+local miniLabel = Instance.new("TextLabel")
+miniLabel.Size = UDim2.new(1, 0, 1, 0)
+miniLabel.BackgroundTransparency = 1
+miniLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+miniLabel.Text = "P"
+miniLabel.TextScaled = true
+miniLabel.Parent = miniFrame
 
 -- Tombol Fly
 local flyButton = Instance.new("TextButton")
 flyButton.Size = UDim2.new(1, -10, 0, 30)
 flyButton.Position = UDim2.new(0, 5, 0, 35)
-flyButton.Text = "Fly"
+flyButton.Text = "Terbang"
 flyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 flyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 flyButton.Parent = frame
@@ -49,11 +71,15 @@ title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = frame
 
--- Minimize logic
-local isMinimized = false
+-- Logic minimize / maximize
 minimizeButton.MouseButton1Click:Connect(function()
-    isMinimized = not isMinimized
-    flyButton.Visible = not isMinimized
+    frame.Visible = false
+    miniFrame.Visible = true
+end)
+
+miniFrame.MouseButton1Click:Connect(function()
+    miniFrame.Visible = false
+    frame.Visible = true
 end)
 
 -- Close logic
