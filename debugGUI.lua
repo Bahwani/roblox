@@ -1,4 +1,3 @@
-sebelumnya kode yg ini bisa menghasilkan debug  nya
 -- Ambil player
 local player = game.Players.LocalPlayer
 
