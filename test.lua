@@ -38,7 +38,6 @@ borderFrame.BackgroundColor3 = Color3.new(1, 0, 0) -- warna awal merah
 borderFrame.BorderSizePixel = 0
 borderFrame.Parent = miniFrame
 borderFrame.Visible = false
-borderFrame.ZIndex = miniFrame.ZIndex - 1 -- pastikan ada di belakang logo
 
 local borderCorner = Instance.new("UICorner")
 borderCorner.CornerRadius = UDim.new(1, 0)
