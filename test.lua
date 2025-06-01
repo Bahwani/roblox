@@ -35,18 +35,48 @@ miniLabel.TextScaled = true
 miniLabel.Parent = miniFrame
 miniLabel.Active = false  -- supaya event di miniFrame tetap bisa jalan
 
--- Tombol Fly
+-- Tombol Fly Toggle (ON/OFF)
 local flyButton = Instance.new("TextButton")
 flyButton.Size = UDim2.new(1, -10, 0, 30)
 flyButton.Position = UDim2.new(0, 5, 0, 35)
-flyButton.Text = "Terbang"
+flyButton.Text = "Fly OFF"
 flyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 flyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 flyButton.Parent = frame
 
+local flyEnabled = false
+local jumpConnection = nil
+
+local UserInputService = game:GetService("UserInputService")
+
+local function onJumpRequest()
+    local player = game.Players.LocalPlayer
+    local character = player and player.Character
+    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
+    if humanoid then
+        -- Cek kalau bukan sedang jatuh bebas
+        if humanoid:GetState() ~= Enum.HumanoidStateType.Freefall then
+            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
+        end
+    end
+end
+
 flyButton.MouseButton1Click:Connect(function()
-    print("Fly activated!")
-    -- Tambahkan script fly di sini
+    flyEnabled = not flyEnabled
+    if flyEnabled then
+        flyButton.Text = "Fly ON"
+        -- Connect jump request jika belum terhubung
+        if not jumpConnection then
+            jumpConnection = UserInputService.JumpRequest:Connect(onJumpRequest)
+        end
+    else
+        flyButton.Text = "Fly OFF"
+        -- Disconnect jump request
+        if jumpConnection then
+            jumpConnection:Disconnect()
+            jumpConnection = nil
+        end
+    end
 end)
 
 -- Tombol Minimize
@@ -88,5 +118,10 @@ end)
 
 -- Close logic
 closeButton.MouseButton1Click:Connect(function()
+    -- Disconnect connection dulu kalau ada supaya gak nempel eventnya
+    if jumpConnection then
+        jumpConnection:Disconnect()
+        jumpConnection = nil
+    end
     gui:Destroy()
 end)
