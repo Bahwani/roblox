@@ -39,7 +39,7 @@ miniLabel.Active = false  -- supaya event di miniFrame tetap bisa jalan
 local flyButton = Instance.new("TextButton")
 flyButton.Size = UDim2.new(1, -10, 0, 30)
 flyButton.Position = UDim2.new(0, 5, 0, 35)
-flyButton.Text = "Fly OFF"
+flyButton.Text = "Terbang: OFF"
 flyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 flyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 flyButton.Parent = frame
@@ -47,24 +47,9 @@ flyButton.Parent = frame
 local UserInputService = game:GetService("UserInputService")
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
 
 local flyEnabled = false
-local flyConnection -- Untuk menyimpan koneksi agar tidak duplikat
-
-local UserInputService = game:GetService("UserInputService")
-
-local function onJumpRequest()
-    local player = game.Players.LocalPlayer
-    local character = player and player.Character
-    local humanoid = character and character:FindFirstChildOfClass("Humanoid")
-    if humanoid then
-        -- Cek kalau bukan sedang jatuh bebas
-        if humanoid:GetState() ~= Enum.HumanoidStateType.Freefall then
-            humanoid:ChangeState(Enum.HumanoidStateType.Jumping)
-        end
-    end
-end
+local flyConnection -- Untuk menyimpan koneksi agar bisa di-disconnect
 
 flyButton.MouseButton1Click:Connect(function()
     flyEnabled = not flyEnabled
@@ -80,8 +65,9 @@ flyButton.MouseButton1Click:Connect(function()
         flyConnection = UserInputService.InputBegan:Connect(function(input, gameProcessed)
             if gameProcessed then return end
             if input.KeyCode == Enum.KeyCode.Space then
-                local hum = player.Character and player.Character:FindFirstChildOfClass("Humanoid")
-                local root = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+                local character = player.Character or player.CharacterAdded:Wait()
+                local hum = character:FindFirstChildOfClass("Humanoid")
+                local root = character:FindFirstChild("HumanoidRootPart")
                 if hum and root then
                     root.Velocity = Vector3.new(0, 50, 0) -- Dorongan ke atas
                 end
@@ -129,10 +115,9 @@ end)
 
 -- Close logic
 closeButton.MouseButton1Click:Connect(function()
-    -- Disconnect connection dulu kalau ada supaya gak nempel eventnya
-    if jumpConnection then
-        jumpConnection:Disconnect()
-        jumpConnection = nil
+    if flyConnection then
+        flyConnection:Disconnect()
+        flyConnection = nil
     end
     gui:Destroy()
 end)
