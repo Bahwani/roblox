@@ -13,7 +13,7 @@ local flyBodyVelocity = nil
 -- Variabel Speed
 local speedEnabled = false
 local normalSpeed = 16
-local fastSpeed = 32
+local fastSpeed = 36
 
 -- Buat GUI utama
 local gui = Instance.new("ScreenGui")
@@ -90,7 +90,7 @@ closeButton.Active = true
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -70, 0, 30)
 title.Position = UDim2.new(0, 5, 0, 0)
-title.Text = "List Menu"
+title.Text = "PetoGacorrawr"
 title.BackgroundTransparency = 1
 title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
