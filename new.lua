@@ -109,8 +109,16 @@ local ProximityPromptService = game:GetService("ProximityPromptService")
 
 ProximityPromptService.PromptShown:Connect(function(prompt)
 	if instantEnabled then
-		prompt.HoldDuration = 0 -- langsung interaksi tanpa tahan
-		prompt.ClickablePrompt = true -- bisa langsung tap di HP
+		prompt.HoldDuration = 0
+
+		-- Hindari mengganggu tombol UI
+		local mousePos = UserInputService:GetMouseLocation()
+		if not (mousePos.X >= gui.AbsolutePosition.X and mousePos.X <= gui.AbsolutePosition.X + gui.AbsoluteSize.X and
+		        mousePos.Y >= gui.AbsolutePosition.Y and mousePos.Y <= gui.AbsolutePosition.Y + gui.AbsoluteSize.Y) then
+			prompt.ClickablePrompt = true
+		else
+			prompt.ClickablePrompt = false
+		end
 	end
 end)
 
@@ -197,6 +205,12 @@ closeButton.MouseButton1Click:Connect(function()
         speedButton.Text = "Speed: OFF"
         humanoid.WalkSpeed = normalSpeed
     end
+
+    -- Matikan Instant Interaction
+    if instantEnabled then
+        instantEnabled = false
+        instantInteractButton.Text = "Instant: OFF"
+    end	
 
     -- Hancurkan GUI
     gui:Destroy()
