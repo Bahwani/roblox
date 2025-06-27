@@ -110,15 +110,16 @@ local ProximityPromptService = game:GetService("ProximityPromptService")
 ProximityPromptService.PromptShown:Connect(function(prompt)
 	if instantEnabled then
 		task.spawn(function()
-			wait(0.1)
-			if prompt and prompt:IsDescendantOf(workspace) and prompt.Enabled then
-				prompt.HoldDuration = 0
-				prompt.ClickablePrompt = true
+			for i = 1, 5 do
+				if prompt and prompt:IsDescendantOf(workspace) and prompt.Enabled then
+					prompt.HoldDuration = 0
+					prompt.ClickablePrompt = true
+				end
+				wait(0.05) -- ulang beberapa kali untuk memastikan override berhasil
 			end
 		end)
 	end
 end)
-
 
 -- Tombol toggle Instant Interaction
 local instantInteractButton = Instance.new("TextButton")
