@@ -109,24 +109,16 @@ local ProximityPromptService = game:GetService("ProximityPromptService")
 
 ProximityPromptService.PromptShown:Connect(function(prompt)
 	if instantEnabled then
-		prompt.ClickablePrompt = true
+		prompt.HoldDuration = 0
 
-		local connection
-		local attemptCount = 0
-
-		connection = game:GetService("RunService").RenderStepped:Connect(function()
-			if not prompt:IsDescendantOf(workspace) or not prompt.Enabled then
-				if connection then connection:Disconnect() end
-				return
-			end
-
-			prompt.HoldDuration = 0
-			attemptCount += 1
-
-			if attemptCount >= 10 then -- lakukan 10 kali saja
-				if connection then connection:Disconnect() end
-			end
-		end)
+		-- Hindari mengganggu tombol UI
+		local mousePos = UserInputService:GetMouseLocation()
+		if not (mousePos.X >= gui.AbsolutePosition.X and mousePos.X <= gui.AbsolutePosition.X + gui.AbsoluteSize.X and
+		        mousePos.Y >= gui.AbsolutePosition.Y and mousePos.Y <= gui.AbsolutePosition.Y + gui.AbsoluteSize.Y) then
+			prompt.ClickablePrompt = true
+		else
+			prompt.ClickablePrompt = false
+		end
 	end
 end)
 
