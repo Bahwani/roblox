@@ -107,10 +107,10 @@ title.Parent = frame
 
 local ProximityPromptService = game:GetService("ProximityPromptService")
 
--- Ubah behavior ProximityPrompt saat toggle ON
 ProximityPromptService.PromptShown:Connect(function(prompt)
 	if instantEnabled then
 		prompt.HoldDuration = 0 -- langsung interaksi tanpa tahan
+		prompt.ClickablePrompt = true -- bisa langsung tap di HP
 	end
 end)
 
