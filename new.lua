@@ -106,36 +106,19 @@ title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = frame
 
 -- Tombol toggle Instant Interaction
+local instantInteractButton = Instance.new("TextButton")
+instantInteractButton.Size = UDim2.new(1, -10, 0, 30)
+instantInteractButton.Position = UDim2.new(0, 5, 0, 115)
 instantInteractButton.Text = "Instant: OFF"
+instantInteractButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+instantInteractButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+instantInteractButton.Parent = frame
+
+-- Event klik tombol untuk toggle ON/OFF
 instantInteractButton.MouseButton1Click:Connect(function()
     instantEnabled = not instantEnabled
     instantInteractButton.Text = instantEnabled and "Instant: ON" or "Instant: OFF"
 end)
-
--- Klik dua kali (misalnya ketuk cepat) untuk trigger
-instantInteractButton.MouseButton1Click:Connect(instantInteract)
-
--- Fungsi instant interact (khusus mobile)
-local function instantInteract()
-    if not instantEnabled then return end
-
-    local prompt = nil
-
-    -- Cari prompt terdekat dari karakter
-    for _, v in pairs(workspace:GetDescendants()) do
-        if v:IsA("ProximityPrompt") and v.Enabled then
-            local part = v.Parent:IsA("BasePart") and v.Parent or v.Parent:FindFirstChildWhichIsA("BasePart")
-            if part and (part.Position - humanoidRootPart.Position).Magnitude < 10 then
-                prompt = v
-                break
-            end
-        end
-    end
-
-    if prompt then
-        fireproximityprompt(prompt, 0) -- instan interact
-    end
-end
 
 -- Fungsi toggle fly
 local function toggleFly()
