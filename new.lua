@@ -105,6 +105,15 @@ title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.Parent = frame
 
+local ProximityPromptService = game:GetService("ProximityPromptService")
+
+-- Ubah behavior ProximityPrompt saat toggle ON
+ProximityPromptService.PromptShown:Connect(function(prompt)
+	if instantEnabled then
+		prompt.HoldDuration = 0 -- langsung interaksi tanpa tahan
+	end
+end)
+
 -- Tombol toggle Instant Interaction
 local instantInteractButton = Instance.new("TextButton")
 instantInteractButton.Size = UDim2.new(1, -10, 0, 30)
