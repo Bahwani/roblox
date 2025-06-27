@@ -109,13 +109,22 @@ local ProximityPromptService = game:GetService("ProximityPromptService")
 
 ProximityPromptService.PromptShown:Connect(function(prompt)
 	if instantEnabled then
-		task.spawn(function()
-			for i = 1, 5 do
-				if prompt and prompt:IsDescendantOf(workspace) and prompt.Enabled then
-					prompt.HoldDuration = 0
-					prompt.ClickablePrompt = true
-				end
-				wait(0.05) -- ulang beberapa kali untuk memastikan override berhasil
+		prompt.ClickablePrompt = true
+
+		local connection
+		local attemptCount = 0
+
+		connection = game:GetService("RunService").RenderStepped:Connect(function()
+			if not prompt:IsDescendantOf(workspace) or not prompt.Enabled then
+				if connection then connection:Disconnect() end
+				return
+			end
+
+			prompt.HoldDuration = 0
+			attemptCount += 1
+
+			if attemptCount >= 10 then -- lakukan 10 kali saja
+				if connection then connection:Disconnect() end
 			end
 		end)
 	end
