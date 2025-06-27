@@ -129,28 +129,6 @@ instantInteractButton.MouseButton1Click:Connect(function()
     instantInteractButton.Text = instantEnabled and "Instant: ON" or "Instant: OFF"
 end)
 
--- Fungsi instant interact (khusus mobile)
-local function instantInteract()
-    if not instantEnabled then return end
-
-    local prompt = nil
-
-    -- Cari prompt terdekat dari karakter
-    for _, v in pairs(workspace:GetDescendants()) do
-        if v:IsA("ProximityPrompt") and v.Enabled then
-            local part = v.Parent:IsA("BasePart") and v.Parent or v.Parent:FindFirstChildWhichIsA("BasePart")
-            if part and (part.Position - humanoidRootPart.Position).Magnitude < 10 then
-                prompt = v
-                break
-            end
-        end
-    end
-
-    if prompt then
-        fireproximityprompt(prompt, 0) -- instan interact
-    end
-end
-
 -- Fungsi toggle fly
 local function toggleFly()
     flyEnabled = not flyEnabled
