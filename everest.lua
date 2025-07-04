@@ -1,15 +1,14 @@
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- === Buat GUI ===
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "TeleportGui"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 200, 0, 280)
-frame.Position = UDim2.new(0, 20, 0.5, -140)
+frame.Size = UDim2.new(0, 200, 0, 320)
+frame.Position = UDim2.new(0, 20, 0.5, -160)
 frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.BackgroundTransparency = 0.2
 frame.BorderSizePixel = 0
@@ -38,32 +37,48 @@ local checkpointPositions = {
 }
 
 -- Urutan tombol
-local order = {"Camp1", "Camp2", "Camp3", "Camp4", "Summit", "Checkpoint"}
+local order = {"Camp1", "Camp2", "Camp3", "Camp4", "Summit", "Checkpoint", "Stop"}
 
--- === Fungsi teleport biasa ===
-local function teleportTo(position)
+-- Flag untuk menghentikan pergerakan
+local stopRequested = false
+
+-- === Fungsi jalan manual ke satu posisi ===
+local function walkTo(position)
 	local char = player.Character or player.CharacterAdded:Wait()
-	char:MoveTo(position)
+	local humanoid = char:WaitForChild("Humanoid")
+	
+	stopRequested = false -- reset flag
+	humanoid:MoveTo(position)
+
+	local reached = false
+	local conn
+	conn = humanoid.MoveToFinished:Connect(function(success)
+		reached = true
+		conn:Disconnect()
+	end)
+
+	local timeout = 15
+	local timer = 0
+	while not reached and timer < timeout do
+		if stopRequested then
+			humanoid:MoveTo(char.HumanoidRootPart.Position) -- hentikan
+			break
+		end
+		task.wait(0.1)
+		timer += 0.1
+	end
 end
 
--- === Fungsi teleport langsung ke checkpoint (lama, dikomentari) ===
--- local function teleportThroughCheckpoints()
--- 	local char = player.Character or player.CharacterAdded:Wait()
--- 	for i, pos in ipairs(checkpointPositions) do
--- 		char:MoveTo(pos)
--- 		task.wait(0.5)
--- 	end
--- end
-
--- === Fungsi jalan manual ke checkpoint (baru) ===
+-- === Fungsi jalan manual ke semua checkpoint ===
 local function walkThroughCheckpoints()
 	local char = player.Character or player.CharacterAdded:Wait()
 	local humanoid = char:WaitForChild("Humanoid")
+	stopRequested = false
 
 	for _, pos in ipairs(checkpointPositions) do
+		if stopRequested then break end
 		humanoid:MoveTo(pos)
 
-		-- Tunggu sampai sampai tujuan atau timeout
 		local reached = false
 		local conn
 		conn = humanoid.MoveToFinished:Connect(function(success)
@@ -71,9 +86,13 @@ local function walkThroughCheckpoints()
 			conn:Disconnect()
 		end)
 
-		local timeout = 10
+		local timeout = 15
 		local timer = 0
 		while not reached and timer < timeout do
+			if stopRequested then
+				humanoid:MoveTo(char.HumanoidRootPart.Position)
+				break
+			end
 			task.wait(0.1)
 			timer += 0.1
 		end
@@ -88,23 +107,24 @@ local function createButton(name)
 	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
 	btn.Font = Enum.Font.SourceSansBold
 	btn.TextSize = 18
-	btn.Text = "Teleport ke " .. name
+	btn.Text = name == "Stop" and "🛑 Stop Jalan" or "Jalan ke " .. name
 	btn.Parent = frame
 
 	btn.MouseButton1Click:Connect(function()
 		if name == "Checkpoint" then
-			-- teleportThroughCheckpoints()
 			walkThroughCheckpoints()
+		elseif name == "Stop" then
+			stopRequested = true
 		else
 			local destination = locations[name]
 			if destination then
-				teleportTo(destination)
+				walkTo(destination)
 			end
 		end
 	end)
 end
 
--- === Buat tombol sesuai urutan ===
+-- === Buat semua tombol ===
 for _, name in ipairs(order) do
 	createButton(name)
 end
