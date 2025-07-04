@@ -1,63 +1,61 @@
--- Ambil service dan player
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- ========== BUAT GUI LOG ==========
+-- === Buat GUI ===
 local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "DebugLogGui"
+screenGui.Name = "TeleportGui"
 screenGui.ResetOnSpawn = false
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 400, 0, 200)
-frame.Position = UDim2.new(0, 10, 0, 10)
-frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+frame.Size = UDim2.new(0, 200, 0, 250)
+frame.Position = UDim2.new(0, 20, 0.5, -125)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.BackgroundTransparency = 0.2
 frame.BorderSizePixel = 0
 frame.Parent = screenGui
 
-local scrollFrame = Instance.new("ScrollingFrame")
-scrollFrame.Size = UDim2.new(1, -10, 1, -10)
-scrollFrame.Position = UDim2.new(0, 5, 0, 5)
-scrollFrame.BackgroundTransparency = 1
-scrollFrame.BorderSizePixel = 0
-scrollFrame.CanvasSize = UDim2.new(0, 0, 0, 0)
-scrollFrame.ScrollBarThickness = 6
-scrollFrame.Parent = frame
-
 local uiList = Instance.new("UIListLayout")
 uiList.SortOrder = Enum.SortOrder.LayoutOrder
-uiList.Parent = scrollFrame
+uiList.Padding = UDim.new(0, 6)
+uiList.Parent = frame
 
--- ========== FUNGSI TAMPILKAN LOG ==========
-local function logMessage(msg)
-	local label = Instance.new("TextLabel")
-	label.Size = UDim2.new(1, -5, 0, 20)
-	label.BackgroundTransparency = 1
-	label.TextColor3 = Color3.new(1, 1, 1)
-	label.TextXAlignment = Enum.TextXAlignment.Left
-	label.Font = Enum.Font.Code
-	label.TextSize = 14
-	label.Text = msg
-	label.Parent = scrollFrame
-	
-	-- Update tinggi canvas
-	scrollFrame.CanvasSize = UDim2.new(0, 0, 0, uiList.AbsoluteContentSize.Y + 10)
+-- === Lokasi koordinat ===
+local locations = {
+	Camp1 = Vector3.new(-1075, 941, 1268),
+	Camp2 = Vector3.new(-2121, 1781, 793),
+	Camp3 = Vector3.new(-3942, 5005, 866),
+	Camp4 = Vector3.new(-4630, 6616, 913),
+	Summit = Vector3.new(-5181, 8429, 1055),
+}
+
+-- === Fungsi teleport ===
+local function teleportTo(position)
+	local char = player.Character or player.CharacterAdded:Wait()
+	local hrp = char:WaitForChild("HumanoidRootPart")
+	hrp.CFrame = CFrame.new(position)
 end
 
--- ========== FUNGSI AMBIL POSISI ==========
-local function logPosition()
-	local character = player.Character or player.CharacterAdded:Wait()
-	local hrp = character:WaitForChild("HumanoidRootPart")
-	local pos = hrp.Position
-	local x = math.floor(pos.X + 0.5)
-	local y = math.floor(pos.Y + 0.5)
-	local z = math.floor(pos.Z + 0.5)
+-- === Fungsi buat tombol ===
+local function createButton(name)
+	local btn = Instance.new("TextButton")
+	btn.Size = UDim2.new(1, -10, 0, 30)
+	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+	btn.Font = Enum.Font.SourceSansBold
+	btn.TextSize = 18
+	btn.Text = "Teleport ke " .. name
+	btn.Parent = frame
 
-	local output = "Vector3.new(" .. x .. ", " .. y .. ", " .. z .. ")"
-	logMessage(output)
+	btn.MouseButton1Click:Connect(function()
+		local destination = locations[name]
+		if destination then
+			teleportTo(destination)
+		end
+	end)
 end
 
--- ========== JALANKAN ==========
-logMessage("📍 Logger koordinat aktif.")
-logPosition()
+-- === Buat tombol dari lokasi ===
+for name, _ in pairs(locations) do
+	createButton(name)
+end
