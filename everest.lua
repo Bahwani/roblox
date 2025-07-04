@@ -1,217 +1,217 @@
--- === Everest Smart Adaptive Replay Script v2 ===
--- Fitur: Adaptive fallback berdasarkan posisi dunia
--- Replay halus, otomatis lanjut log utama setelah fallback
--- Record dan Replay GUI dengan status dinamis
+--[[
+Everest Replay System (Adaptif dan Tahan Nyangkut)
+Fitur:
+✅ Record Posisi ke File
+✅ Smart Replay dari banyak log
+✅ Fallback antar log jika gagal
+✅ Looping hingga mencapai koordinat akhir
+✅ GUI dengan tombol Start/Stop Record dan Replay
+]]
 
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
-local folderPath = "/storage/emulated/0/Delta/Workspace/LogEverest"
+local HttpService = game:GetService("HttpService")
+local RunService = game:GetService("RunService")
 
-local replaying, recording = false, false
-local recordConnection, lastRecordedPos = nil, nil
-local minDistance = 1.5
-local replayButton, recordButton
+local logFolder = "/storage/emulated/0/Delta/Workspace/Config/EverestLogs"
+local targetEndPos = Vector3.new(-5181, 8429, 1055)
+local endReachedRadius = 5
 
--- === Utility ===
-local function readLog(path)
-	local ok, content = pcall(readfile, path)
-	if not ok then return {} end
-	local positions = {}
-	for line in content:gmatch("[^\r\n]+") do
-		local x, y, z = line:match("Posisi: Vector3.new%((%-?[%d%.]+), (%-?[%d%.]+), (%-?[%d%.]+)%)")
-		if x and y and z then
-			table.insert(positions, Vector3.new(tonumber(x), tonumber(y), tonumber(z)))
-		end
+local recording = false
+local replaying = false
+local logs = {} -- semua log
+local currentLog = {} -- saat record
+
+-- === Fungsi Simpan File ===
+local function saveLog(log)
+	local name = os.time() .. ".txt"
+	local path = logFolder .. "/" .. name
+	local data = ""
+	for _, pos in ipairs(log) do
+		data ..= "Posisi: Vector3.new(" .. pos.X .. ", " .. pos.Y .. ", " .. pos.Z .. ")\n"
 	end
-	return positions
+	writefile(path, data)
 end
 
-local function getAllLogs()
-	local logs = {}
-	local ok, files = pcall(listfiles, folderPath)
-	if not ok then return {} end
-	for _, f in ipairs(files) do
-		if f:match("%.txt$") then
-			local log = readLog(f)
-			if #log > 0 then table.insert(logs, log) end
-		end
-	end
-	return logs
-end
-
-local function findClosestPoint(logs, currentPos)
-	local minDist, bestLog, bestStep = math.huge, 1, 1
-	for i, log in ipairs(logs) do
-		for j, pos in ipairs(log) do
-			local d = (pos - currentPos).Magnitude
-			if d < minDist then
-				minDist = d
-				bestLog, bestStep = i, j
+-- === Fungsi Load Semua Log ===
+local function loadAllLogs()
+	logs = {}
+	local files = listfiles(logFolder)
+	for _, file in ipairs(files) do
+		local content = readfile(file)
+		local log = {}
+		for line in content:gmatch("Posisi: Vector3.new%((.-)%)") do
+			local x, y, z = line:match("([^,]+), ([^,]+), ([^,]+)")
+			if x and y and z then
+				table.insert(log, Vector3.new(tonumber(x), tonumber(y), tonumber(z)))
 			end
 		end
+		if #log > 0 then table.insert(logs, log) end
 	end
-	return bestLog, bestStep
 end
 
-local function walkTo(pos)
-	local char = player.Character or player.CharacterAdded:Wait()
-	local human = char:WaitForChild("Humanoid")
-	local done, timeout = false, 3
-	human:MoveTo(pos)
-	local conn = human.MoveToFinished:Connect(function(ok) done = ok end)
-	local t = 0
-	while not done and t < timeout do
-		task.wait(0.1)
-		t += 0.1
-	end
-	conn:Disconnect()
-	return done
-end
-
-local function adaptiveFallback(targetPos, fallbackLogs)
-	for _, log in ipairs(fallbackLogs) do
-		local closestIdx, minDist = nil, math.huge
-		for i, pos in ipairs(log) do
-			local d = (targetPos - pos).Magnitude
-			if d < minDist then
-				minDist = d
-				closestIdx = i
-			end
-		end
-		if closestIdx and minDist < 10 then
-			if walkTo(log[closestIdx]) then
-				return true, log, closestIdx + 1
-			end
-		end
-	end
-	return false
-end
-
-local function smartReplay()
-	replaying = true
-	replayButton.Text = "⏹ Stop Replay"
-	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
-
-	local logs = getAllLogs()
-	if #logs == 0 then return end
-
-	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-	if not hrp then return end
-
-	local bestLogIndex, stepIndex = findClosestPoint(logs, hrp.Position)
-	local log = logs[bestLogIndex]
-	local i = stepIndex
-
-	while i <= #log do
-		if not replaying then break end
-		local success = walkTo(log[i])
-		if not success then
-			local ok, newLog, nextIndex = adaptiveFallback(log[i], logs)
-			if ok then
-				log = newLog
-				i = nextIndex
-				continue
-			else
-				warn("Gagal mencapai langkah ke-"..i)
-				break
-			end
-		end
-		i += 5
-	end
-
-	replayButton.Text = "▶ Start Replay"
-	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-	replaying = false
-end
-
--- === Record ===
-local function getUniqueFilename()
-	local i = 1
-	while isfile(folderPath.."/Log_"..i..".txt") do i += 1 end
-	return folderPath.."/Log_"..i..".txt"
-end
-
-local function writePos(path, pos)
-	appendfile(path, "Posisi: Vector3.new(" .. pos.X .. ", " .. pos.Y .. ", " .. pos.Z .. ")\n")
-end
-
+-- === Fungsi Record ===
 local function startRecording()
-	local char = player.Character or player.CharacterAdded:Wait()
-	local hrp = char:WaitForChild("HumanoidRootPart")
-	local logPath = getUniqueFilename()
-	writefile(logPath, "")
-	lastRecordedPos = nil
 	recording = true
-	recordButton.Text = "⏹ Stop Record"
-	recordButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
-	recordConnection = RunService.Heartbeat:Connect(function()
-		if not hrp or not recording then return end
-		local pos = hrp.Position
-		if not lastRecordedPos or (pos - lastRecordedPos).Magnitude >= minDistance then
-			writePos(logPath, pos)
-			lastRecordedPos = pos
+	currentLog = {}
+	task.spawn(function()
+		while recording do
+			local char = player.Character
+			if char and char:FindFirstChild("HumanoidRootPart") then
+				table.insert(currentLog, char.HumanoidRootPart.Position)
+			end
+			task.wait(0.3)
 		end
 	end)
 end
 
 local function stopRecording()
 	recording = false
-	if recordConnection then recordConnection:Disconnect() end
-	recordButton.Text = "⏺ Start Record"
-	recordButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+	if #currentLog > 5 then
+		saveLog(currentLog)
+	end
+end
+
+-- === Fungsi Jalan ===
+local function walkTo(pos)
+	local char = player.Character or player.CharacterAdded:Wait()
+	local hrp = char:WaitForChild("HumanoidRootPart")
+	local human = char:WaitForChild("Humanoid")
+	local timeout = 10
+	local startTime = tick()
+	local lastPos = hrp.Position
+	local stuckTime = 0
+
+	while (pos - hrp.Position).Magnitude > 2 and tick() - startTime < timeout do
+		human:MoveTo(pos)
+		task.wait(0.3)
+		if (hrp.Position - lastPos).Magnitude < 0.2 then
+			stuckTime += 0.3
+			if stuckTime > 4 then
+				return false
+			end
+		else
+			stuckTime = 0
+		end
+		lastPos = hrp.Position
+	end
+	return true
+end
+
+-- === Fungsi Cari Titik Terdekat di Semua Log ===
+local function getClosestStep(pos)
+	local bestLog, bestIdx, bestDist = nil, nil, math.huge
+	for _, log in ipairs(logs) do
+		for i, step in ipairs(log) do
+			local dist = (step - pos).Magnitude
+			if dist < bestDist then
+				bestLog, bestIdx, bestDist = log, i, dist
+			end
+		end
+	end
+	return bestLog, bestIdx
+end
+
+-- === Smart Replay ===
+local function smartReplay()
+	replaying = true
+	local char = player.Character or player.CharacterAdded:Wait()
+	local hrp = char:WaitForChild("HumanoidRootPart")
+
+	local mainLog, mainIdx = getClosestStep(hrp.Position)
+	if not mainLog then return end
+
+	while replaying do
+		local goal = mainLog[mainIdx]
+		if not goal then break end
+		if (goal - hrp.Position).Magnitude < 2 then
+			mainIdx += 1
+			continue
+		end
+
+		local success = walkTo(goal)
+		if success then
+			mainIdx += 1
+		else
+			-- fallback: cari titik mirip dari log lain
+			local tried = {}
+			local reached = false
+			for _, altLog in ipairs(logs) do
+				for i = 1, #altLog do
+					local alt = altLog[i]
+					if (alt - goal).Magnitude < 5 and not tried[i] then
+						if walkTo(alt) then
+							reached = true
+							break
+						end
+						tried[i] = true
+					end
+				end
+				if reached then break end
+			end
+			if not reached then
+				break -- semua gagal
+			end
+		end
+
+		if (hrp.Position - targetEndPos).Magnitude < endReachedRadius then
+			break -- sudah sampai summit
+		end
+	end
+	replaying = false
 end
 
 -- === GUI ===
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "EverestGUI"
+screenGui.ResetOnSpawn = false
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
 local frame = Instance.new("Frame")
 frame.Size = UDim2.new(0, 180, 0, 120)
-frame.Position = UDim2.new(0, 20, 0.3, 0)
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-frame.BackgroundTransparency = 0.15
-frame.BorderSizePixel = 0
+frame.Position = UDim2.new(0, 20, 0.5, -60)
+frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
 frame.Parent = screenGui
 
-local layout = Instance.new("UIListLayout")
-layout.Padding = UDim.new(0, 8)
-layout.Parent = frame
+local uiList = Instance.new("UIListLayout")
+uiList.SortOrder = Enum.SortOrder.LayoutOrder
+uiList.Parent = frame
 
-replayButton = Instance.new("TextButton")
-replayButton.Size = UDim2.new(1, -10, 0, 40)
-replayButton.Position = UDim2.new(0, 5, 0, 10)
-replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-replayButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-replayButton.Font = Enum.Font.SourceSansBold
-replayButton.TextSize = 18
-replayButton.Text = "▶ Start Replay"
-replayButton.Parent = frame
+local function makeButton(text, callback)
+	local btn = Instance.new("TextButton")
+	btn.Size = UDim2.new(1, -10, 0, 30)
+	btn.Position = UDim2.new(0, 5, 0, 0)
+	btn.Text = text
+	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	btn.TextColor3 = Color3.new(1, 1, 1)
+	btn.Font = Enum.Font.SourceSansBold
+	btn.TextSize = 16
+	btn.Parent = frame
+	btn.MouseButton1Click:Connect(callback)
+	return btn
+end
 
-recordButton = Instance.new("TextButton")
-recordButton.Size = UDim2.new(1, -10, 0, 40)
-recordButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-recordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-recordButton.Font = Enum.Font.SourceSansBold
-recordButton.TextSize = 18
-recordButton.Text = "⏺ Start Record"
-recordButton.Parent = frame
-
-replayButton.MouseButton1Click:Connect(function()
-	if not replaying then
-		task.spawn(smartReplay)
+local recordBtn = makeButton("Start Record", function()
+	if not recording then
+		recordBtn.Text = "Stop Record"
+		recordBtn.BackgroundColor3 = Color3.fromRGB(60, 30, 30)
+		startRecording()
 	else
-		replaying = false
-		replayButton.Text = "▶ Start Replay"
-		replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+		recordBtn.Text = "Start Record"
+		recordBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+		stopRecording()
 	end
 end)
 
-recordButton.MouseButton1Click:Connect(function()
-	if not recording then
-		startRecording()
+local replayBtn = makeButton("Start Replay", function()
+	if not replaying then
+		replayBtn.Text = "Stop Replay"
+		replayBtn.BackgroundColor3 = Color3.fromRGB(30, 60, 30)
+		loadAllLogs()
+		task.spawn(smartReplay)
 	else
-		stopRecording()
+		replayBtn.Text = "Start Replay"
+		replayBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+		replaying = false
 	end
 end)
