@@ -8,8 +8,8 @@ screenGui.ResetOnSpawn = false
 screenGui.Parent = player:WaitForChild("PlayerGui")
 
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 200, 0, 250)
-frame.Position = UDim2.new(0, 20, 0.5, -125)
+frame.Size = UDim2.new(0, 200, 0, 280)
+frame.Position = UDim2.new(0, 20, 0.5, -140)
 frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 frame.BackgroundTransparency = 0.2
 frame.BorderSizePixel = 0
@@ -20,7 +20,7 @@ uiList.SortOrder = Enum.SortOrder.LayoutOrder
 uiList.Padding = UDim.new(0, 6)
 uiList.Parent = frame
 
--- === Lokasi & urutan ===
+-- === Lokasi utama ===
 local locations = {
 	Camp1 = Vector3.new(-1075, 941, 1268),
 	Camp2 = Vector3.new(-2121, 1781, 793),
@@ -29,16 +29,33 @@ local locations = {
 	Summit = Vector3.new(-5181, 8429, 1055),
 }
 
--- Urutan tampil
-local order = {"Camp1", "Camp2", "Camp3", "Camp4", "Summit"}
+-- === Lokasi checkpoint (berurutan) ===
+local checkpointPositions = {
+	Vector3.new(-3804, 4977, 1172),
+	Vector3.new(-3803, 4980, 611),
+	Vector3.new(-3802, 4978, 610),
+	Vector3.new(-3801, 4978, 612),
+}
 
--- === Fungsi teleport ===
+-- Urutan tombol
+local order = {"Camp1", "Camp2", "Camp3", "Camp4", "Summit", "Checkpoint"}
+
+-- === Fungsi teleport biasa ===
 local function teleportTo(position)
 	local char = player.Character or player.CharacterAdded:Wait()
 	char:MoveTo(position)
 end
 
--- === Fungsi buat tombol ===
+-- === Fungsi teleport berurutan ke checkpoint ===
+local function teleportThroughCheckpoints()
+	local char = player.Character or player.CharacterAdded:Wait()
+	for i, pos in ipairs(checkpointPositions) do
+		char:MoveTo(pos)
+		task.wait(0.5) -- beri jeda antar teleport agar map bisa loading dan tidak nabrak
+	end
+end
+
+-- === Buat tombol ===
 local function createButton(name)
 	local btn = Instance.new("TextButton")
 	btn.Size = UDim2.new(1, -10, 0, 30)
@@ -50,14 +67,18 @@ local function createButton(name)
 	btn.Parent = frame
 
 	btn.MouseButton1Click:Connect(function()
-		local destination = locations[name]
-		if destination then
-			teleportTo(destination)
+		if name == "Checkpoint" then
+			teleportThroughCheckpoints()
+		else
+			local destination = locations[name]
+			if destination then
+				teleportTo(destination)
+			end
 		end
 	end)
 end
 
--- === Buat tombol secara urut ===
+-- === Buat tombol sesuai urutan ===
 for _, name in ipairs(order) do
 	createButton(name)
 end
