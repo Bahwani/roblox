@@ -1,5 +1,7 @@
--- === Everest Smart Adaptive Replay Script ===
--- Fitur: Replay mulus (5 stud), fallback 1 stud dari semua log, mulai dari posisi terdekat, tombol record + replay
+-- === Everest Smart Adaptive Replay Script v2 ===
+-- Fitur: Adaptive fallback berdasarkan posisi dunia
+-- Replay halus, otomatis lanjut log utama setelah fallback
+-- Record dan Replay GUI dengan status dinamis
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
@@ -11,7 +13,7 @@ local recordConnection, lastRecordedPos = nil, nil
 local minDistance = 1.5
 local replayButton, recordButton
 
--- === Utility Functions ===
+-- === Utility ===
 local function readLog(path)
 	local ok, content = pcall(readfile, path)
 	if not ok then return {} end
@@ -56,7 +58,6 @@ local function walkTo(pos)
 	local char = player.Character or player.CharacterAdded:Wait()
 	local human = char:WaitForChild("Humanoid")
 	local done, timeout = false, 3
-
 	human:MoveTo(pos)
 	local conn = human.MoveToFinished:Connect(function(ok) done = ok end)
 	local t = 0
@@ -68,29 +69,23 @@ local function walkTo(pos)
 	return done
 end
 
-local function walkPath(log, start, step, fallbackLogs)
-	local i = start
-	while i <= #log do
-		if not replaying then break end
-		local success = walkTo(log[i])
-		if not success then
-			-- Try every log for matching index with step 1
-			local recovered = false
-			for _, fbLog in ipairs(fallbackLogs) do
-				local alt = fbLog[i]
-				if alt and walkTo(alt) then
-					recovered = true
-					break
-				end
-			end
-			if not recovered then
-				warn("Gagal mencapai langkah " .. i)
-				return false
+local function adaptiveFallback(targetPos, fallbackLogs)
+	for _, log in ipairs(fallbackLogs) do
+		local closestIdx, minDist = nil, math.huge
+		for i, pos in ipairs(log) do
+			local d = (targetPos - pos).Magnitude
+			if d < minDist then
+				minDist = d
+				closestIdx = i
 			end
 		end
-		i += step
+		if closestIdx and minDist < 10 then
+			if walkTo(log[closestIdx]) then
+				return true, log, closestIdx + 1
+			end
+		end
 	end
-	return true
+	return false
 end
 
 local function smartReplay()
@@ -105,16 +100,32 @@ local function smartReplay()
 	if not hrp then return end
 
 	local bestLogIndex, stepIndex = findClosestPoint(logs, hrp.Position)
-	local mainLog = logs[bestLogIndex]
+	local log = logs[bestLogIndex]
+	local i = stepIndex
 
-	walkPath(mainLog, stepIndex, 5, logs)
+	while i <= #log do
+		if not replaying then break end
+		local success = walkTo(log[i])
+		if not success then
+			local ok, newLog, nextIndex = adaptiveFallback(log[i], logs)
+			if ok then
+				log = newLog
+				i = nextIndex
+				continue
+			else
+				warn("Gagal mencapai langkah ke-"..i)
+				break
+			end
+		end
+		i += 5
+	end
 
 	replayButton.Text = "▶ Start Replay"
 	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 	replaying = false
 end
 
--- === RECORD ===
+-- === Record ===
 local function getUniqueFilename()
 	local i = 1
 	while isfile(folderPath.."/Log_"..i..".txt") do i += 1 end
@@ -131,12 +142,9 @@ local function startRecording()
 	local logPath = getUniqueFilename()
 	writefile(logPath, "")
 	lastRecordedPos = nil
-
 	recording = true
-
 	recordButton.Text = "⏹ Stop Record"
 	recordButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
-
 	recordConnection = RunService.Heartbeat:Connect(function()
 		if not hrp or not recording then return end
 		local pos = hrp.Position
