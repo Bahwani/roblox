@@ -1,4 +1,5 @@
 local Players = game:GetService("Players")
+local PathfindingService = game:GetService("PathfindingService")
 local player = Players.LocalPlayer
 
 local screenGui = Instance.new("ScreenGui")
@@ -36,66 +37,64 @@ local checkpointPositions = {
 	Vector3.new(-3801, 4978, 612),
 }
 
--- Urutan tombol
 local order = {"Camp1", "Camp2", "Camp3", "Camp4", "Summit", "Checkpoint", "Stop"}
 
--- Flag untuk menghentikan pergerakan
 local stopRequested = false
 
--- === Fungsi jalan manual ke satu posisi ===
-local function walkTo(position)
+-- === Fungsi jalan dengan Pathfinding ===
+local function walkToWithPathfinding(targetPos)
 	local char = player.Character or player.CharacterAdded:Wait()
 	local humanoid = char:WaitForChild("Humanoid")
-	
-	stopRequested = false -- reset flag
-	humanoid:MoveTo(position)
+	local hrp = char:WaitForChild("HumanoidRootPart")
 
-	local reached = false
-	local conn
-	conn = humanoid.MoveToFinished:Connect(function(success)
-		reached = true
-		conn:Disconnect()
-	end)
+	stopRequested = false
 
-	local timeout = 15
-	local timer = 0
-	while not reached and timer < timeout do
-		if stopRequested then
-			humanoid:MoveTo(char.HumanoidRootPart.Position) -- hentikan
-			break
+	local path = PathfindingService:CreatePath({
+		AgentRadius = 2,
+		AgentHeight = 5,
+		AgentCanJump = true,
+		AgentJumpHeight = 15,
+		AgentMaxSlope = 45,
+	})
+
+	path:ComputeAsync(hrp.Position, targetPos)
+
+	if path.Status == Enum.PathStatus.Complete then
+		for _, waypoint in ipairs(path:GetWaypoints()) do
+			if stopRequested then
+				humanoid:MoveTo(hrp.Position)
+				break
+			end
+
+			humanoid:MoveTo(waypoint.Position)
+
+			local reached = false
+			local conn
+			conn = humanoid.MoveToFinished:Connect(function(success)
+				reached = true
+				conn:Disconnect()
+			end)
+
+			local timer = 0
+			while not reached and timer < 10 do
+				if stopRequested then
+					humanoid:MoveTo(hrp.Position)
+					break
+				end
+				task.wait(0.1)
+				timer += 0.1
+			end
 		end
-		task.wait(0.1)
-		timer += 0.1
+	else
+		warn("Gagal menghitung path ke:", targetPos)
 	end
 end
 
--- === Fungsi jalan manual ke semua checkpoint ===
+-- === Jalan ke semua checkpoint pakai Pathfinding ===
 local function walkThroughCheckpoints()
-	local char = player.Character or player.CharacterAdded:Wait()
-	local humanoid = char:WaitForChild("Humanoid")
-	stopRequested = false
-
 	for _, pos in ipairs(checkpointPositions) do
 		if stopRequested then break end
-		humanoid:MoveTo(pos)
-
-		local reached = false
-		local conn
-		conn = humanoid.MoveToFinished:Connect(function(success)
-			reached = true
-			conn:Disconnect()
-		end)
-
-		local timeout = 15
-		local timer = 0
-		while not reached and timer < timeout do
-			if stopRequested then
-				humanoid:MoveTo(char.HumanoidRootPart.Position)
-				break
-			end
-			task.wait(0.1)
-			timer += 0.1
-		end
+		walkToWithPathfinding(pos)
 	end
 end
 
@@ -118,7 +117,7 @@ local function createButton(name)
 		else
 			local destination = locations[name]
 			if destination then
-				walkTo(destination)
+				walkToWithPathfinding(destination)
 			end
 		end
 	end)
