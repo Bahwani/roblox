@@ -13,7 +13,7 @@ local player = Players.LocalPlayer
 local HttpService = game:GetService("HttpService")
 local RunService = game:GetService("RunService")
 
-local logFolder = "/storage/emulated/0/Delta/Workspace/Config/EverestLogs"
+local logFolder = "/storage/emulated/0/Delta/Workspace/LogEverest"
 local targetEndPos = Vector3.new(-5181, 8429, 1055)
 local endReachedRadius = 5
 
