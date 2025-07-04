@@ -69,11 +69,29 @@ local function walkTo(pos)
 	return done
 end
 
-local function walkPath(log, start, step)
-	for i = start, #log, step do
+local function walkPath(log, start, step, fallbackLogs)
+	local i = start
+	while i <= #log do
 		if not replaying then break end
 		while paused do task.wait(0.2) end
-		if not walkTo(log[i]) then return false, i end
+
+		local success = walkTo(log[i])
+		if not success then
+			-- Try fallback logs with step 1
+			local recovered = false
+			for _, fallbackLog in ipairs(fallbackLogs) do
+				if fallbackLog[i] and walkTo(fallbackLog[i]) then
+					recovered = true
+					break
+				end
+			end
+			if not recovered then
+				warn("Gagal mencapai langkah " .. i)
+				return false
+			end
+			-- Setelah berhasil, lanjut dengan step normal lagi
+		end
+		i += step
 	end
 	return true
 end
@@ -93,12 +111,7 @@ local function smartReplay()
 	local bestLogIndex, stepIndex = findClosestPoint(logs, hrp.Position)
 	local mainLog = logs[bestLogIndex]
 
-	local success, failIndex = walkPath(mainLog, stepIndex, 5)
-	if not success then
-		for _, log in ipairs(logs) do
-			walkPath(log, failIndex, 1)
-		end
-	end
+	walkPath(mainLog, stepIndex, 5, logs)
 
 	replayButton.Text = "▶ Start Replay"
 	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
@@ -122,6 +135,7 @@ local function startRecording()
 	local logPath = getUniqueFilename()
 	writefile(logPath, "")
 	lastRecordedPos = nil
+
 	recording = true
 	recordButton.Text = "⏹ Stop Record"
 	recordButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
