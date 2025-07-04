@@ -96,22 +96,60 @@ local function replayLog()
 		return
 	end
 
-	local positions = {}
+	local rawPositions = {}
 	for line in content:gmatch("[^\r\n]+") do
 		local x, y, z = line:match("Posisi: Vector3.new%((%-?[%d%.]+), (%-?[%d%.]+), (%-?[%d%.]+)%)")
 		if x and y and z then
-			table.insert(positions, Vector3.new(tonumber(x), tonumber(y), tonumber(z)))
+			table.insert(rawPositions, Vector3.new(tonumber(x), tonumber(y), tonumber(z)))
 		end
 	end
 
-	for _, pos in ipairs(positions) do
+	-- Gabungkan titik-titik yang terlalu dekat
+	local combined = {}
+	local lastPos = nil
+	local combineDistance = 3 -- stud minimum untuk gabung
+
+	for _, pos in ipairs(rawPositions) do
+		if not lastPos or (pos - lastPos).Magnitude >= combineDistance then
+			table.insert(combined, pos)
+			lastPos = pos
+		end
+	end
+
+	-- Fungsi jalan halus
+	local function walkTo(pos)
+		local char = player.Character or player.CharacterAdded:Wait()
+		local humanoid = char:WaitForChild("Humanoid")
+		if not humanoid then return end
+
+		local reached = false
+		local timeout = 3
+		humanoid:MoveTo(pos)
+
+		local conn
+		conn = humanoid.MoveToFinished:Connect(function(success)
+			reached = true
+		end)
+
+		local elapsed = 0
+		while not reached and elapsed < timeout do
+			task.wait(0.1)
+			elapsed += 0.1
+		end
+
+		if conn then conn:Disconnect() end
+	end
+
+	-- Replay semua titik gabungan
+	for _, pos in ipairs(combined) do
 		if not replaying then break end
 		walkTo(pos)
-		task.wait(0.05) -- jeda kecil antar titik agar lancar
+		task.wait(0.05)
 	end
 
 	replaying = false
 end
+
 
 -- === Button Builder ===
 local function createButton(text, callback)
