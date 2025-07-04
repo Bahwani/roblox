@@ -34,23 +34,33 @@ local function logToFile(text)
 	appendfile(logPath, os.date("[%H:%M:%S] ") .. text .. "\n")
 end
 
--- === Movement function ===
+-- Fungsi jalan yang lebih halus
 local function walkTo(pos)
 	local char = player.Character or player.CharacterAdded:Wait()
 	local humanoid = char:WaitForChild("Humanoid")
+	if not humanoid then return end
+
+	local reached = false
+	local timeout = 3 -- maks 3 detik per titik
 
 	humanoid:MoveTo(pos)
-	local reached = false
-	local conn = humanoid.MoveToFinished:Connect(function(success)
+
+	local conn
+	conn = humanoid.MoveToFinished:Connect(function(success)
 		reached = true
 	end)
 
-	local timer = 0
-	while not reached and timer < 10 do
+	-- Tunggu hingga sampai atau timeout
+	local elapsed = 0
+	while not reached and elapsed < timeout do
 		task.wait(0.1)
-		timer += 0.1
+		elapsed += 0.1
 	end
-	conn:Disconnect()
+
+	if conn then conn:Disconnect() end
+
+	-- Tambahan kecil untuk memastikan berhenti
+	humanoid:MoveTo(char.HumanoidRootPart.Position)
 end
 
 -- === RECORD MODE ===
@@ -75,7 +85,6 @@ local function stopRecording()
 	end
 end
 
--- === REPLAY MODE ===
 local function replayLog()
 	if replaying then return end
 	replaying = true
@@ -89,7 +98,7 @@ local function replayLog()
 
 	local positions = {}
 	for line in content:gmatch("[^\r\n]+") do
-		local x, y, z = line:match("Posisi: Vector3.new%((.-), (.-), (.-)%)")
+		local x, y, z = line:match("Posisi: Vector3.new%((%-?[%d%.]+), (%-?[%d%.]+), (%-?[%d%.]+)%)")
 		if x and y and z then
 			table.insert(positions, Vector3.new(tonumber(x), tonumber(y), tonumber(z)))
 		end
@@ -98,6 +107,7 @@ local function replayLog()
 	for _, pos in ipairs(positions) do
 		if not replaying then break end
 		walkTo(pos)
+		task.wait(0.05) -- jeda kecil antar titik agar lancar
 	end
 
 	replaying = false
