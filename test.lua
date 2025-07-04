@@ -20,7 +20,7 @@ uiList.SortOrder = Enum.SortOrder.LayoutOrder
 uiList.Padding = UDim.new(0, 6)
 uiList.Parent = frame
 
--- === Lokasi koordinat ===
+-- === Lokasi & urutan ===
 local locations = {
 	Camp1 = Vector3.new(-1075, 941, 1268),
 	Camp2 = Vector3.new(-2121, 1781, 793),
@@ -28,6 +28,9 @@ local locations = {
 	Camp4 = Vector3.new(-4630, 6616, 913),
 	Summit = Vector3.new(-5181, 8429, 1055),
 }
+
+-- Urutan tampil
+local order = {"Camp1", "Camp2", "Camp3", "Camp4", "Summit"}
 
 -- === Fungsi teleport ===
 local function teleportTo(position)
@@ -55,7 +58,7 @@ local function createButton(name)
 	end)
 end
 
--- === Buat tombol dari lokasi ===
-for name, _ in pairs(locations) do
+-- === Buat tombol secara urut ===
+for _, name in ipairs(order) do
 	createButton(name)
 end
