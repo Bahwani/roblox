@@ -90,38 +90,58 @@ end
 
 local function smartReplay()
 	replaying = true
-	replayButton.Text = "⏹ Stop Replay"
-	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+	replayBtn.Text = "🟥 Stop Replay"
+	replayBtn.BackgroundColor3 = Color3.fromRGB(30, 60, 30)
 
-	local logs = getAllLogs()
-	if #logs == 0 then return end
+	local char = player.Character or player.CharacterAdded:Wait()
+	local hrp = char:WaitForChild("HumanoidRootPart")
 
-	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-	if not hrp then return end
-
-	local bestLogIndex, stepIndex = findClosestPoint(logs, hrp.Position)
-	local log = logs[bestLogIndex]
-	local i = stepIndex
-
-	while i <= #log do
-		if not replaying then break end
-		local success = walkTo(log[i])
-		if not success then
-			local ok, newLog, nextIndex = adaptiveFallback(log[i], logs)
-			if ok then
-				log = newLog
-				i = nextIndex
-				continue
-			else
-				warn("Gagal mencapai langkah ke-"..i)
-				break
-			end
-		end
-		i += 5
+	local mainLog, mainIdx = getClosestStep(hrp.Position)
+	if not mainLog then
+		replaying = false
+		replayBtn.Text = "▶️ Start Replay"
+		replayBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+		return
 	end
 
-	replayButton.Text = "▶ Start Replay"
-	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+	while replaying do
+		local goal = mainLog[mainIdx]
+		if not goal then break end
+		if (goal - hrp.Position).Magnitude < 2 then
+			mainIdx += 1
+			continue
+		end
+
+		local success = walkTo(goal)
+		if success then
+			mainIdx += 1
+		else
+			-- fallback: coba terus log lain hingga berhasil
+			local reached = false
+			for _, altLog in ipairs(logs) do
+				for _, alt in ipairs(altLog) do
+					if (alt - goal).Magnitude < 5 then
+						if walkTo(alt) then
+							mainLog, mainIdx = getClosestStep(hrp.Position)
+							reached = true
+							break
+						end
+					end
+				end
+				if reached then break end
+			end
+			if not reached then
+				task.wait(0.5)
+			end
+		end
+
+		if (hrp.Position - targetEndPos).Magnitude < endReachedRadius then
+			break
+		end
+	end
+
+	replayBtn.Text = "▶️ Start Replay"
+	replayBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 	replaying = false
 end
 
