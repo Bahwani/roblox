@@ -1,12 +1,12 @@
 -- === Everest Smart Adaptive Replay Script ===
--- Fitur: Replay mulus (5 stud), fallback 1 stud, mulai dari posisi terdekat, tombol record + replay
+-- Fitur: Replay mulus (5 stud), fallback 1 stud dari semua log, mulai dari posisi terdekat, tombol record + replay
 
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
 local folderPath = "/storage/emulated/0/Delta/Workspace/LogEverest"
 
-local replaying, paused, recording = false, false, false
+local replaying, recording = false, false
 local recordConnection, lastRecordedPos = nil, nil
 local minDistance = 1.5
 local replayButton, recordButton
@@ -61,7 +61,6 @@ local function walkTo(pos)
 	local conn = human.MoveToFinished:Connect(function(ok) done = ok end)
 	local t = 0
 	while not done and t < timeout do
-		if paused then break end
 		task.wait(0.1)
 		t += 0.1
 	end
@@ -73,14 +72,13 @@ local function walkPath(log, start, step, fallbackLogs)
 	local i = start
 	while i <= #log do
 		if not replaying then break end
-		while paused do task.wait(0.2) end
-
 		local success = walkTo(log[i])
 		if not success then
-			-- Try fallback logs with step 1
+			-- Try every log for matching index with step 1
 			local recovered = false
-			for _, fallbackLog in ipairs(fallbackLogs) do
-				if fallbackLog[i] and walkTo(fallbackLog[i]) then
+			for _, fbLog in ipairs(fallbackLogs) do
+				local alt = fbLog[i]
+				if alt and walkTo(alt) then
 					recovered = true
 					break
 				end
@@ -89,7 +87,6 @@ local function walkPath(log, start, step, fallbackLogs)
 				warn("Gagal mencapai langkah " .. i)
 				return false
 			end
-			-- Setelah berhasil, lanjut dengan step normal lagi
 		end
 		i += step
 	end
@@ -98,9 +95,8 @@ end
 
 local function smartReplay()
 	replaying = true
-	paused = false
-	replayButton.Text = "⏸ Pause Replay"
-	replayButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+	replayButton.Text = "⏹ Stop Replay"
+	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
 
 	local logs = getAllLogs()
 	if #logs == 0 then return end
@@ -137,6 +133,7 @@ local function startRecording()
 	lastRecordedPos = nil
 
 	recording = true
+
 	recordButton.Text = "⏹ Stop Record"
 	recordButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
 
@@ -197,9 +194,9 @@ replayButton.MouseButton1Click:Connect(function()
 	if not replaying then
 		task.spawn(smartReplay)
 	else
-		paused = not paused
-		replayButton.Text = paused and "▶ Resume Replay" or "⏸ Pause Replay"
-		replayButton.BackgroundColor3 = paused and Color3.fromRGB(100, 100, 100) or Color3.fromRGB(0, 170, 0)
+		replaying = false
+		replayButton.Text = "▶ Start Replay"
+		replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 	end
 end)
 
