@@ -90,8 +90,8 @@ end
 
 local function smartReplay()
 	replaying = true
-	replayBtn.Text = "🟥 Stop Replay"
-	replayBtn.BackgroundColor3 = Color3.fromRGB(30, 60, 30)
+	replayButton.Text = "🟥 Stop Replay"
+	replayButton.BackgroundColor3 = Color3.fromRGB(30, 60, 30)
 
 	local char = player.Character or player.CharacterAdded:Wait()
 	local hrp = char:WaitForChild("HumanoidRootPart")
@@ -99,8 +99,8 @@ local function smartReplay()
 	local mainLog, mainIdx = getClosestStep(hrp.Position)
 	if not mainLog then
 		replaying = false
-		replayBtn.Text = "▶️ Start Replay"
-		replayBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+		replayButton.Text = "▶️ Start Replay"
+		replayButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 		return
 	end
 
@@ -118,7 +118,7 @@ local function smartReplay()
 		else
 			-- fallback: coba terus log lain hingga berhasil
 			local reached = false
-			for _, altLog in ipairs(logs) do
+			for _, altLog in ipairs(getAllLogs()) do
 				for _, alt in ipairs(altLog) do
 					if (alt - goal).Magnitude < 5 then
 						if walkTo(alt) then
@@ -135,13 +135,13 @@ local function smartReplay()
 			end
 		end
 
-		if (hrp.Position - targetEndPos).Magnitude < endReachedRadius then
+		if (hrp.Position - Vector3.new(-5181, 8429, 1055)).Magnitude < 5 then
 			break
 		end
 	end
 
-	replayBtn.Text = "▶️ Start Replay"
-	replayBtn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	replayButton.Text = "▶️ Start Replay"
+	replayButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
 	replaying = false
 end
 
