@@ -35,8 +35,7 @@ local order = {"Camp1", "Camp2", "Camp3", "Camp4", "Summit"}
 -- === Fungsi teleport ===
 local function teleportTo(position)
 	local char = player.Character or player.CharacterAdded:Wait()
-	local hrp = char:WaitForChild("HumanoidRootPart")
-	hrp.CFrame = CFrame.new(position)
+	char:MoveTo(position)
 end
 
 -- === Fungsi buat tombol ===
