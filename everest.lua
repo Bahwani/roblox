@@ -108,16 +108,22 @@ local function smartReplay()
 	local hrp = char:WaitForChild("HumanoidRootPart")
 
 	local logIndex, stepIndex = findClosestPoint(logs, hrp.Position)
+	if not logIndex or not stepIndex then
+		LogToConsole("[Replay] Tidak bisa temukan posisi terdekat dalam log.")
+		replaying = false
+		replayButton.Text = "▶ Start Replay"
+		replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+		return
+	end
+
 	local log = logs[logIndex]
 	local i = stepIndex
 
-	while i <= #log do
-		if not replaying then
-			LogToConsole("[Replay] Dihentikan manual.")
-			break
-		end
+	LogToConsole("[Replay] Mulai dari log " .. logIndex .. " langkah " .. i)
 
+	while replaying and i <= #log do
 		LogToConsole("[Replay] Menuju langkah " .. i)
+
 		local success = walkTo(log[i])
 		if not success then
 			LogToConsole("[Fallback] Gagal ke langkah " .. i .. ", teleport ke i+5")
@@ -128,6 +134,7 @@ local function smartReplay()
 			local newChar = player.Character or player.CharacterAdded:Wait()
 			local newHRP = newChar:WaitForChild("HumanoidRootPart")
 			local humanoid = newChar:FindFirstChild("Humanoid")
+
 			if humanoid then
 				humanoid:MoveTo(fallbackPos)
 
@@ -144,13 +151,13 @@ local function smartReplay()
 				end
 			end
 
-			-- Stop replay & restart
+			-- Reset state dan restart
 			replaying = false
 			replayButton.Text = "▶ Start Replay"
 			replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 
 			task.wait(0.5)
-			return task.spawn(smartReplay)  -- penting: gunakan return agar replay lama keluar total
+			return task.spawn(smartReplay)
 		end
 
 		i += 5
