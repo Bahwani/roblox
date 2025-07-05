@@ -1,70 +1,32 @@
 local player = game.Players.LocalPlayer
-local TweenService = game:GetService("TweenService")
+local char = player.Character or player.CharacterAdded:Wait()
+local hrp = char:WaitForChild("HumanoidRootPart")
 
--- GUI Setup
-local ScreenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-local StartButton = Instance.new("TextButton", ScreenGui)
-StartButton.Size = UDim2.new(0, 200, 0, 50)
-StartButton.Position = UDim2.new(0.5, -100, 0.5, -25)
-StartButton.Text = "Start"
-StartButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-StartButton.TextScaled = true
+-- Konfigurasi waktu & titik awal-akhir
+local totalTime = 720 -- 12 menit (720 detik)
+local steps = 720 -- 1 detik per langkah
+local delayPerStep = totalTime / steps -- 1 detik
 
--- Fungsi teleport
-local function teleportTo(position)
-	local char = player.Character or player.CharacterAdded:Wait()
-	local rayOrigin = position + Vector3.new(0, 100, 0) -- dari atas
-	local rayDirection = Vector3.new(0, -500, 0) -- tembak ke bawah
+-- Ganti posisi awal dan akhir ini sesuai map Everest
+local startPos = Vector3.new(-920, 320, -150) -- Misal Camp 1
+local endPos = Vector3.new(-650, 1020, -350) -- Misal Summit
 
-	local raycastParams = RaycastParams.new()
-	raycastParams.FilterDescendantsInstances = {char}
-	raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
-
-	local result = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
-
-	if result then
-		-- Jika ada permukaan di bawah, teleport ke atas permukaan itu
-		local groundPos = result.Position + Vector3.new(0, 3, 0) -- naik 3 stud di atas tanah
-		char:MoveTo(groundPos)
-	else
-		-- Jika tidak ada permukaan, tetap teleport ke posisi awal (mungkin di udara)
-		char:MoveTo(position)
-	end
+-- Fungsi interpolasi posisi
+local function interpolateVector3(startPos, endPos, t)
+	return startPos + (endPos - startPos) * t
 end
 
--- Fungsi interpolasi
-local function interpolate(startVec, endVec, t)
-	return startVec + (endVec - startVec) * t
+-- Mulai fly
+hrp.Anchored = true
+print("Mulai fly ke summit...")
+
+for step = 1, steps do
+	local t = step / steps
+	local targetPos = interpolateVector3(startPos, endPos, t)
+	hrp.CFrame = CFrame.new(targetPos)
+	task.wait(delayPerStep)
 end
 
--- Titik utama
-local points = {
-	Vector3.new(-1075, 941, 1268),
-	Vector3.new(-2121, 1781, 793),
-	Vector3.new(-3942, 5005, 866),
-	Vector3.new(-4630, 6616, 913),
-	Vector3.new(-5181, 8429, 1055)
-}
-
--- Bagi 720 titik di antara 4 lintasan
-local totalSteps = 720
-local stepsPerSegment = totalSteps / (#points - 1) -- 720 / 4 = 180
-
--- Ketika tombol diklik
-StartButton.MouseButton1Click:Connect(function()
-	StartButton.Visible = false
-
-	for i = 1, #points - 1 do
-		local startPos = points[i]
-		local endPos = points[i + 1]
-
-		for step = 1, stepsPerSegment do
-			local t = step / stepsPerSegment
-			local interpolatedPos = interpolate(startPos, endPos, t)
-			teleportTo(interpolatedPos)
-			task.wait(1) -- 1 detik per teleport
-		end
-	end
-
-	print("Teleportasi selesai.")
-end)
+-- Matikan fly setelah selesai
+hrp.Anchored = false
+print("Selesai fly. Sampai Summit.")
