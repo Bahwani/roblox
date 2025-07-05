@@ -96,7 +96,9 @@ local function smartReplay()
 	local char = player.Character or player.CharacterAdded:Wait()
 	local hrp = char:WaitForChild("HumanoidRootPart")
 
-	local mainLog, mainIdx = getClosestStep(hrp.Position)
+	local allLogs = getAllLogs()
+	local logIndex, mainIdx = findClosestPoint(allLogs, hrp.Position)
+	local mainLog = allLogs[logIndex]
 	if not mainLog then
 		replaying = false
 		replayButton.Text = "▶️ Start Replay"
@@ -118,11 +120,13 @@ local function smartReplay()
 		else
 			-- fallback: coba terus log lain hingga berhasil
 			local reached = false
-			for _, altLog in ipairs(getAllLogs()) do
+			for _, altLog in ipairs(allLogs) do
 				for _, alt in ipairs(altLog) do
 					if (alt - goal).Magnitude < 5 then
 						if walkTo(alt) then
-							mainLog, mainIdx = getClosestStep(hrp.Position)
+							-- perbarui log utama setelah fallback
+							logIndex, mainIdx = findClosestPoint(allLogs, hrp.Position)
+							mainLog = allLogs[logIndex]
 							reached = true
 							break
 						end
