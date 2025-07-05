@@ -90,7 +90,7 @@ local function adaptiveFallback(targetPos, fallbackLogs)
 	return false -- semua log gagal
 end
 
-local function smartReplay()
+--[[ local function smartReplay()
 	replaying = true
 	replayButton.Text = "⏹ Stop Replay"
 	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
@@ -168,8 +168,9 @@ local function smartReplay()
 	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 	replaying = false
 end
+]]
 
---[[local function smartReplay()
+local function smartReplay()
 	replaying = true
 	replayButton.Text = "⏹ Stop Replay"
 	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
@@ -223,7 +224,7 @@ end
 	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 	replaying = false
 end
-]]
+
 -- === Record ===
 local function getUniqueFilename()
 	local i = 1
