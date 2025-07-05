@@ -274,7 +274,39 @@ local function smartReplay()
 	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 	if not hrp then return end
 
-	local currentLogIndex, currentStepIndex = findClosestPoint(logs, hrp.Position)
+-- Cek semua log dan pilih yang POSISI awalnya lebih tinggi dari sekarang
+local validLogs = {}
+local currentPos = hrp.Position
+for i, log in ipairs(logs) do
+	local lastPos = log[#log]
+	if lastPos.Y > currentPos.Y then
+		table.insert(validLogs, {log = log, index = i})
+	end
+end
+
+if #validLogs == 0 then
+	warn("Tidak ada log lanjutan, replay selesai.")
+	replayButton.Text = "▶ Start Replay"
+	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+	replaying = false
+	return
+end
+-- Pilih log valid yang paling dekat dari posisi sekarang
+    local minDist, bestIndex, bestStep = math.huge, nil, 1
+    for _, entry in ipairs(validLogs) do
+    	for j, pos in ipairs(entry.log) do
+    		if pos.Y > currentPos.Y then -- Hanya ambil titik di atas
+    			local d = (pos - currentPos).Magnitude
+	    		if d < minDist then
+	    			minDist = d
+	    			bestIndex = entry.index
+	    			bestStep = j
+	    		end
+    		end
+    	end
+    end
+
+    local currentLogIndex, currentStepIndex = bestIndex, bestStep
 
 	while replaying and currentLogIndex <= #logs do
 		local log = logs[currentLogIndex]
