@@ -80,12 +80,14 @@ local function adaptiveFallback(targetPos, fallbackLogs)
 			end
 		end
 		if closestIdx and minDist < 10 then
-			if walkTo(log[closestIdx]) then
+			local success = walkTo(log[closestIdx])
+			if success then
 				return true, log, closestIdx + 1
 			end
+			-- ❗ jika gagal, lanjut ke log berikutnya, jangan return false dulu
 		end
 	end
-	return false
+	return false -- semua log gagal
 end
 
 local function smartReplay()
