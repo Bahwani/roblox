@@ -6,7 +6,7 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
-local folderPath = "/storage/emulated/0/Delta/Petss_LogEverest"
+local folderPath = "/storage/emulated/0/Delta/Workspace/PetssLogEverest"
 
 local replaying, recording = false, false
 local recordConnection, lastRecordedPos = nil, nil
