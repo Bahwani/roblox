@@ -124,7 +124,7 @@ local function smartReplay()
 
 				if humanoid and fallbackPos then
 					humanoid:MoveTo(fallbackPos)
-					LogToConsole("[Fallback] Teleport ke langkah "..targetStep)
+					print("[Fallback] Teleport ke langkah "..targetStep)
 
 					local timeout = 3
 					local elapsed = 0
@@ -134,9 +134,9 @@ local function smartReplay()
 					end
 
 					if (hrp.Position - fallbackPos).Magnitude <= 2 then
-						LogToConsole("[Fallback] Teleport berhasil")
+						print("[Fallback] Teleport berhasil")
 					else
-						LogToConsole("[Fallback] Teleport gagal, tetap lanjut")
+						print("[Fallback] Teleport gagal, tetap lanjut")
 					end
 				end
 
