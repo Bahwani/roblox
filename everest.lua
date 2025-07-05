@@ -126,8 +126,8 @@ local function smartReplay()
 					humanoid:MoveTo(fallbackPos)
 
 					local done = false
-					local moveConn = humanoid.MoveToFinished:Connect(function(success)
-						done = success
+					local moveConn = humanoid.MoveToFinished:Connect(function(ok)
+						done = ok
 					end)
 
 					local elapsed = 0
@@ -140,7 +140,10 @@ local function smartReplay()
 					if done then
 						print("[Fallback] MoveTo berhasil ke langkah " .. targetStep)
 					else
-						print("[Fallback] MoveTo gagal/tidak selesai dalam 3 detik, lanjut manual")
+						print("[Fallback] MoveTo gagal/tidak selesai dalam 3 detik, teleport paksa dengan CFrame...")
+						-- Teleport paksa via CFrame jika MoveTo gagal
+						hrp.CFrame = CFrame.new(fallbackPos + Vector3.new(0, 3, 0))
+						task.wait(0.2)
 					end
 				else
 					print("[Fallback] Tidak bisa teleport karena Humanoid atau fallbackPos nil")
