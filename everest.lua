@@ -21,15 +21,29 @@ local minDistance, walkStep, fallbackStep = 1.5, 8, 2
 local gui = Instance.new("ScreenGui", game.CoreGui)
 gui.Name = "PetoGacorrawr"
 
-local frame = Instance.new("Frame")
+local frame = Instance.new("Frame", gui)
 frame.Name = "MainFrame"
-frame.Size = UDim2.new(0, 200, 0, 240) -- sebelumnya 160
-frame.Position = UDim2.new(0.5, -100, 0.5, -120) -- opsional agar tetap di tengah
+frame.Size = UDim2.new(0, 220, 0, 260)
+frame.Position = UDim2.new(0.5, -110, 0.5, -130)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Active = true
 frame.Draggable = true
-frame.Parent = gui
+
+local scrollContent = Instance.new("ScrollingFrame", frame)
+scrollContent.Name = "ScrollContent"
+scrollContent.Position = UDim2.new(0, 0, 0, 40) -- mulai setelah header
+scrollContent.Size = UDim2.new(1, 0, 1, -40)    -- sisakan tempat buat header
+scrollContent.BackgroundTransparency = 1
+scrollContent.BorderSizePixel = 0
+scrollContent.CanvasSize = UDim2.new(0, 0, 0, 500)
+scrollContent.AutomaticCanvasSize = Enum.AutomaticSize.Y
+scrollContent.ScrollBarThickness = 6
+scrollContent.VerticalScrollBarInset = Enum.ScrollBarInset.ScrollBar
+
+local layout = Instance.new("UIListLayout", scrollContent)
+layout.Padding = UDim.new(0, 10)
+layout.SortOrder = Enum.SortOrder.LayoutOrder
 
 local title = Instance.new("TextLabel", frame)
 title.Size = UDim2.new(1, -70, 0, 30)
@@ -49,21 +63,24 @@ closeButton.Size = UDim2.new(0, 30, 0, 30)
 closeButton.Position = UDim2.new(1, -35, 0, 0)
 closeButton.Text = "X"
 
-local flyButton = Instance.new("TextButton", frame)
+local flyButton = Instance.new("TextButton", scrollContent)
+flyButton.LayoutOrder = 1
 flyButton.Size = UDim2.new(1, -10, 0, 30)
 flyButton.Position = UDim2.new(0, 5, 0, 35)
 flyButton.Text = "Fly: OFF"
 flyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 flyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-local speedButton = Instance.new("TextButton", frame)
+local speedButton = Instance.new("TextButton", scrollContent)
+speedButton.LayoutOrder = 2
 speedButton.Size = UDim2.new(1, -10, 0, 30)
 speedButton.Position = UDim2.new(0, 5, 0, 75)
 speedButton.Text = "Speed: OFF"
 speedButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 speedButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 
-local instantInteractButton = Instance.new("TextButton", frame)
+local instantInteractButton = Instance.new("TextButton", scrollContent)
+instantInteractButton.LayoutOrder = 3
 instantInteractButton.Size = UDim2.new(1, -10, 0, 30)
 instantInteractButton.Position = UDim2.new(0, 5, 0, 115)
 instantInteractButton.Text = "Instant: OFF"
@@ -71,7 +88,8 @@ instantInteractButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 instantInteractButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 
 -- Tambahkan ini DI BAWAH instantInteractButton (masih dalam `frame`)
-local replayButton = Instance.new("TextButton", frame)
+local replayButton = Instance.new("TextButton", scrollContent)
+replayButton.LayoutOrder = 4
 replayButton.Size = UDim2.new(1, -10, 0, 30)
 replayButton.Position = UDim2.new(0, 5, 0, 155) -- Sesuaikan posisi (115 + 30 + 10)
 replayButton.Text = "▶ Start Replay"
@@ -80,7 +98,8 @@ replayButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 replayButton.Font = Enum.Font.SourceSansBold
 replayButton.TextSize = 18
 
-local recordButton = Instance.new("TextButton", frame)
+local recordButton = Instance.new("TextButton", scrollContent)
+recordButton.LayoutOrder = 5
 recordButton.Size = UDim2.new(1, -10, 0, 30)
 recordButton.Position = UDim2.new(0, 5, 0, 195) -- Sesuaikan posisi (155 + 30 + 10)
 recordButton.Text = "⏺ Start Record"
