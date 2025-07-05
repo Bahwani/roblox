@@ -235,13 +235,15 @@ local function getAllLogs()
 end
 
 local function findClosestPoint(logs, currentPos)
-	local minDist, bestLog, bestStep = math.huge, 1, 1
+	local minDist, bestLog, bestStep = math.huge, nil, nil
 	for i, log in ipairs(logs) do
 		for j, pos in ipairs(log) do
-			local d = (pos - currentPos).Magnitude
-			if d < minDist then
-				minDist = d
-				bestLog, bestStep = i, j
+			if pos.Y >= currentPos.Y then -- ⬅ hanya titik yang lebih tinggi atau sejajar
+				local d = (pos - currentPos).Magnitude
+				if d < minDist then
+					minDist = d
+					bestLog, bestStep = i, j
+				end
 			end
 		end
 	end
