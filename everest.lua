@@ -144,22 +144,6 @@ instantInteractButton.MouseButton1Click:Connect(function()
 	instantInteractButton.Text = instantEnabled and "Instant: ON" or "Instant: OFF"
 end)
 
-replayButton.MouseButton1Click:Connect(function()
-	if not replaying then
-		task.spawn(smartReplay)
-	else
-		replaying = false
-	end
-end)
-
-recordButton.MouseButton1Click:Connect(function()
-	if not recording then
-		startRecording()
-	else
-		stopRecording()
-	end
-end)
-
 minimizeButton.MouseButton1Click:Connect(function()
 	frame.Visible = false
 	borderFrame.Visible = true
@@ -380,3 +364,19 @@ local function stopRecording()
 	recordButton.Text = "⏺ Start Record"
 	recordButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 end
+
+replayButton.MouseButton1Click:Connect(function()
+	if not replaying then
+		task.spawn(smartReplay)
+	else
+		replaying = false
+	end
+end)
+
+recordButton.MouseButton1Click:Connect(function()
+	if not recording then
+		startRecording()
+	else
+		stopRecording()
+	end
+end)
