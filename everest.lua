@@ -120,7 +120,11 @@ local function smartReplay()
 			newChar:MoveTo(fallbackPos)
 			LogToConsole("[Fallback] Teleport ke langkah ke-" .. targetStep)
 
-			i = targetStep
+			-- Tambahan agar lanjut jalan setelah teleport
+			task.wait(0.5)
+			walkTo(log[targetStep])
+
+			i = targetStep + 5
 			continue
 		end
 
