@@ -1,136 +1,54 @@
-local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
+local player = game.Players.LocalPlayer
+local TweenService = game:GetService("TweenService")
 
-local player = Players.LocalPlayer
-local character = player.Character or player.CharacterAdded:Wait()
-local humanoid = character:WaitForChild("Humanoid")
+-- GUI Setup
+local ScreenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+local StartButton = Instance.new("TextButton", ScreenGui)
+StartButton.Size = UDim2.new(0, 200, 0, 50)
+StartButton.Position = UDim2.new(0.5, -100, 0.5, -25)
+StartButton.Text = "Start"
+StartButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
+StartButton.TextScaled = true
 
-local followEnabled = false
-local targetName = ""
-local followLoop = nil
-
--- === GUI ===
-local gui = Instance.new("ScreenGui", game.CoreGui)
-gui.Name = "FollowGUI"
-
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 220, 0, 180)
-frame.Position = UDim2.new(0, 50, 0, 200)
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-frame.BorderSizePixel = 0
-frame.Active = true
-frame.Draggable = true
-
-local title = Instance.new("TextLabel", frame)
-title.Size = UDim2.new(1, 0, 0, 30)
-title.Text = "Follow Player"
-title.TextColor3 = Color3.new(1, 1, 1)
-title.BackgroundTransparency = 1
-title.Font = Enum.Font.SourceSansBold
-title.TextSize = 18
-
-local usernameBox = Instance.new("TextBox", frame)
-usernameBox.Size = UDim2.new(1, -10, 0, 30)
-usernameBox.Position = UDim2.new(0, 5, 0, 40)
-usernameBox.PlaceholderText = "Enter Player Username"
-usernameBox.Text = ""
-usernameBox.ClearTextOnFocus = false
-usernameBox.TextColor3 = Color3.new(1, 1, 1)
-usernameBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-
-local followButton = Instance.new("TextButton", frame)
-followButton.Size = UDim2.new(1, -10, 0, 30)
-followButton.Position = UDim2.new(0, 5, 0, 80)
-followButton.Text = "Follow: OFF"
-followButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-followButton.TextColor3 = Color3.fromRGB(1, 1, 1)
-
-local teleportButton = Instance.new("TextButton", frame)
-teleportButton.Size = UDim2.new(1, -10, 0, 30)
-teleportButton.Position = UDim2.new(0, 5, 0, 120)
-teleportButton.Text = "Teleport to Player"
-teleportButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-teleportButton.TextColor3 = Color3.fromRGB(1, 1, 1)
-
--- === Fungsi Utama ===
-local function findTargetByName(name)
-	for _, p in pairs(Players:GetPlayers()) do
-		if p.Name:lower() == name:lower() then
-			return p
-		end
-	end
-	return nil
-end
-
+-- Fungsi teleport
 local function teleportTo(position)
 	local char = player.Character or player.CharacterAdded:Wait()
 	char:MoveTo(position)
 end
 
-local function followTarget()
-	if followLoop then followLoop:Disconnect() end
-
-	followLoop = RunService.Heartbeat:Connect(function()
-		if not followEnabled then
-			if followLoop then
-				followLoop:Disconnect()
-				followLoop = nil
-			end
-			return
-		end
-
-		local target = findTargetByName(targetName)
-		if not target or not target.Character or not target.Character:FindFirstChild("HumanoidRootPart") then
-			warn("❌ Target not found or invalid.")
-			followEnabled = false
-			followButton.Text = "Follow: OFF"
-			followButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-			return
-		end
-
-		local myChar = player.Character or player.CharacterAdded:Wait()
-		local myHumanoid = myChar:WaitForChild("Humanoid")
-		local targetPos = target.Character.HumanoidRootPart.Position
-
-		myHumanoid:MoveTo(targetPos)
-	end)
+-- Fungsi interpolasi
+local function interpolate(startVec, endVec, t)
+	return startVec + (endVec - startVec) * t
 end
 
--- === Button Handler ===
-followButton.MouseButton1Click:Connect(function()
-	if not followEnabled then
-		targetName = usernameBox.Text
-		if targetName == "" then return end
+-- Titik utama
+local points = {
+	Vector3.new(-1075, 941, 1268),
+	Vector3.new(-2121, 1781, 793),
+	Vector3.new(-3942, 5005, 866),
+	Vector3.new(-4630, 6616, 913),
+	Vector3.new(-5181, 8429, 1055)
+}
 
-		followEnabled = true
-		followButton.Text = "Follow: ON"
-		followButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-		followTarget()
-	else
-		followEnabled = false
-		followButton.Text = "Follow: OFF"
-		followButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+-- Bagi 720 titik di antara 4 lintasan
+local totalSteps = 720
+local stepsPerSegment = totalSteps / (#points - 1) -- 720 / 4 = 180
 
-		local char = player.Character
-		if char and char:FindFirstChild("Humanoid") then
-			-- Stop movement instantly
-			char.Humanoid:Move(Vector3.zero, false)
-		end
+-- Ketika tombol diklik
+StartButton.MouseButton1Click:Connect(function()
+	StartButton.Visible = false
 
-		if followLoop then
-			followLoop:Disconnect()
-			followLoop = nil
+	for i = 1, #points - 1 do
+		local startPos = points[i]
+		local endPos = points[i + 1]
+
+		for step = 1, stepsPerSegment do
+			local t = step / stepsPerSegment
+			local interpolatedPos = interpolate(startPos, endPos, t)
+			teleportTo(interpolatedPos)
+			task.wait(1) -- 1 detik per teleport
 		end
 	end
-end)
 
-teleportButton.MouseButton1Click:Connect(function()
-	local target = findTargetByName(usernameBox.Text)
-	if not target or not target.Character or not target.Character:FindFirstChild("HumanoidRootPart") then
-		warn("❌ Target not found or invalid.")
-		return
-	end
-
-	local targetPos = target.Character.HumanoidRootPart.Position
-	teleportTo(targetPos)
+	print("Teleportasi selesai.")
 end)
