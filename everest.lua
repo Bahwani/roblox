@@ -215,45 +215,6 @@ closeButton.MouseButton1Click:Connect(function()
 	gui:Destroy()
 end)
 
--- === Button Handler ===
-followButton.MouseButton1Click:Connect(function()
-	if not followEnabled then
-		targetName = usernameBox.Text
-		if targetName == "" then return end
-
-		followEnabled = true
-		followButton.Text = "Follow: ON"
-		followButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-		followTarget()
-	else
-		followEnabled = false
-		followButton.Text = "Follow: OFF"
-		followButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-
-		local char = player.Character
-		if char and char:FindFirstChild("Humanoid") then
-			-- Stop movement instantly
-			char.Humanoid:Move(Vector3.zero, false)
-		end
-
-		if followLoop then
-			followLoop:Disconnect()
-			followLoop = nil
-		end
-	end
-end)
-
-teleportButton.MouseButton1Click:Connect(function()
-	local target = findTargetByName(usernameBox.Text)
-	if not target or not target.Character or not target.Character:FindFirstChild("HumanoidRootPart") then
-		warn("❌ Target not found or invalid.")
-		return
-	end
-
-	local targetPos = target.Character.HumanoidRootPart.Position
-	teleportTo(targetPos)
-end)
-
 -- === Prompt Instant Interact ===
 ProximityPromptService.PromptShown:Connect(function(prompt)
 	if instantEnabled then
@@ -541,4 +502,43 @@ recordButton.MouseButton1Click:Connect(function()
 	else
 		stopRecording()
 	end
+end)
+
+-- === Button Handler ===
+followButton.MouseButton1Click:Connect(function()
+	if not followEnabled then
+		targetName = usernameBox.Text
+		if targetName == "" then return end
+
+		followEnabled = true
+		followButton.Text = "Follow: ON"
+		followButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
+		followTarget()
+	else
+		followEnabled = false
+		followButton.Text = "Follow: OFF"
+		followButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+
+		local char = player.Character
+		if char and char:FindFirstChild("Humanoid") then
+			-- Stop movement instantly
+			char.Humanoid:Move(Vector3.zero, false)
+		end
+
+		if followLoop then
+			followLoop:Disconnect()
+			followLoop = nil
+		end
+	end
+end)
+
+teleportButton.MouseButton1Click:Connect(function()
+	local target = findTargetByName(usernameBox.Text)
+	if not target or not target.Character or not target.Character:FindFirstChild("HumanoidRootPart") then
+		warn("❌ Target not found or invalid.")
+		return
+	end
+
+	local targetPos = target.Character.HumanoidRootPart.Position
+	teleportTo(targetPos)
 end)
