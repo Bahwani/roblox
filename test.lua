@@ -7,13 +7,14 @@ local humanoid = character:WaitForChild("Humanoid")
 
 local followEnabled = false
 local targetName = ""
+local followLoop = nil
 
 -- === GUI ===
 local gui = Instance.new("ScreenGui", game.CoreGui)
 gui.Name = "FollowGUI"
 
 local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 200, 0, 140)
+frame.Size = UDim2.new(0, 220, 0, 180)
 frame.Position = UDim2.new(0, 50, 0, 200)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
@@ -44,6 +45,13 @@ followButton.Text = "Follow: OFF"
 followButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 followButton.TextColor3 = Color3.fromRGB(1, 1, 1)
 
+local teleportButton = Instance.new("TextButton", frame)
+teleportButton.Size = UDim2.new(1, -10, 0, 30)
+teleportButton.Position = UDim2.new(0, 5, 0, 120)
+teleportButton.Text = "Teleport to Player"
+teleportButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+teleportButton.TextColor3 = Color3.fromRGB(1, 1, 1)
+
 -- === Fungsi Utama ===
 local function findTargetByName(name)
 	for _, p in pairs(Players:GetPlayers()) do
@@ -55,14 +63,24 @@ local function findTargetByName(name)
 end
 
 local function followTarget()
-	while followEnabled do
+	if followLoop then followLoop:Disconnect() end
+
+	followLoop = RunService.Heartbeat:Connect(function()
+		if not followEnabled then
+			if followLoop then
+				followLoop:Disconnect()
+				followLoop = nil
+			end
+			return
+		end
+
 		local target = findTargetByName(targetName)
 		if not target or not target.Character or not target.Character:FindFirstChild("HumanoidRootPart") then
-			print("❌ Target not found or invalid.")
+			warn("❌ Target not found or invalid.")
 			followEnabled = false
 			followButton.Text = "Follow: OFF"
 			followButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-			break
+			return
 		end
 
 		local myChar = player.Character or player.CharacterAdded:Wait()
@@ -70,8 +88,7 @@ local function followTarget()
 		local targetPos = target.Character.HumanoidRootPart.Position
 
 		myHumanoid:MoveTo(targetPos)
-		wait(0.2)
-	end
+	end)
 end
 
 -- === Button Handler ===
@@ -83,11 +100,22 @@ followButton.MouseButton1Click:Connect(function()
 		followEnabled = true
 		followButton.Text = "Follow: ON"
 		followButton.BackgroundColor3 = Color3.fromRGB(0, 170, 0)
-
-		task.spawn(followTarget)
+		followTarget()
 	else
 		followEnabled = false
 		followButton.Text = "Follow: OFF"
 		followButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 	end
+end)
+
+teleportButton.MouseButton1Click:Connect(function()
+	local target = findTargetByName(usernameBox.Text)
+	if not target or not target.Character or not target.Character:FindFirstChild("HumanoidRootPart") then
+		warn("❌ Target not found or invalid.")
+		return
+	end
+
+	local myChar = player.Character or player.CharacterAdded:Wait()
+	local myHumanoid = myChar:WaitForChild("Humanoid")
+	myHumanoid:MoveTo(target.Character.HumanoidRootPart.Position)
 end)
