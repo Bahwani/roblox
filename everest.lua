@@ -256,7 +256,47 @@ local function smartReplay()
 		while replaying and i <= #log do
 			local pos = log[i]
 			local success = walkTo(pos)
-			i += success and walkStep or fallbackStep
+
+			if success then
+				i += walkStep
+			else
+				local targetStep = math.min(i + fallbackStep, #log)
+				local fallbackPos = log[targetStep]
+
+				local char = player.Character or player.CharacterAdded:Wait()
+				local hrp = char:WaitForChild("HumanoidRootPart")
+				local humanoid = char:FindFirstChild("Humanoid")
+
+				if humanoid and fallbackPos then
+					print("[Fallback] Memanggil MoveTo ke langkah " .. targetStep)
+					humanoid:MoveTo(fallbackPos)
+
+					local done = false
+					local moveConn = humanoid.MoveToFinished:Connect(function(ok)
+						done = ok
+					end)
+
+					local elapsed = 0
+					while not done and elapsed < 3.0 do
+						task.wait(0.1)
+						elapsed += 0.1
+					end
+					moveConn:Disconnect()
+
+					if done then
+						print("[Fallback] MoveTo berhasil ke langkah " .. targetStep)
+					else
+						print("[Fallback] MoveTo gagal/tidak selesai dalam 3 detik, teleport paksa dengan CFrame...")
+						-- Teleport paksa via CFrame jika MoveTo gagal
+						hrp.CFrame = CFrame.new(fallbackPos + Vector3.new(0, 3, 0))
+						task.wait(0.2)
+					end
+				else
+					print("[Fallback] Tidak bisa teleport karena Humanoid atau fallbackPos nil")
+				end
+
+				i = targetStep + 1
+			end
 		end
 
 		currentLogIndex += 1
