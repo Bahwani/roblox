@@ -23,8 +23,8 @@ gui.Name = "PetoGacorrawr"
 
 local frame = Instance.new("Frame")
 frame.Name = "MainFrame"
-frame.Size = UDim2.new(0, 200, 0, 160)
-frame.Position = UDim2.new(0.5, -100, 0.5, -80)
+frame.Size = UDim2.new(0, 200, 0, 240) -- sebelumnya 160
+frame.Position = UDim2.new(0.5, -100, 0.5, -120) -- opsional agar tetap di tengah
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
 frame.Active = true
@@ -139,8 +139,15 @@ end)
 closeButton.MouseButton1Click:Connect(function()
 	if flyEnabled and flyBodyVelocity then flyBodyVelocity:Destroy() end
 	humanoid.WalkSpeed = normalSpeed
+
+	-- Matikan recording dan replay
+	recording = false
+	replaying = false
+	if recordConnection then recordConnection:Disconnect() end
+
 	gui:Destroy()
 end)
+
 
 -- === Prompt Instant Interact ===
 ProximityPromptService.PromptShown:Connect(function(prompt)
@@ -338,36 +345,24 @@ local function stopRecording()
 	recordButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 end
 
--- === GUI Record / Replay ===
-local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-screenGui.Name = "EverestGUI"
-
-local logFrame = Instance.new("Frame", screenGui)
-logFrame.Size = UDim2.new(0, 180, 0, 120)
-logFrame.Position = UDim2.new(0, 20, 0.3, 0)
-logFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-logFrame.BackgroundTransparency = 0.15
-logFrame.BorderSizePixel = 0
-
-local layout = Instance.new("UIListLayout", logFrame)
-layout.Padding = UDim.new(0, 8)
-
-replayButton = Instance.new("TextButton", logFrame)
-replayButton.Size = UDim2.new(1, -10, 0, 40)
-replayButton.Position = UDim2.new(0, 5, 0, 10)
+-- Tambahkan ini DI BAWAH instantInteractButton (masih dalam `frame`)
+local replayButton = Instance.new("TextButton", frame)
+replayButton.Size = UDim2.new(1, -10, 0, 30)
+replayButton.Position = UDim2.new(0, 5, 0, 155) -- Sesuaikan posisi (115 + 30 + 10)
+replayButton.Text = "▶ Start Replay"
 replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 replayButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 replayButton.Font = Enum.Font.SourceSansBold
 replayButton.TextSize = 18
-replayButton.Text = "▶ Start Replay"
 
-recordButton = Instance.new("TextButton", logFrame)
-recordButton.Size = UDim2.new(1, -10, 0, 40)
+local recordButton = Instance.new("TextButton", frame)
+recordButton.Size = UDim2.new(1, -10, 0, 30)
+recordButton.Position = UDim2.new(0, 5, 0, 195) -- Sesuaikan posisi (155 + 30 + 10)
+recordButton.Text = "⏺ Start Record"
 recordButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 recordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 recordButton.Font = Enum.Font.SourceSansBold
 recordButton.TextSize = 18
-recordButton.Text = "⏺ Start Record"
 
 replayButton.MouseButton1Click:Connect(function()
 	if not replaying then
