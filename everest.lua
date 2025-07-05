@@ -96,7 +96,10 @@ local function smartReplay()
 	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
 
 	local logs = getAllLogs()
-	if #logs == 0 then return end
+	if #logs == 0 then
+		LogToConsole("[Replay] Tidak ada log yang ditemukan.")
+		return
+	end
 
 	local char = player.Character or player.CharacterAdded:Wait()
 	local hrp = char:WaitForChild("HumanoidRootPart")
@@ -108,41 +111,45 @@ local function smartReplay()
 	while i <= #log do
 		if not replaying then break end
 
+		LogToConsole("[Replay] Menuju langkah " .. i)
 		local success = walkTo(log[i])
 		if not success then
-			LogToConsole("[Walk] Gagal ke langkah " .. i .. ", teleport fallback...")
+			LogToConsole("[WalkTo] Gagal ke langkah " .. i .. ", mencoba teleport...")
 
-			local newChar = player.Character or player.CharacterAdded:Wait()
-			local newHRP = newChar:FindFirstChild("HumanoidRootPart")
-			local newHuman = newChar:FindFirstChild("Humanoid")
-			if not newChar or not newHRP or not newHuman then break end
+			-- Fallback: teleport ke langkah +5
+			local fallbackStep = math.min(i + 5, #log)
+			local fallbackPos = log[fallbackStep]
 
-			local targetStep = math.min(i + 5, #log)
-			local fallbackPos = log[targetStep]
+			local char2 = player.Character or player.CharacterAdded:Wait()
+			local hrp2 = char2:WaitForChild("HumanoidRootPart")
+			local humanoid = char2:FindFirstChild("Humanoid")
 
-			newHuman:MoveTo(fallbackPos) -- gunakan tetap MoveTo
-			LogToConsole("[Fallback] MoveTo ke langkah ke-" .. targetStep)
+			if humanoid then
+				humanoid:MoveTo(fallbackPos)
+				LogToConsole("[Fallback] MoveTo ke langkah ke-" .. fallbackStep)
 
-			-- Tunggu sampai karakter benar-benar sampai
-			local maxWait = 3.0
-			local elapsed = 0
-			while (newHRP.Position - fallbackPos).Magnitude > 1 and elapsed < maxWait do
-				task.wait(0.1)
-				elapsed += 0.1
-			end
+				-- Tunggu hingga benar-benar sampai di tempat fallback
+				local t, timeout = 0, 3.0
+				while (hrp2.Position - fallbackPos).Magnitude > 2 and t < timeout do
+					task.wait(0.1)
+					t += 0.1
+				end
 
-			if (newHRP.Position - fallbackPos).Magnitude > 1 then
-				LogToConsole("[Fallback] Gagal mencapai posisi fallback.")
+				if (hrp2.Position - fallbackPos).Magnitude <= 2 then
+					LogToConsole("[Fallback] Berhasil teleport ke fallback.")
+				else
+					LogToConsole("[Fallback] Gagal mencapai posisi fallback.")
+				end
 			else
-				LogToConsole("[Fallback] Sukses teleport via MoveTo.")
+				LogToConsole("[Fallback] Tidak menemukan humanoid.")
 			end
 
-			-- Set ulang status replay dan restart dari posisi baru
+			-- STOP REPLAY, lalu START ulang
 			replaying = false
 			replayButton.Text = "▶ Start Replay"
 			replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 
-			task.wait(0.5) -- beri waktu break keluar loop
+			task.wait(0.5) -- beri waktu untuk keluar dari loop
 			task.spawn(smartReplay) -- jalankan ulang replay
 			return
 		end
