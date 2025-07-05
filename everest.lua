@@ -90,87 +90,70 @@ local function adaptiveFallback(targetPos, fallbackLogs)
 	return false -- semua log gagal
 end
 
---[[ local function smartReplay()
+local function smartReplay()
 	replaying = true
 	replayButton.Text = "⏹ Stop Replay"
 	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
 
 	local logs = getAllLogs()
-	if #logs == 0 then
-		LogToConsole("[Replay] Tidak ada log ditemukan.")
-		replaying = false
-		replayButton.Text = "▶ Start Replay"
-		replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-		return
-	end
+	if #logs == 0 then return end
 
-	local char = player.Character or player.CharacterAdded:Wait()
-	local hrp = char:WaitForChild("HumanoidRootPart")
+	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if not hrp then return end
 
-	local logIndex, stepIndex = findClosestPoint(logs, hrp.Position)
-	if not logIndex or not stepIndex then
-		LogToConsole("[Replay] Tidak bisa temukan posisi terdekat dalam log.")
-		replaying = false
-		replayButton.Text = "▶ Start Replay"
-		replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-		return
-	end
+	local currentLogIndex, currentStepIndex = findClosestPoint(logs, hrp.Position)
 
-	local log = logs[logIndex]
-	local i = stepIndex
+	while replaying and currentLogIndex <= #logs do
+		local log = logs[currentLogIndex]
+		local i = currentStepIndex
 
-	LogToConsole("[Replay] Mulai dari log " .. logIndex .. " langkah " .. i)
+		while replaying and i <= #log do
+			local pos = log[i]
+			local success = walkTo(pos)
 
-	while replaying and i <= #log do
-		LogToConsole("[Replay] Menuju langkah " .. i)
+			if success then
+				i += 5
+			else
+				-- 🚨 Langsung teleport ke langkah i + 5
+				local targetStep = math.min(i + 5, #log)
+				local fallbackPos = log[targetStep]
 
-		local success = walkTo(log[i])
-		if not success then
-			LogToConsole("[Fallback] Gagal ke langkah " .. i .. ", teleport ke i+5")
+				local char = player.Character or player.CharacterAdded:Wait()
+				local hrp = char:WaitForChild("HumanoidRootPart")
+				local humanoid = char:FindFirstChild("Humanoid")
 
-			local targetStep = math.min(i + 5, #log)
-			local fallbackPos = log[targetStep]
+				if humanoid and fallbackPos then
+					humanoid:MoveTo(fallbackPos)
+					LogToConsole("[Fallback] Teleport ke langkah "..targetStep)
 
-			local newChar = player.Character or player.CharacterAdded:Wait()
-			local newHRP = newChar:WaitForChild("HumanoidRootPart")
-			local humanoid = newChar:FindFirstChild("Humanoid")
+					local timeout = 3
+					local elapsed = 0
+					while (hrp.Position - fallbackPos).Magnitude > 2 and elapsed < timeout do
+						task.wait(0.1)
+						elapsed += 0.1
+					end
 
-			if humanoid then
-				humanoid:MoveTo(fallbackPos)
-
-				local elapsed = 0
-				while (newHRP.Position - fallbackPos).Magnitude > 2 and elapsed < 3.0 do
-					task.wait(0.1)
-					elapsed += 0.1
+					if (hrp.Position - fallbackPos).Magnitude <= 2 then
+						LogToConsole("[Fallback] Teleport berhasil")
+					else
+						LogToConsole("[Fallback] Teleport gagal, tetap lanjut")
+					end
 				end
 
-				if (newHRP.Position - fallbackPos).Magnitude <= 2 then
-					LogToConsole("[Fallback] Teleport berhasil. Restart replay...")
-				else
-					LogToConsole("[Fallback] Teleport gagal. Tetap coba restart.")
-				end
+				i = targetStep + 1 -- lanjut setelah teleport
 			end
-
-			-- Reset state dan restart
-			replaying = false
-			replayButton.Text = "▶ Start Replay"
-			replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-
-			task.wait(0.5)
-			return task.spawn(smartReplay)
 		end
 
-		i += 5
+		currentLogIndex += 1
+		currentStepIndex = 1
 	end
 
-	LogToConsole("[Replay] Selesai.")
 	replayButton.Text = "▶ Start Replay"
 	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 	replaying = false
 end
-]]
 
-local function smartReplay()
+--[[local function smartReplay()
 	replaying = true
 	replayButton.Text = "⏹ Stop Replay"
 	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
@@ -224,6 +207,7 @@ local function smartReplay()
 	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 	replaying = false
 end
+]]
 
 -- === Record ===
 local function getUniqueFilename()
