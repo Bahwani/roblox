@@ -105,6 +105,17 @@ followButton.MouseButton1Click:Connect(function()
 		followEnabled = false
 		followButton.Text = "Follow: OFF"
 		followButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+
+		local char = player.Character
+		if char and char:FindFirstChild("Humanoid") then
+			-- Stop movement instantly
+			char.Humanoid:Move(Vector3.zero, false)
+		end
+
+		if followLoop then
+			followLoop:Disconnect()
+			followLoop = nil
+		end
 	end
 end)
 
@@ -116,6 +127,9 @@ teleportButton.MouseButton1Click:Connect(function()
 	end
 
 	local myChar = player.Character or player.CharacterAdded:Wait()
-	local myHumanoid = myChar:WaitForChild("Humanoid")
-	myHumanoid:MoveTo(target.Character.HumanoidRootPart.Position)
+	local myRoot = myChar:WaitForChild("HumanoidRootPart")
+	local targetPos = target.Character.HumanoidRootPart.Position
+
+	-- Teleport langsung, bukan MoveTo
+	myRoot.CFrame = CFrame.new(targetPos + Vector3.new(0, 3, 0))
 end)
