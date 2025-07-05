@@ -1,133 +1,195 @@
--- Everest Smart Adaptive Replay Script v3 + GUI Fly/Speed/Instant
--- Digabung utuh tanpa menghilangkan fitur apa pun
-
 local Players = game:GetService("Players")
-local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local ProximityPromptService = game:GetService("ProximityPromptService")
+local RunService = game:GetService("RunService")
+
 local player = Players.LocalPlayer
 local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
 
-local folderPath = "/storage/emulated/0/Delta/Workspace/LogEverest"
+-- === Variabel Utama ===
+local folderPath = "/storage/emulated/0/Delta/Workspace/PetssLogEverest"
+local flyEnabled, speedEnabled, instantEnabled = false, false, false
+local flyBodyVelocity = nil
+local normalSpeed, fastSpeed = 16, 36
 local replaying, recording = false, false
 local recordConnection, lastRecordedPos = nil, nil
 local minDistance, walkStep, fallbackStep = 1.5, 8, 2
 
-local flyEnabled, flyBodyVelocity = false, nil
-local speedEnabled, normalSpeed, fastSpeed = false, 16, 36
-local instantEnabled = false
-
--- GUI Setup
+-- === GUI PetoGacorrawr ===
 local gui = Instance.new("ScreenGui", game.CoreGui)
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 200, 0, 270)
-frame.Position = UDim2.new(0.5, -100, 0.5, -135)
+gui.Name = "PetoGacorrawr"
+
+local frame = Instance.new("Frame")
+frame.Name = "MainFrame"
+frame.Size = UDim2.new(0, 200, 0, 160)
+frame.Position = UDim2.new(0.5, -100, 0.5, -80)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
-frame.Active, frame.Draggable = true, true
+frame.Active = true
+frame.Draggable = true
+frame.Parent = gui
 
-local function createButton(text, y)
-	local btn = Instance.new("TextButton", frame)
-	btn.Size = UDim2.new(1, -10, 0, 30)
-	btn.Position = UDim2.new(0, 5, 0, y)
-	btn.Text = text
-	btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-	btn.Font = Enum.Font.SourceSansBold
-	btn.TextSize = 16
-	return btn
-end
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, -70, 0, 30)
+title.Position = UDim2.new(0, 5, 0, 0)
+title.Text = "PetoGacorrawr"
+title.BackgroundTransparency = 1
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
+title.TextXAlignment = Enum.TextXAlignment.Left
 
-local flyButton = createButton("Fly: OFF", 35)
-local speedButton = createButton("Speed: OFF", 75)
-local instantButton = createButton("Instant: OFF", 115)
-local replayButton = createButton("\226\151\128 Start Replay", 155)
-local recordButton = createButton("\226\141\276 Start Record", 195)
+local minimizeButton = Instance.new("TextButton", frame)
+minimizeButton.Size = UDim2.new(0, 30, 0, 30)
+minimizeButton.Position = UDim2.new(1, -65, 0, 0)
+minimizeButton.Text = "-"
 
--- Fly toggle
+local closeButton = Instance.new("TextButton", frame)
+closeButton.Size = UDim2.new(0, 30, 0, 30)
+closeButton.Position = UDim2.new(1, -35, 0, 0)
+closeButton.Text = "X"
+
+local flyButton = Instance.new("TextButton", frame)
+flyButton.Size = UDim2.new(1, -10, 0, 30)
+flyButton.Position = UDim2.new(0, 5, 0, 35)
+flyButton.Text = "Fly: OFF"
+flyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+flyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local speedButton = Instance.new("TextButton", frame)
+speedButton.Size = UDim2.new(1, -10, 0, 30)
+speedButton.Position = UDim2.new(0, 5, 0, 75)
+speedButton.Text = "Speed: OFF"
+speedButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+speedButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+local instantInteractButton = Instance.new("TextButton", frame)
+instantInteractButton.Size = UDim2.new(1, -10, 0, 30)
+instantInteractButton.Position = UDim2.new(0, 5, 0, 115)
+instantInteractButton.Text = "Instant: OFF"
+instantInteractButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+instantInteractButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+
+-- === GUI Mini
+local miniFrame = Instance.new("ImageButton", gui)
+miniFrame.Size = UDim2.new(0, 50, 0, 50)
+miniFrame.Position = UDim2.new(0.5, -25, 0.5, -25)
+miniFrame.BackgroundTransparency = 1
+miniFrame.Image = "rbxassetid://116056354483334"
+miniFrame.Visible = false
+miniFrame.Active = true
+miniFrame.Draggable = true
+miniFrame.ZIndex = 6
+
+local corner = Instance.new("UICorner", miniFrame)
+corner.CornerRadius = UDim.new(1, 0)
+
+local borderFrame = Instance.new("Frame", miniFrame)
+borderFrame.Size = UDim2.new(1, 6, 1, 6)
+borderFrame.Position = UDim2.new(0, -3, 0, -3)
+borderFrame.BackgroundColor3 = Color3.new(1, 0, 0)
+borderFrame.BorderSizePixel = 0
+borderFrame.ZIndex = 5
+borderFrame.Visible = false
+
+local borderCorner = Instance.new("UICorner", borderFrame)
+borderCorner.CornerRadius = UDim.new(1, 0)
+
+-- === Tombol Handler ===
 flyButton.MouseButton1Click:Connect(function()
 	flyEnabled = not flyEnabled
 	flyButton.Text = flyEnabled and "Fly: ON" or "Fly: OFF"
 	if flyEnabled then
-		flyBodyVelocity = Instance.new("BodyVelocity", humanoidRootPart)
+		flyBodyVelocity = Instance.new("BodyVelocity")
 		flyBodyVelocity.Velocity = Vector3.new(0, 50, 0)
 		flyBodyVelocity.MaxForce = Vector3.new(0, math.huge, 0)
 		flyBodyVelocity.P = 1250
+		flyBodyVelocity.Parent = humanoidRootPart
 	else
-		if flyBodyVelocity then flyBodyVelocity:Destroy() flyBodyVelocity = nil end
+		if flyBodyVelocity then
+			flyBodyVelocity:Destroy()
+			flyBodyVelocity = nil
+		end
 	end
 end)
 
--- Speed toggle
 speedButton.MouseButton1Click:Connect(function()
 	speedEnabled = not speedEnabled
 	speedButton.Text = speedEnabled and "Speed: ON" or "Speed: OFF"
 	humanoid.WalkSpeed = speedEnabled and fastSpeed or normalSpeed
 end)
 
--- Instant interaction toggle
-instantButton.MouseButton1Click:Connect(function()
+instantInteractButton.MouseButton1Click:Connect(function()
 	instantEnabled = not instantEnabled
-	instantButton.Text = instantEnabled and "Instant: ON" or "Instant: OFF"
+	instantInteractButton.Text = instantEnabled and "Instant: ON" or "Instant: OFF"
 end)
 
+minimizeButton.MouseButton1Click:Connect(function()
+	frame.Visible = false
+	borderFrame.Visible = true
+	miniFrame.Visible = true
+end)
+
+miniFrame.MouseButton1Click:Connect(function()
+	miniFrame.Visible = false
+	borderFrame.Visible = false
+	frame.Visible = true
+end)
+
+closeButton.MouseButton1Click:Connect(function()
+	if flyEnabled and flyBodyVelocity then flyBodyVelocity:Destroy() end
+	humanoid.WalkSpeed = normalSpeed
+	gui:Destroy()
+end)
+
+-- === Prompt Instant Interact ===
 ProximityPromptService.PromptShown:Connect(function(prompt)
-	if instantEnabled then prompt.HoldDuration = 0 end
+	if instantEnabled then
+		prompt.HoldDuration = 0
+		local mousePos = UserInputService:GetMouseLocation()
+		if not (mousePos.X >= gui.AbsolutePosition.X and mousePos.X <= gui.AbsolutePosition.X + gui.AbsoluteSize.X and
+		        mousePos.Y >= gui.AbsolutePosition.Y and mousePos.Y <= gui.AbsolutePosition.Y + gui.AbsoluteSize.Y) then
+			prompt.ClickablePrompt = true
+		else
+			prompt.ClickablePrompt = false
+		end
+	end
 end)
 
--- Write to file
-local function writePos(path, pos)
-	appendfile(path, "Posisi: Vector3.new("..pos.X..","..pos.Y..","..pos.Z..")\n")
-end
+-- === Border RGB Animation ===
+spawn(function()
+	local hue = 0
+	while true do
+		hue = (hue + 1) % 360
+		borderFrame.BackgroundColor3 = Color3.fromHSV(hue / 360, 1, 1)
+		wait(0.03)
+	end
+end)
 
-local function getUniqueFilename()
-	local i = 1
-	while isfile(folderPath.."/Log_"..i..".txt") do i += 1 end
-	return folderPath.."/Log_"..i..".txt"
-end
-
+-- === Fungsi Record / Replay ===
 local function ensureFolderExists(path)
 	if not isfolder(path) then makefolder(path) end
 end
 
-local function startRecording()
-	ensureFolderExists(folderPath)
-	local logPath = getUniqueFilename()
-	writefile(logPath, "")
-	lastRecordedPos = nil
-	recording = true
-	recordButton.Text = "\226\141\276 Stop Record"
-	recordButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
-	recordConnection = RunService.Heartbeat:Connect(function()
-		local pos = humanoidRootPart.Position
-		if not lastRecordedPos or (pos - lastRecordedPos).Magnitude >= minDistance then
-			writePos(logPath, pos)
-			lastRecordedPos = pos
-		end
-	end)
+local function getUniqueFilename()
+	local i = 1
+	while isfile(folderPath .. "/Log_" .. i .. ".txt") do i += 1 end
+	return folderPath .. "/Log_" .. i .. ".txt"
 end
 
-local function stopRecording()
-	if recordConnection then recordConnection:Disconnect() end
-	recording = false
-	recordButton.Text = "\226\141\276 Start Record"
-	recordButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+local function writePos(path, pos)
+	appendfile(path, string.format("Posisi: Vector3.new(%s, %s, %s)\n", pos.X, pos.Y, pos.Z))
 end
 
-recordButton.MouseButton1Click:Connect(function()
-	if recording then stopRecording() else startRecording() end
-end)
-
--- Replay logic
 local function readLog(path)
 	local ok, content = pcall(readfile, path)
 	if not ok then return {} end
 	local positions = {}
 	for line in content:gmatch("[^\r\n]+") do
-		local x, y, z = line:match("Vector3.new%((%-?[%d%.]+),(%-?[%d%.]+),(%-?[%d%.]+)%)")
-		if x then table.insert(positions, Vector3.new(tonumber(x), tonumber(y), tonumber(z))) end
+		local x, y, z = line:match("Posisi: Vector3.new%((%-?[%d%.]+), (%-?[%d%.]+), (%-?[%d%.]+)%)")
+		if x and y and z then
+			table.insert(positions, Vector3.new(tonumber(x), tonumber(y), tonumber(z)))
+		end
 	end
 	return positions
 end
@@ -145,81 +207,140 @@ local function getAllLogs()
 	return logs
 end
 
-local function findClosest(logs, pos)
+local function findClosestPoint(logs, currentPos)
 	local minDist, bestLog, bestStep = math.huge, 1, 1
 	for i, log in ipairs(logs) do
-		for j, p in ipairs(log) do
-			local d = (p - pos).Magnitude
-			if d < minDist then minDist, bestLog, bestStep = d, i, j end
+		for j, pos in ipairs(log) do
+			local d = (pos - currentPos).Magnitude
+			if d < minDist then
+				minDist = d
+				bestLog, bestStep = i, j
+			end
 		end
 	end
 	return bestLog, bestStep
 end
 
 local function walkTo(pos)
-	humanoid:MoveTo(pos)
-	local done = false
-	local conn = humanoid.MoveToFinished:Connect(function(ok) done = ok end)
+	local char = player.Character or player.CharacterAdded:Wait()
+	local human = char:WaitForChild("Humanoid")
+	local done, timeout = false, 3
+	human:MoveTo(pos)
+	local conn = human.MoveToFinished:Connect(function(ok) done = ok end)
 	local t = 0
-	while not done and t < 3 do task.wait(0.1); t += 0.1 end
+	while not done and t < timeout do
+		task.wait(0.1)
+		t += 0.1
+	end
 	conn:Disconnect()
 	return done
 end
 
 local function smartReplay()
 	replaying = true
-	replayButton.Text = "\226\128\185 Stop Replay"
+	replayButton.Text = "⏹ Stop Replay"
 	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
 
 	local logs = getAllLogs()
 	if #logs == 0 then return end
 
-	local currentLogIndex, currentStepIndex = findClosest(logs, humanoidRootPart.Position)
+	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if not hrp then return end
+
+	local currentLogIndex, currentStepIndex = findClosestPoint(logs, hrp.Position)
+
 	while replaying and currentLogIndex <= #logs do
 		local log = logs[currentLogIndex]
 		local i = currentStepIndex
+
 		while replaying and i <= #log do
-			if not walkTo(log[i]) then
-				local nextStep = math.min(i + fallbackStep, #log)
-				humanoidRootPart.CFrame = CFrame.new(log[nextStep] + Vector3.new(0, 3, 0))
-				task.wait(0.2)
-				i = nextStep + 1
-			else
-				i += walkStep
-			end
+			local pos = log[i]
+			local success = walkTo(pos)
+			i += success and walkStep or fallbackStep
 		end
+
 		currentLogIndex += 1
 		currentStepIndex = 1
 	end
 
-	replayButton.Text = "\226\151\128 Start Replay"
-	replayButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+	replayButton.Text = "▶ Start Replay"
+	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 	replaying = false
 end
 
+local function startRecording()
+	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if not hrp then return end
+	local logPath = getUniqueFilename()
+
+	ensureFolderExists(folderPath)
+	writefile(logPath, "")
+	lastRecordedPos = nil
+	recording = true
+
+	recordButton.Text = "⏹ Stop Record"
+	recordButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+
+	recordConnection = RunService.Heartbeat:Connect(function()
+		if not recording then return end
+		local pos = hrp.Position
+		if not lastRecordedPos or (pos - lastRecordedPos).Magnitude >= minDistance then
+			writePos(logPath, pos)
+			lastRecordedPos = pos
+		end
+	end)
+end
+
+local function stopRecording()
+	recording = false
+	if recordConnection then recordConnection:Disconnect() end
+	recordButton.Text = "⏺ Start Record"
+	recordButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+end
+
+-- === GUI Record / Replay ===
+local screenGui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
+screenGui.Name = "EverestGUI"
+
+local logFrame = Instance.new("Frame", screenGui)
+logFrame.Size = UDim2.new(0, 180, 0, 120)
+logFrame.Position = UDim2.new(0, 20, 0.3, 0)
+logFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+logFrame.BackgroundTransparency = 0.15
+logFrame.BorderSizePixel = 0
+
+local layout = Instance.new("UIListLayout", logFrame)
+layout.Padding = UDim.new(0, 8)
+
+replayButton = Instance.new("TextButton", logFrame)
+replayButton.Size = UDim2.new(1, -10, 0, 40)
+replayButton.Position = UDim2.new(0, 5, 0, 10)
+replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+replayButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+replayButton.Font = Enum.Font.SourceSansBold
+replayButton.TextSize = 18
+replayButton.Text = "▶ Start Replay"
+
+recordButton = Instance.new("TextButton", logFrame)
+recordButton.Size = UDim2.new(1, -10, 0, 40)
+recordButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+recordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+recordButton.Font = Enum.Font.SourceSansBold
+recordButton.TextSize = 18
+recordButton.Text = "⏺ Start Record"
+
 replayButton.MouseButton1Click:Connect(function()
-	if replaying then
-		replaying = false
-		replayButton.Text = "\226\151\128 Start Replay"
-		replayButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-	else
+	if not replaying then
 		task.spawn(smartReplay)
+	else
+		replaying = false
 	end
 end)
 
--- RGB border animation (optional)
-local border = Instance.new("Frame", frame)
-border.Size = frame.Size + UDim2.new(0, 6, 0, 6)
-border.Position = frame.Position - UDim2.new(0, 3, 0, 3)
-border.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-border.BorderSizePixel = 0
-border.ZIndex = -1
-
-spawn(function()
-	local hue = 0
-	while true do
-		hue = (hue + 1) % 360
-		border.BackgroundColor3 = Color3.fromHSV(hue / 360, 1, 1)
-		wait(0.03)
+recordButton.MouseButton1Click:Connect(function()
+	if not recording then
+		startRecording()
+	else
+		stopRecording()
 	end
 end)
