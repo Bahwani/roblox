@@ -1,84 +1,76 @@
 local Players = game:GetService("Players")
-local player = Players.LocalPlayer
+local RunService = game:GetService("RunService")
 
--- === Buat GUI ===
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "TeleportGui"
-screenGui.ResetOnSpawn = false
-screenGui.Parent = player:WaitForChild("PlayerGui")
+local localPlayer = Players.LocalPlayer
+local following = false
+local targetName = ""
 
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 200, 0, 280)
-frame.Position = UDim2.new(0, 20, 0.5, -140)
-frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-frame.BackgroundTransparency = 0.2
-frame.BorderSizePixel = 0
-frame.Parent = screenGui
+-- === GUI ===
+local screenGui = Instance.new("ScreenGui", game.CoreGui)
+screenGui.Name = "FollowGUI"
 
-local uiList = Instance.new("UIListLayout")
-uiList.SortOrder = Enum.SortOrder.LayoutOrder
-uiList.Padding = UDim.new(0, 6)
-uiList.Parent = frame
+local frame = Instance.new("Frame", screenGui)
+frame.Size = UDim2.new(0, 250, 0, 140)
+frame.Position = UDim2.new(0, 50, 0.5, -70)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.Active = true
+frame.Draggable = true
 
--- === Lokasi utama ===
-local locations = {
-	Camp1 = Vector3.new(-1075, 941, 1268),
-	Camp2 = Vector3.new(-2121, 1781, 793),
-	Camp3 = Vector3.new(-3942, 5005, 866),
-	Camp4 = Vector3.new(-4630, 6616, 913),
-	Summit = Vector3.new(-5181, 8429, 1055),
-}
+local title = Instance.new("TextLabel", frame)
+title.Size = UDim2.new(1, 0, 0, 30)
+title.Text = "Follow Player"
+title.TextColor3 = Color3.new(1, 1, 1)
+title.BackgroundTransparency = 1
+title.Font = Enum.Font.SourceSansBold
+title.TextSize = 20
 
--- === Lokasi checkpoint (berurutan) ===
-local checkpointPositions = {
-	Vector3.new(-3804, 4977, 1172),
-	Vector3.new(-3803, 4980, 611),
-	Vector3.new(-3802, 4978, 610),
-	Vector3.new(-3801, 4978, 612),
-}
+local usernameBox = Instance.new("TextBox", frame)
+usernameBox.PlaceholderText = "Username to follow"
+usernameBox.Size = UDim2.new(1, -20, 0, 30)
+usernameBox.Position = UDim2.new(0, 10, 0, 40)
+usernameBox.Text = ""
+usernameBox.Font = Enum.Font.SourceSans
+usernameBox.TextSize = 16
+usernameBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+usernameBox.TextColor3 = Color3.new(1, 1, 1)
 
--- Urutan tombol
-local order = {"Camp1", "Camp2", "Camp3", "Camp4", "Summit", "Checkpoint"}
+local followButton = Instance.new("TextButton", frame)
+followButton.Text = "Follow: OFF"
+followButton.Size = UDim2.new(1, -20, 0, 30)
+followButton.Position = UDim2.new(0, 10, 0, 80)
+followButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+followButton.TextColor3 = Color3.new(1, 1, 1)
+followButton.Font = Enum.Font.SourceSansBold
+followButton.TextSize = 18
 
--- === Fungsi teleport biasa ===
-local function teleportTo(position)
-	local char = player.Character or player.CharacterAdded:Wait()
-	char:MoveTo(position)
-end
+-- === Follow Logic ===
+followButton.MouseButton1Click:Connect(function()
+	following = not following
+	targetName = usernameBox.Text
+	followButton.Text = following and "Follow: ON" or "Follow: OFF"
+	followButton.BackgroundColor3 = following and Color3.fromRGB(0, 150, 0) or Color3.fromRGB(60, 60, 60)
+end)
 
--- === Fungsi teleport berurutan ke checkpoint ===
-local function teleportThroughCheckpoints()
-	local char = player.Character or player.CharacterAdded:Wait()
-	for i, pos in ipairs(checkpointPositions) do
-		char:MoveTo(pos)
-		task.wait(0.5) -- beri jeda antar teleport agar map bisa loading dan tidak nabrak
-	end
-end
+task.spawn(function()
+	while true do
+		if following and targetName ~= "" then
+			local target = Players:FindFirstChild(targetName)
+			local char = localPlayer.Character
+			local myHRP = char and char:FindFirstChild("HumanoidRootPart")
 
--- === Buat tombol ===
-local function createButton(name)
-	local btn = Instance.new("TextButton")
-	btn.Size = UDim2.new(1, -10, 0, 30)
-	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-	btn.Font = Enum.Font.SourceSansBold
-	btn.TextSize = 18
-	btn.Text = "Teleport ke " .. name
-	btn.Parent = frame
-
-	btn.MouseButton1Click:Connect(function()
-		if name == "Checkpoint" then
-			teleportThroughCheckpoints()
-		else
-			local destination = locations[name]
-			if destination then
-				teleportTo(destination)
+			if target and target.Character and myHRP then
+				local targetHRP = target.Character:FindFirstChild("HumanoidRootPart")
+				if targetHRP then
+					local dist = (myHRP.Position - targetHRP.Position).Magnitude
+					if dist > 10 then
+						local hum = char:FindFirstChildOfClass("Humanoid")
+						if hum then
+							hum:MoveTo(targetHRP.Position)
+						end
+					end
+				end
 			end
 		end
-	end)
-end
-
--- === Buat tombol sesuai urutan ===
-for _, name in ipairs(order) do
-	createButton(name)
-end
+		task.wait(0.3)
+	end
+end)
