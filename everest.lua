@@ -114,7 +114,6 @@ local function smartReplay()
 			if success then
 				i += 5
 			else
-				-- 🚨 Langsung teleport ke langkah i + 5
 				local targetStep = math.min(i + 5, #log)
 				local fallbackPos = log[targetStep]
 
@@ -123,24 +122,31 @@ local function smartReplay()
 				local humanoid = char:FindFirstChild("Humanoid")
 
 				if humanoid and fallbackPos then
+					print("[Fallback] Memanggil MoveTo ke langkah " .. targetStep)
 					humanoid:MoveTo(fallbackPos)
-					print("[Fallback] Teleport ke langkah "..targetStep)
 
-					local timeout = 3
+					local done = false
+					local moveConn = humanoid.MoveToFinished:Connect(function(success)
+						done = success
+					end)
+
 					local elapsed = 0
-					while (hrp.Position - fallbackPos).Magnitude > 2 and elapsed < timeout do
+					while not done and elapsed < 3.0 do
 						task.wait(0.1)
 						elapsed += 0.1
 					end
+					moveConn:Disconnect()
 
-					if (hrp.Position - fallbackPos).Magnitude <= 2 then
-						print("[Fallback] Teleport berhasil")
+					if done then
+						print("[Fallback] MoveTo berhasil ke langkah " .. targetStep)
 					else
-						print("[Fallback] Teleport gagal, tetap lanjut")
+						print("[Fallback] MoveTo gagal/tidak selesai dalam 3 detik, lanjut manual")
 					end
+				else
+					print("[Fallback] Tidak bisa teleport karena Humanoid atau fallbackPos nil")
 				end
 
-				i = targetStep + 1 -- lanjut setelah teleport
+				i = targetStep + 1
 			end
 		end
 
