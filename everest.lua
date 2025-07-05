@@ -120,17 +120,30 @@ local function smartReplay()
 			newChar:MoveTo(fallbackPos)
 			LogToConsole("[Fallback] Teleport ke langkah ke-" .. targetStep)
 
-			task.wait(3.0)
+			-- Tunggu sampai karakter benar-benar berada di posisi teleport
+			local maxWait = 3.0
+			local elapsed = 0
+			while (newHRP.Position - fallbackPos).Magnitude > 1 and elapsed < maxWait do
+				task.wait(0.1)
+				elapsed += 0.1
+			end
 
-			-- Setelah teleport, cari titik terdekat dan coba jalan lagi
+			-- Pastikan benar-benar berada di posisi teleport
+			if (newHRP.Position - fallbackPos).Magnitude > 1 then
+				LogToConsole("[Fallback] Gagal mencapai posisi teleport.")
+				i += 5
+				continue
+			end
+
+			-- Cari ulang titik terdekat dan lanjutkan jalan
 			local newIndex, newStep = findClosestPoint(logs, newHRP.Position)
 			logIndex = newIndex
 			log = logs[logIndex]
 			i = newStep
 
+			LogToConsole("[Replay] Lanjut jalan dari log "..logIndex.." langkah "..i)
 			local walked = walkTo(log[i])
 			if walked then
-				LogToConsole("[Replay] Berhasil jalan dari log "..logIndex.." langkah "..i)
 				i += 5
 			else
 				LogToConsole("[Replay] Gagal jalan setelah teleport, lanjut manual +5")
