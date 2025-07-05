@@ -123,7 +123,11 @@ local function smartReplay()
 			task.wait(0.5)
 			local walked = walkTo(log[targetStep])
 			if walked then
-				i = targetStep + 5
+	                        local newIndex, newStep = findClosestPoint(logs, newChar:WaitForChild("HumanoidRootPart").Position)
+	                        logIndex = newIndex
+	                        log = logs[logIndex]
+	                        i = newStep
+	                        LogToConsole("[Replay] Melanjutkan dari log "..logIndex.." langkah "..i)
 			else
 				LogToConsole("[Fallback] Gagal jalan setelah teleport, lanjutkan manual +5")
 				i += 5
