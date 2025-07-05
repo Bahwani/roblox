@@ -136,7 +136,11 @@ local function smartReplay()
 
 			-- Stop dan restart replay dari posisi baru
 			replaying = false
-			task.wait(0.1) -- beri waktu loop utama untuk break
+			-- Stop UI replay indicator
+                        replayButton.Text = "▶ Start Replay"
+                        replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+
+			task.wait(2.0) -- beri waktu loop utama untuk break
 			smartReplay()
 			return
 		end
