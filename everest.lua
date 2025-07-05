@@ -6,12 +6,15 @@
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local player = Players.LocalPlayer
-local folderPath = "/storage/emulated/0/Delta/Workspace/LogEverest"
+local folderPath = "/storage/emulated/0/Delta/PetssLogEverest😈"
 
 local replaying, recording = false, false
 local recordConnection, lastRecordedPos = nil, nil
 local minDistance = 1.5
 local replayButton, recordButton
+
+local walkStep = 8
+local fallbackStep = 2
 
 -- === Utility ===
 local function readLog(path)
@@ -112,9 +115,9 @@ local function smartReplay()
 			local success = walkTo(pos)
 
 			if success then
-				i += 5
+				i += walkStep
 			else
-				local targetStep = math.min(i + 5, #log)
+				local targetStep = math.min(i + fallbackStep, #log)
 				local fallbackPos = log[targetStep]
 
 				local char = player.Character or player.CharacterAdded:Wait()
@@ -162,61 +165,6 @@ local function smartReplay()
 	replaying = false
 end
 
---[[local function smartReplay()
-	replaying = true
-	replayButton.Text = "⏹ Stop Replay"
-	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
-
-	local logs = getAllLogs()
-	if #logs == 0 then return end
-
-	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
-	if not hrp then return end
-
-	local currentLogIndex, currentStepIndex = findClosestPoint(logs, hrp.Position)
-
-	while replaying and currentLogIndex <= #logs do
-		local log = logs[currentLogIndex]
-		local i = currentStepIndex
-
-		while replaying and i <= #log do
-			local pos = log[i]
-			local success = walkTo(pos)
-
-			if success then
-				i += 5
-			else
-				-- Coba semua log lain satu per satu
-				local reached = false
-				for altIndex, altLog in ipairs(logs) do
-					for altStep, altPos in ipairs(altLog) do
-						if (altPos - pos).Magnitude < 10 then
-							if walkTo(altPos) then
-								currentLogIndex, currentStepIndex = findClosestPoint(logs, hrp.Position)
-								reached = true
-								break
-							end
-						end
-					end
-					if reached then break end
-				end
-
-				if not reached then
-					warn("Gagal mencapai titik "..i..", lanjut ke langkah berikutnya")
-					i += 1
-				end
-			end
-		end
-
-		currentLogIndex += 1
-		currentStepIndex = 1
-	end
-
-	replayButton.Text = "▶ Start Replay"
-	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-	replaying = false
-end
-]]
 
 -- === Record ===
 local function getUniqueFilename()
@@ -229,10 +177,19 @@ local function writePos(path, pos)
 	appendfile(path, "Posisi: Vector3.new(" .. pos.X .. ", " .. pos.Y .. ", " .. pos.Z .. ")\n")
 end
 
+local function ensureFolderExists(path)
+	if not isfolder(path) then
+		makefolder(path)
+	end
+end
+
 local function startRecording()
 	local char = player.Character or player.CharacterAdded:Wait()
 	local hrp = char:WaitForChild("HumanoidRootPart")
 	local logPath = getUniqueFilename()
+	
+	ensureFolderExists(folderPath)
+	
 	writefile(logPath, "")
 	lastRecordedPos = nil
 	recording = true
