@@ -90,62 +90,38 @@ end
 
 local function smartReplay()
 	replaying = true
-	replayButton.Text = "🟥 Stop Replay"
-	replayButton.BackgroundColor3 = Color3.fromRGB(30, 60, 30)
+	replayButton.Text = "⏹ Stop Replay"
+	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
 
-	local char = player.Character or player.CharacterAdded:Wait()
-	local hrp = char:WaitForChild("HumanoidRootPart")
+	local logs = getAllLogs()
+	if #logs == 0 then return end
 
-	local allLogs = getAllLogs()
-	local logIndex, mainIdx = findClosestPoint(allLogs, hrp.Position)
-	local mainLog = allLogs[logIndex]
-	if not mainLog then
-		replaying = false
-		replayButton.Text = "▶️ Start Replay"
-		replayButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-		return
-	end
+	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if not hrp then return end
 
-	while replaying do
-		local goal = mainLog[mainIdx]
-		if not goal then break end
-		if (goal - hrp.Position).Magnitude < 2 then
-			mainIdx += 1
-			continue
-		end
+	local bestLogIndex, stepIndex = findClosestPoint(logs, hrp.Position)
+	local log = logs[bestLogIndex]
+	local i = stepIndex
 
-		local success = walkTo(goal)
-		if success then
-			mainIdx += 1
-		else
-			-- fallback: coba terus log lain hingga berhasil
-			local reached = false
-			for _, altLog in ipairs(allLogs) do
-				for _, alt in ipairs(altLog) do
-					if (alt - goal).Magnitude < 5 then
-						if walkTo(alt) then
-							-- perbarui log utama setelah fallback
-							logIndex, mainIdx = findClosestPoint(allLogs, hrp.Position)
-							mainLog = allLogs[logIndex]
-							reached = true
-							break
-						end
-					end
-				end
-				if reached then break end
-			end
-			if not reached then
-				task.wait(0.5)
+	while i <= #log do
+		if not replaying then break end
+		local success = walkTo(log[i])
+		if not success then
+			local ok, newLog, nextIndex = adaptiveFallback(log[i], logs)
+			if ok then
+				log = newLog
+				i = nextIndex
+				continue
+			else
+				warn("Gagal mencapai langkah ke-"..i)
+				break
 			end
 		end
-
-		if (hrp.Position - Vector3.new(-5181, 8429, 1055)).Magnitude < 5 then
-			break
-		end
+		i += 5
 	end
 
-	replayButton.Text = "▶️ Start Replay"
-	replayButton.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	replayButton.Text = "▶ Start Replay"
+	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 	replaying = false
 end
 
