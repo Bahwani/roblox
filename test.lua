@@ -13,7 +13,23 @@ StartButton.TextScaled = true
 -- Fungsi teleport
 local function teleportTo(position)
 	local char = player.Character or player.CharacterAdded:Wait()
-	char:MoveTo(position)
+	local rayOrigin = position + Vector3.new(0, 100, 0) -- dari atas
+	local rayDirection = Vector3.new(0, -500, 0) -- tembak ke bawah
+
+	local raycastParams = RaycastParams.new()
+	raycastParams.FilterDescendantsInstances = {char}
+	raycastParams.FilterType = Enum.RaycastFilterType.Blacklist
+
+	local result = workspace:Raycast(rayOrigin, rayDirection, raycastParams)
+
+	if result then
+		-- Jika ada permukaan di bawah, teleport ke atas permukaan itu
+		local groundPos = result.Position + Vector3.new(0, 3, 0) -- naik 3 stud di atas tanah
+		char:MoveTo(groundPos)
+	else
+		-- Jika tidak ada permukaan, tetap teleport ke posisi awal (mungkin di udara)
+		char:MoveTo(position)
+	end
 end
 
 -- Fungsi interpolasi
