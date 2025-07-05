@@ -90,7 +90,7 @@ local function adaptiveFallback(targetPos, fallbackLogs)
 	return false -- semua log gagal
 end
 
-local function smartReplay()
+--[[local function smartReplay()
 	replaying = true
 	replayButton.Text = "⏹ Stop Replay"
 	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
@@ -120,6 +120,62 @@ local function smartReplay()
 			end
 		end
 		i += 5
+	end
+
+
+	replayButton.Text = "▶ Start Replay"
+	replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+	replaying = false
+end
+]]
+local function smartReplay()
+	replaying = true
+	replayButton.Text = "⏹ Stop Replay"
+	replayButton.BackgroundColor3 = Color3.fromRGB(180, 0, 0)
+
+	local logs = getAllLogs()
+	if #logs == 0 then return end
+
+	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
+	if not hrp then return end
+
+	local currentLogIndex, currentStepIndex = findClosestPoint(logs, hrp.Position)
+
+	while replaying and currentLogIndex <= #logs do
+		local log = logs[currentLogIndex]
+		local i = currentStepIndex
+
+		while replaying and i <= #log do
+			local pos = log[i]
+			local success = walkTo(pos)
+
+			if success then
+				i += 5
+			else
+				-- Coba semua log lain satu per satu
+				local reached = false
+				for altIndex, altLog in ipairs(logs) do
+					for altStep, altPos in ipairs(altLog) do
+						if (altPos - pos).Magnitude < 10 then
+							if walkTo(altPos) then
+								currentLogIndex, currentStepIndex = findClosestPoint(logs, hrp.Position)
+								reached = true
+								break
+							end
+						end
+					end
+					if reached then break end
+				end
+
+				if not reached then
+					warn("Gagal mencapai titik "..i..", lanjut ke langkah berikutnya")
+					i += 1
+				end
+			end
+		end
+
+		currentLogIndex += 1
+		currentStepIndex = 1
 	end
 
 	replayButton.Text = "▶ Start Replay"
