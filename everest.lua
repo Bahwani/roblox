@@ -70,6 +70,26 @@ instantInteractButton.Text = "Instant: OFF"
 instantInteractButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 instantInteractButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 
+-- Tambahkan ini DI BAWAH instantInteractButton (masih dalam `frame`)
+local replayButton = Instance.new("TextButton", frame)
+replayButton.Size = UDim2.new(1, -10, 0, 30)
+replayButton.Position = UDim2.new(0, 5, 0, 155) -- Sesuaikan posisi (115 + 30 + 10)
+replayButton.Text = "▶ Start Replay"
+replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+replayButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+replayButton.Font = Enum.Font.SourceSansBold
+replayButton.TextSize = 18
+
+local recordButton = Instance.new("TextButton", frame)
+recordButton.Size = UDim2.new(1, -10, 0, 30)
+recordButton.Position = UDim2.new(0, 5, 0, 195) -- Sesuaikan posisi (155 + 30 + 10)
+recordButton.Text = "⏺ Start Record"
+recordButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+recordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+recordButton.Font = Enum.Font.SourceSansBold
+recordButton.TextSize = 18
+
+
 -- === GUI Mini
 local miniFrame = Instance.new("ImageButton", gui)
 miniFrame.Size = UDim2.new(0, 50, 0, 50)
@@ -122,6 +142,22 @@ end)
 instantInteractButton.MouseButton1Click:Connect(function()
 	instantEnabled = not instantEnabled
 	instantInteractButton.Text = instantEnabled and "Instant: ON" or "Instant: OFF"
+end)
+
+replayButton.MouseButton1Click:Connect(function()
+	if not replaying then
+		task.spawn(smartReplay)
+	else
+		replaying = false
+	end
+end)
+
+recordButton.MouseButton1Click:Connect(function()
+	if not recording then
+		startRecording()
+	else
+		stopRecording()
+	end
 end)
 
 minimizeButton.MouseButton1Click:Connect(function()
@@ -344,38 +380,3 @@ local function stopRecording()
 	recordButton.Text = "⏺ Start Record"
 	recordButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 end
-
--- Tambahkan ini DI BAWAH instantInteractButton (masih dalam `frame`)
-local replayButton = Instance.new("TextButton", frame)
-replayButton.Size = UDim2.new(1, -10, 0, 30)
-replayButton.Position = UDim2.new(0, 5, 0, 155) -- Sesuaikan posisi (115 + 30 + 10)
-replayButton.Text = "▶ Start Replay"
-replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-replayButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-replayButton.Font = Enum.Font.SourceSansBold
-replayButton.TextSize = 18
-
-local recordButton = Instance.new("TextButton", frame)
-recordButton.Size = UDim2.new(1, -10, 0, 30)
-recordButton.Position = UDim2.new(0, 5, 0, 195) -- Sesuaikan posisi (155 + 30 + 10)
-recordButton.Text = "⏺ Start Record"
-recordButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
-recordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-recordButton.Font = Enum.Font.SourceSansBold
-recordButton.TextSize = 18
-
-replayButton.MouseButton1Click:Connect(function()
-	if not replaying then
-		task.spawn(smartReplay)
-	else
-		replaying = false
-	end
-end)
-
-recordButton.MouseButton1Click:Connect(function()
-	if not recording then
-		startRecording()
-	else
-		stopRecording()
-	end
-end)
