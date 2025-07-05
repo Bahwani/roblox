@@ -62,6 +62,11 @@ local function findTargetByName(name)
 	return nil
 end
 
+local function teleportTo(position)
+	local char = player.Character or player.CharacterAdded:Wait()
+	char:MoveTo(position)
+end
+
 local function followTarget()
 	if followLoop then followLoop:Disconnect() end
 
@@ -126,10 +131,6 @@ teleportButton.MouseButton1Click:Connect(function()
 		return
 	end
 
-	local myChar = player.Character or player.CharacterAdded:Wait()
-	local myRoot = myChar:WaitForChild("HumanoidRootPart")
 	local targetPos = target.Character.HumanoidRootPart.Position
-
-	-- Teleport langsung, bukan MoveTo
-	myRoot.CFrame = CFrame.new(targetPos + Vector3.new(0, 3, 0))
+	teleportTo(targetPos)
 end)
