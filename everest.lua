@@ -114,15 +114,16 @@ local function smartReplay()
 
 			local newChar = player.Character or player.CharacterAdded:Wait()
 			local newHRP = newChar:FindFirstChild("HumanoidRootPart")
-			if not newChar or not newHRP then break end
+			local newHuman = newChar:FindFirstChild("Humanoid")
+			if not newChar or not newHRP or not newHuman then break end
 
 			local targetStep = math.min(i + 5, #log)
 			local fallbackPos = log[targetStep]
 
-			newChar:MoveTo(fallbackPos)
-			LogToConsole("[Fallback] Teleport ke langkah ke-" .. targetStep)
+			newHuman:MoveTo(fallbackPos) -- gunakan tetap MoveTo
+			LogToConsole("[Fallback] MoveTo ke langkah ke-" .. targetStep)
 
-			-- Tunggu sampai benar-benar teleport
+			-- Tunggu sampai karakter benar-benar sampai
 			local maxWait = 3.0
 			local elapsed = 0
 			while (newHRP.Position - fallbackPos).Magnitude > 1 and elapsed < maxWait do
@@ -131,24 +132,19 @@ local function smartReplay()
 			end
 
 			if (newHRP.Position - fallbackPos).Magnitude > 1 then
-				LogToConsole("[Fallback] Gagal mencapai posisi teleport.")
-				i += 5
-				continue
+				LogToConsole("[Fallback] Gagal mencapai posisi fallback.")
+			else
+				LogToConsole("[Fallback] Sukses teleport via MoveTo.")
 			end
 
-			-- Stop replay agar loop utama berhenti
+			-- Set ulang status replay dan restart dari posisi baru
 			replaying = false
 			replayButton.Text = "▶ Start Replay"
 			replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 
-			LogToConsole("[Replay] Replay dihentikan sementara, akan restart...")
-
-			-- Tunggu sedikit agar loop utama keluar
-			task.delay(0.5, function()
-				task.spawn(smartReplay)
-			end)
-
-			return -- keluar dari loop sekarang
+			task.wait(0.5) -- beri waktu break keluar loop
+			task.spawn(smartReplay) -- jalankan ulang replay
+			return
 		end
 
 		i += 5
