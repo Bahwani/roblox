@@ -1,67 +1,84 @@
-local player = game.Players.LocalPlayer
-local char = player.Character or player.CharacterAdded:Wait()
-local hrp = char:WaitForChild("HumanoidRootPart")
+local Players = game:GetService("Players")
+local player = Players.LocalPlayer
 
--- GUI Setup
-local gui = Instance.new("ScreenGui", player:WaitForChild("PlayerGui"))
-gui.Name = "FlyToSummitGUI"
+-- === Buat GUI ===
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "TeleportGui"
+screenGui.ResetOnSpawn = false
+screenGui.Parent = player:WaitForChild("PlayerGui")
 
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 220, 0, 100)
-frame.Position = UDim2.new(0.5, -110, 0.5, -50)
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 200, 0, 280)
+frame.Position = UDim2.new(0, 20, 0.5, -140)
+frame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+frame.BackgroundTransparency = 0.2
 frame.BorderSizePixel = 0
+frame.Parent = screenGui
 
-local startButton = Instance.new("TextButton", frame)
-startButton.Size = UDim2.new(1, -10, 0.5, -5)
-startButton.Position = UDim2.new(0, 5, 0, 5)
-startButton.Text = "Start Fly"
-startButton.BackgroundColor3 = Color3.fromRGB(0, 170, 255)
-startButton.TextScaled = true
+local uiList = Instance.new("UIListLayout")
+uiList.SortOrder = Enum.SortOrder.LayoutOrder
+uiList.Padding = UDim.new(0, 6)
+uiList.Parent = frame
 
-local closeButton = Instance.new("TextButton", frame)
-closeButton.Size = UDim2.new(1, -10, 0.5, -5)
-closeButton.Position = UDim2.new(0, 5, 0.5, 5)
-closeButton.Text = "Close"
-closeButton.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
-closeButton.TextScaled = true
+-- === Lokasi utama ===
+local locations = {
+	Camp1 = Vector3.new(-1075, 941, 1268),
+	Camp2 = Vector3.new(-2121, 1781, 793),
+	Camp3 = Vector3.new(-3942, 5005, 866),
+	Camp4 = Vector3.new(-4630, 6616, 913),
+	Summit = Vector3.new(-5181, 8429, 1055),
+}
 
--- Fungsi interpolasi posisi
-local function interpolateVector3(startPos, endPos, t)
-	return startPos + (endPos - startPos) * t
+-- === Lokasi checkpoint (berurutan) ===
+local checkpointPositions = {
+	Vector3.new(-3804, 4977, 1172),
+	Vector3.new(-3803, 4980, 611),
+	Vector3.new(-3802, 4978, 610),
+	Vector3.new(-3801, 4978, 612),
+}
+
+-- Urutan tombol
+local order = {"Camp1", "Camp2", "Camp3", "Camp4", "Summit", "Checkpoint"}
+
+-- === Fungsi teleport biasa ===
+local function teleportTo(position)
+	local char = player.Character or player.CharacterAdded:Wait()
+	char:MoveTo(position)
 end
 
--- Konfigurasi
-local totalTime = 720 -- 12 menit
-local steps = 720
-local delayPerStep = totalTime / steps
-
-local startPos = Vector3.new(-3942, 5005, 866)
-local endPos = Vector3.new(-5181, 8429, 1055)
-
--- Fungsi fly ke summit
-local function startFly()
-	frame.Visible = false
-	hrp.Anchored = true
-	print("Mulai fly ke summit...")
-
-	for step = 1, steps do
-		local t = step / steps
-		local targetPos = interpolateVector3(startPos, endPos, t)
-		hrp.CFrame = CFrame.new(targetPos)
-		task.wait(delayPerStep)
+-- === Fungsi teleport berurutan ke checkpoint ===
+local function teleportThroughCheckpoints()
+	local char = player.Character or player.CharacterAdded:Wait()
+	for i, pos in ipairs(checkpointPositions) do
+		char:MoveTo(pos)
+		task.wait(0.5) -- beri jeda antar teleport agar map bisa loading dan tidak nabrak
 	end
-
-	hrp.Anchored = false
-	print("Selesai fly. Sampai Summit.")
 end
 
--- Tombol start
-startButton.MouseButton1Click:Connect(function()
-	startFly()
-end)
+-- === Buat tombol ===
+local function createButton(name)
+	local btn = Instance.new("TextButton")
+	btn.Size = UDim2.new(1, -10, 0, 30)
+	btn.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+	btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+	btn.Font = Enum.Font.SourceSansBold
+	btn.TextSize = 18
+	btn.Text = "Teleport ke " .. name
+	btn.Parent = frame
 
--- Tombol close
-closeButton.MouseButton1Click:Connect(function()
-	gui:Destroy()
-end)
+	btn.MouseButton1Click:Connect(function()
+		if name == "Checkpoint" then
+			teleportThroughCheckpoints()
+		else
+			local destination = locations[name]
+			if destination then
+				teleportTo(destination)
+			end
+		end
+	end)
+end
+
+-- === Buat tombol sesuai urutan ===
+for _, name in ipairs(order) do
+	createButton(name)
+end
