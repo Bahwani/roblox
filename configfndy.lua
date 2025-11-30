@@ -6,7 +6,7 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Enabled"] = true,
         ["Whitelist Username"] = {"PetsSave_1"},
         ["Category Fish"] = { -- Only Select one, fill in the fish category or fish name
-            "Secret",
+            "Mythic",
         },
         ["Fish Name"] = {
         },
