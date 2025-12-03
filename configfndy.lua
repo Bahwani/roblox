@@ -22,7 +22,7 @@ _G.FishItConfig = _G.FishItConfig or {
     },
     ["Doing Quest"] = {
         ["Auto Ghostfinn Rod"] = true,
-        ["Auto Element Rod"] = false,
+        ["Auto Element Rod"] = true,
         ["Allowed Sacrifice"] = {
             "Blob Shark",
             "Ghost Shark",
@@ -32,7 +32,7 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Minimum Rod"] = "Astral Rod",
     },
     ["WebHook"] = {
-        ["Link Webhook"] = "https://discord.com/api/webhooks/1297761458108633148/9m7xOS7kRZ-xfA36X6pnJ47fWritQPr0hdU_4AvzciIoacuNAwUbP3S09T5E2zNbJLTG",
+        ["Link Webhook"] = "",
         ["Auto Sending"] = true,
         ["Category"] = {"Secret"},
 
@@ -43,6 +43,8 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Minimum Rod"] = "Astral Rod",
         ["Weather List"] = {
             "Wind",
+            "Cloudy",
+            "Storm",
         },
     },
     ["Event"] = {
