@@ -49,7 +49,7 @@ _G.FishItConfig = _G.FishItConfig or {
     },
     ["Event"] = {
         ["Start Farm"] = true,
-        ["Minimum Rod"] = "Ghostfinn Rod",
+        ["Minimum Rod"] = "Element Rod",
         ["Event List"] = {
             "Megalodon Hunt",
             "Ghost Shark Hunt",
@@ -88,7 +88,7 @@ _G.FishItConfig = _G.FishItConfig or {
             ["Fisherman Island"] = {"Starter Rod"},
             ["Kohana Volcano"] = {"Grass Rod", "Midnight Rod"},
             ["Tropical Grove"] = {"Astral Rod"},
-            ["Crater Island"] = {"Element Rod", "Ghostfinn Rod", "Angler Rod", "Ares Rod"},
+            ["Crater Island"] = {"Element Rod"},
         },
     },
 
