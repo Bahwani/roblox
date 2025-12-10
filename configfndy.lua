@@ -39,7 +39,7 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Link Webhook Quest Complete"] = "https://discord.com/api/webhooks/1443678625705627789/iaPclxGB0i_0v1B7P2pBVk9leStMNiLwFNzYnKRmXsN4oKwdxVOgDYAhoGSZUuCT5F1T",
     },
     ["Weather"] = {
-        ["Auto Buying"] = false,
+        ["Auto Buying"] = true,
         ["Minimum Rod"] = "Astral Rod",
         ["Weather List"] = {
             "Wind",
