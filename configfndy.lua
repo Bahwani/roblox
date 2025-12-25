@@ -36,7 +36,7 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Auto Sending"] = true,
         ["Category"] = {"Secret"},
 
-        ["Link Webhook Quest Complete"] = "https://discord.com/api/webhooks/1443678625705627789/iaPclxGB0i_0v1B7P2pBVk9leStMNiLwFNzYnKRmXsN4oKwdxVOgDYAhoGSZUuCT5F1T",
+        ["Link Webhook Quest Complete"] = "",
     },
     ["Weather"] = {
         ["Auto Buying"] = true,
