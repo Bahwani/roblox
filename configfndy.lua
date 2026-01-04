@@ -1,14 +1,23 @@
 _G.FishItConfig = _G.FishItConfig or {
     ["Fishing"] = {
         ["Auto Perfect"] = true,
+        ["Auto Favorite"] = true,
+        ["Fish Name"] = {
+            "Sacred Guardian Squid",
+            {Name = "Ruby", Variant = "Gemstone"},
+        },
+        ["Auto Accept Trade"] = true,
     },
     ["Auto Trade"] = {
         ["Enabled"] = true,
         ["Whitelist Username"] = {"PetsSave_1"},
-        ["Category Fish"] = { -- Only Select one, fill in the fish category or fish name
+        ["Category Fish"] = {
             "Secret",
         },
         ["Fish Name"] = {
+        },
+        ["Item Name"] = {
+            "Evolved Enchant Stone",
         },
     },
     ["Farm Coin Only"] = {
