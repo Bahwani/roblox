@@ -3,7 +3,6 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Auto Perfect"] = true,
         ["Auto Favorite"] = true,
         ["Fish Name"] = {
-            "Sacred Guardian Squid",
             {Name = "Ruby", Variant = "Gemstone"},
             {Variant = "Leviathan's Rage"},
         },
