@@ -4,7 +4,7 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Auto Favorite"] = true,
         ["Fish Name"] = {
             {Name = "Ruby", Variant = "Gemstone"},
-            {Variant = "Leviathan's Rage"},
+            {Variant = "Leviathan Rage"},
         },
         ["Auto Accept Trade"] = true,
     },
@@ -17,7 +17,7 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Fish Name"] = {
             "Sacred Guardian Squid",
             {Name = "Ruby", Variant = "Gemstone"},
-            {Variant = "Leviathan's Rage"},
+            {Variant = "Leviathan Rage"},
         },
         ["Item Name"] = {
             "Evolved Enchant Stone",
