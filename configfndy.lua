@@ -32,11 +32,16 @@ _G.FishItConfig = _G.FishItConfig or {
     },
     ["Doing Quest"] = {
         ["Auto Ghostfinn Rod"] = true,
-        ["Auto Element Rod"] = false,
+        ["Auto Element Rod"] = true,
         ["Unlock Ancient Ruin"] = true,
         ["Allowed Sacrifice"] = {
-            "Blob Shark",
             "Ghost Shark",
+            "Cryoshade Glider",
+            "Panther Eel",
+            "Queen Crab",
+            "King Crab",
+            "Giant Squid",
+            "Blob Shark",
         },
         ["FARM_LOC_SECRET_SACRIFICE"] = "Ocean",
 
@@ -99,7 +104,7 @@ _G.FishItConfig = _G.FishItConfig or {
             ["Fisherman Island"] = {"Starter Rod"},
             ["Kohana Volcano"] = {"Grass Rod", "Midnight Rod"},
             ["Tropical Grove"] = {"Astral Rod"},
-            ["Treasure Room"] = {"Ghostfinn Rod"},
+            ["Treasure Room"] = {"Ghostfinn Rod", "Element Rod"},
         },
     },
 
