@@ -94,6 +94,7 @@ _G.FishItConfig = _G.FishItConfig or {
             "Corrupt Bait",
             "Aether Bait",
         },
+        ["Endgame"] = "Singularity Bait",
     },
     ["Rod List"] = {
         ["Auto Buying"] = true,
@@ -111,6 +112,7 @@ _G.FishItConfig = _G.FishItConfig or {
             ["Treasure Room"] = {"Ghostfinn Rod"},
             ["Ancient Ruin"] = {"Element Rod"},
         },
+        ["Endgame"] = "Element Rod",
     },
 
     ["ExtremeFpsBoost"] = true,
