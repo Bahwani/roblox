@@ -77,13 +77,14 @@ _G.FishItConfig = _G.FishItConfig or {
         },
     },
     ["Enchant"] = {
-        ["Auto Enchant"] = false,
+        ["Auto Enchant"] = true,
         ["Roll Enchant"] = false, -- Roll enchant until get Leprechaun II
-        ["Minimum Rod"] = "Astral Rod",
+        ["Minimum Rod"] = "Element Rod",
         ["Enchant List"] = {
-            "Leprechaun II",
+            "Cursed I",
             "Mutation Hunter II",
-            "Prismatic I",
+            "Mutation Hunter I",
+            "Reeler I",
         },
     },
     ["Bait List"] = {
@@ -93,6 +94,7 @@ _G.FishItConfig = _G.FishItConfig or {
             "Chroma Bait",
             "Corrupt Bait",
             "Aether Bait",
+            "Singularity Bait",
         },
         ["Endgame"] = "Singularity Bait",
     },
