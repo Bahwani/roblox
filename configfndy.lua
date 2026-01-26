@@ -32,7 +32,7 @@ _G.FishItConfig = _G.FishItConfig or {
     },
     ["Doing Quest"] = {
         ["Auto Ghostfinn Rod"] = true,
-        ["Auto Element Rod"] = true,
+        ["Auto Element Rod"] = false,
         ["Unlock Ancient Ruin"] = true,
         ["Allowed Sacrifice"] = {
             "Ghost Shark",
@@ -112,7 +112,7 @@ _G.FishItConfig = _G.FishItConfig or {
             ["Fisherman Island"] = {"Starter Rod"},
             ["Kohana Volcano"] = {"Grass Rod", "Midnight Rod"},
             ["Tropical Grove"] = {"Astral Rod"},
-            ["Treasure Room"] = {"Ghostfinn Rod"},
+            ["Ancient Ruin"] = {"Ghostfinn Rod"},
             ["Ancient Ruin"] = {"Element Rod"},
         },
         ["Endgame"] = "Element Rod",
