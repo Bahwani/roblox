@@ -27,8 +27,8 @@ _G.FishItConfig = _G.FishItConfig or {
     },
     ["Selling"] = {
         ["Auto Sell"] = true,
-        ["Auto Sell Threshold"] = "Mythic",
-        ["Auto Sell Every"] = 50,
+        ["Auto Sell Threshold"] = "Legendary",
+        ["Auto Sell Every"] = 100,
     },
     ["Doing Quest"] = {
         ["Auto Ghostfinn Rod"] = true,
