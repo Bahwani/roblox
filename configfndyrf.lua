@@ -1,6 +1,8 @@
 _G.FishItConfig = _G.FishItConfig or {
     ["Fishing"] = {
-        ["Auto Perfect"] = true,
+        ["Auto Perfect"] = false,
+        ["Random Result"] = true,
+
         ["Auto Favorite"] = true,
         ["Fish Name"] = {
             {Name = "Ruby", Variant = "Gemstone"},
