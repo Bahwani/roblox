@@ -39,6 +39,7 @@ getgenv().Configuration
                 "Random Rod", --// ถ้าสุ่มเจอ ในร้านโคตรโชคดีเบ็ตแม่งอย่างโหด โอกาส ออก 0.02%
                 "Bloop Whistle", --// เอาไปรับเปิดได้
                 "Exalted Relic",
+                "Megalodon Hunt Totem",
             },
         },
         Aurora_Available = {
