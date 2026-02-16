@@ -39,7 +39,6 @@ getgenv().Configuration
                 "Random Rod", --// ถ้าสุ่มเจอ ในร้านโคตรโชคดีเบ็ตแม่งอย่างโหด โอกาส ออก 0.02%
                 "Bloop Whistle", --// เอาไปรับเปิดได้
                 "Exalted Relic",
-                "Enchant Relic",
             },
         },
         Aurora_Available = {
@@ -81,6 +80,7 @@ getgenv().Configuration
                 "Original No-Life Rod",
                 "Treasure Rod",
                 "Great Rod of Oscar",
+                "Tryhard Rod",
             },
         },
     }
