@@ -1,4 +1,3 @@
--- Layanan Roblox
 local Players = game:GetService("Players")
 local UserInputService = game:GetService("UserInputService")
 local player = Players.LocalPlayer
@@ -6,25 +5,21 @@ local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
 
--- Variabel Fly
 local flyEnabled = false
 local flyBodyVelocity = nil
 
--- Variabel Speed
 local speedEnabled = false
 local normalSpeed = 16
 local fastSpeed = 36
 
 local instantEnabled = false
 
--- Buat GUI utama
 local gui = Instance.new("ScreenGui")
 gui.Name = "PetoGacorrawr"
 gui.Parent = game.CoreGui
 
--- Frame utama
 local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 200, 0, 160) -- ditambah tinggi untuk tombol speed
+frame.Size = UDim2.new(0, 200, 0, 160) 
 frame.Position = UDim2.new(0.5, -100, 0.5, -80)
 frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 frame.BorderSizePixel = 0
@@ -32,12 +27,11 @@ frame.Parent = gui
 frame.Active = true
 frame.Draggable = true
 
--- Buat miniFrame dulu
 local miniFrame = Instance.new("ImageButton")
 miniFrame.Size = UDim2.new(0, 50, 0, 50)
 miniFrame.Position = UDim2.new(0.5, -25, 0.5, -25)
 miniFrame.BackgroundTransparency = 1
-miniFrame.Image = "rbxassetid://116056354483334" -- ganti sesuai gambar kamu
+miniFrame.Image = "rbxassetid://116056354483334" 
 miniFrame.Parent = gui
 miniFrame.Visible = false
 miniFrame.Active = true
@@ -47,7 +41,6 @@ miniFrame.ZIndex = 6
 local corner = Instance.new("UICorner", miniFrame)
 corner.CornerRadius = UDim.new(1, 0)
 
--- Baru buat borderFrame dan masukkan ke dalam miniFrame
 local borderFrame = Instance.new("Frame")
 borderFrame.Size = UDim2.new(1, 6, 1, 6)
 borderFrame.Position = UDim2.new(0, -3, 0, -3)
@@ -61,7 +54,6 @@ local borderCorner = Instance.new("UICorner")
 borderCorner.CornerRadius = UDim.new(1, 0)
 borderCorner.Parent = borderFrame
 
--- Tombol Fly Toggle
 local flyButton = Instance.new("TextButton")
 flyButton.Size = UDim2.new(1, -10, 0, 30)
 flyButton.Position = UDim2.new(0, 5, 0, 35)
@@ -70,7 +62,6 @@ flyButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 flyButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 flyButton.Parent = frame
 
--- Tombol Speed Toggle
 local speedButton = Instance.new("TextButton")
 speedButton.Size = UDim2.new(1, -10, 0, 30)
 speedButton.Position = UDim2.new(0, 5, 0, 75)
@@ -79,7 +70,6 @@ speedButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 speedButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 speedButton.Parent = frame
 
--- Tombol Minimize
 local minimizeButton = Instance.new("TextButton")
 minimizeButton.Size = UDim2.new(0, 30, 0, 30)
 minimizeButton.Position = UDim2.new(1, -65, 0, 0)
@@ -87,7 +77,6 @@ minimizeButton.Text = "-"
 minimizeButton.Parent = frame
 minimizeButton.Active = true
 
--- Tombol Close
 local closeButton = Instance.new("TextButton")
 closeButton.Size = UDim2.new(0, 30, 0, 30)
 closeButton.Position = UDim2.new(1, -35, 0, 0)
@@ -95,7 +84,6 @@ closeButton.Text = "X"
 closeButton.Parent = frame
 closeButton.Active = true
 
--- Label Judul
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -70, 0, 30)
 title.Position = UDim2.new(0, 5, 0, 0)
@@ -111,7 +99,6 @@ ProximityPromptService.PromptShown:Connect(function(prompt)
 	if instantEnabled then
 		prompt.HoldDuration = 0
 
-		-- Hindari mengganggu tombol UI
 		local mousePos = UserInputService:GetMouseLocation()
 		if not (mousePos.X >= gui.AbsolutePosition.X and mousePos.X <= gui.AbsolutePosition.X + gui.AbsoluteSize.X and
 		        mousePos.Y >= gui.AbsolutePosition.Y and mousePos.Y <= gui.AbsolutePosition.Y + gui.AbsoluteSize.Y) then
@@ -122,7 +109,6 @@ ProximityPromptService.PromptShown:Connect(function(prompt)
 	end
 end)
 
--- Tombol toggle Instant Interaction
 local instantInteractButton = Instance.new("TextButton")
 instantInteractButton.Size = UDim2.new(1, -10, 0, 30)
 instantInteractButton.Position = UDim2.new(0, 5, 0, 115)
@@ -131,13 +117,11 @@ instantInteractButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 instantInteractButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 instantInteractButton.Parent = frame
 
--- Event klik tombol untuk toggle ON/OFF
 instantInteractButton.MouseButton1Click:Connect(function()
     instantEnabled = not instantEnabled
     instantInteractButton.Text = instantEnabled and "Instant: ON" or "Instant: OFF"
 end)
 
--- Fungsi toggle fly
 local function toggleFly()
     flyEnabled = not flyEnabled
     flyButton.Text = flyEnabled and "Fly: ON" or "Fly: OFF"
@@ -157,7 +141,6 @@ local function toggleFly()
     end
 end
 
--- Fungsi toggle speed jalan cepat
 local function toggleSpeed()
     speedEnabled = not speedEnabled
     speedButton.Text = speedEnabled and "Speed: ON" or "Speed: OFF"
@@ -169,27 +152,23 @@ local function toggleSpeed()
     end
 end
 
--- Event klik tombol
 flyButton.MouseButton1Click:Connect(toggleFly)
 speedButton.MouseButton1Click:Connect(toggleSpeed)
 
--- Minimalkan GUI
 minimizeButton.MouseButton1Click:Connect(function()
     frame.Visible = false
     borderFrame.Visible = true
     miniFrame.Visible = true
 end)
 
--- Maksimalkan GUI
 miniFrame.MouseButton1Click:Connect(function()
     miniFrame.Visible = false
     borderFrame.Visible = false
     frame.Visible = true
 end)
 
--- Tutup GUI
 closeButton.MouseButton1Click:Connect(function()
-    -- Matikan fly jika aktif
+
     if flyEnabled then
         flyEnabled = false
         flyButton.Text = "Fly: OFF"
@@ -199,24 +178,20 @@ closeButton.MouseButton1Click:Connect(function()
         end
     end
 
-    -- Reset kecepatan ke normal jika speed aktif
     if speedEnabled then
         speedEnabled = false
         speedButton.Text = "Speed: OFF"
         humanoid.WalkSpeed = normalSpeed
     end
 
-    -- Matikan Instant Interaction
     if instantEnabled then
         instantEnabled = false
         instantInteractButton.Text = "Instant: OFF"
     end	
 
-    -- Hancurkan GUI
     gui:Destroy()
 end)
 
--- Animasi RGB untuk border frame
 spawn(function()
     local hue = 0
     while true do
