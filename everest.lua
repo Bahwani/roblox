@@ -8,7 +8,6 @@ local character = player.Character or player.CharacterAdded:Wait()
 local humanoidRootPart = character:WaitForChild("HumanoidRootPart")
 local humanoid = character:WaitForChild("Humanoid")
 
--- === Variabel Utama ===
 local folderPath = "/storage/emulated/0/Delta/Workspace/PetssLogEverest"
 local flyEnabled, speedEnabled, instantEnabled = false, false, false
 local flyBodyVelocity = nil
@@ -17,7 +16,6 @@ local replaying, recording = false, false
 local recordConnection, lastRecordedPos = nil, nil
 local minDistance, walkStep, fallbackStep = 1.5, 8, 2
 
--- === GUI PetoGacorrawr ===
 local gui = Instance.new("ScreenGui", game.CoreGui)
 gui.Name = "PetoGacorrawr"
 
@@ -32,8 +30,8 @@ frame.Draggable = true
 
 local scrollContent = Instance.new("ScrollingFrame", frame)
 scrollContent.Name = "ScrollContent"
-scrollContent.Position = UDim2.new(0, 0, 0, 40) -- mulai setelah header
-scrollContent.Size = UDim2.new(1, 0, 1, -40)    -- sisakan tempat buat header
+scrollContent.Position = UDim2.new(0, 0, 0, 40) 
+scrollContent.Size = UDim2.new(1, 0, 1, -40)    
 scrollContent.BackgroundTransparency = 1
 scrollContent.BorderSizePixel = 0
 scrollContent.CanvasSize = UDim2.new(0, 0, 0, 500)
@@ -87,11 +85,10 @@ instantInteractButton.Text = "Instant: OFF"
 instantInteractButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
 instantInteractButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 
--- Tambahkan ini DI BAWAH instantInteractButton (masih dalam `frame`)
 local replayButton = Instance.new("TextButton", scrollContent)
 replayButton.LayoutOrder = 4
 replayButton.Size = UDim2.new(1, -10, 0, 30)
-replayButton.Position = UDim2.new(0, 5, 0, 155) -- Sesuaikan posisi (115 + 30 + 10)
+replayButton.Position = UDim2.new(0, 5, 0, 155) 
 replayButton.Text = "▶ Start Replay"
 replayButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 replayButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -101,14 +98,12 @@ replayButton.TextSize = 18
 local recordButton = Instance.new("TextButton", scrollContent)
 recordButton.LayoutOrder = 5
 recordButton.Size = UDim2.new(1, -10, 0, 30)
-recordButton.Position = UDim2.new(0, 5, 0, 195) -- Sesuaikan posisi (155 + 30 + 10)
+recordButton.Position = UDim2.new(0, 5, 0, 195) 
 recordButton.Text = "⏺ Start Record"
 recordButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 recordButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 recordButton.Font = Enum.Font.SourceSansBold
 recordButton.TextSize = 18
-
---========
 
 local usernameBox = Instance.new("TextBox", scrollContent)
 usernameBox.LayoutOrder = 6
@@ -136,8 +131,6 @@ teleportButton.Text = "Teleport to Player"
 teleportButton.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
 teleportButton.TextColor3 = Color3.fromRGB(1, 1, 1)
 
-
--- === GUI Mini
 local miniFrame = Instance.new("ImageButton", gui)
 miniFrame.Size = UDim2.new(0, 50, 0, 50)
 miniFrame.Position = UDim2.new(0.5, -25, 0.5, -25)
@@ -162,7 +155,6 @@ borderFrame.Visible = false
 local borderCorner = Instance.new("UICorner", borderFrame)
 borderCorner.CornerRadius = UDim.new(1, 0)
 
--- === Tombol Handler ===
 flyButton.MouseButton1Click:Connect(function()
 	flyEnabled = not flyEnabled
 	flyButton.Text = flyEnabled and "Fly: ON" or "Fly: OFF"
@@ -207,7 +199,6 @@ closeButton.MouseButton1Click:Connect(function()
 	if flyEnabled and flyBodyVelocity then flyBodyVelocity:Destroy() end
 	humanoid.WalkSpeed = normalSpeed
 
-	-- Matikan recording dan replay
 	recording = false
 	replaying = false
 	if recordConnection then recordConnection:Disconnect() end
@@ -215,7 +206,6 @@ closeButton.MouseButton1Click:Connect(function()
 	gui:Destroy()
 end)
 
--- === Prompt Instant Interact ===
 ProximityPromptService.PromptShown:Connect(function(prompt)
 	if instantEnabled then
 		prompt.HoldDuration = 0
@@ -229,7 +219,6 @@ ProximityPromptService.PromptShown:Connect(function(prompt)
 	end
 end)
 
--- === Border RGB Animation ===
 spawn(function()
 	local hue = 0
 	while true do
@@ -282,7 +271,6 @@ local function followTarget()
 	end)
 end
 
--- === Fungsi Record / Replay ===
 local function ensureFolderExists(path)
 	if not isfolder(path) then makefolder(path) end
 end
@@ -327,7 +315,7 @@ local function findClosestPoint(logs, currentPos)
 	local minDist, bestLog, bestStep = math.huge, nil, nil
 	for i, log in ipairs(logs) do
 		for j, pos in ipairs(log) do
-			if pos.X < currentPos.X then -- hanya titik yg lebih tinggi
+			if pos.X < currentPos.X then 
 				local d = (pos - currentPos).Magnitude
 				if d < minDist then
 					minDist = d
@@ -365,7 +353,6 @@ local function smartReplay()
 	local hrp = player.Character and player.Character:FindFirstChild("HumanoidRootPart")
 	if not hrp then return end
 
--- Cek semua log dan pilih yang POSISI awalnya lebih tinggi dari sekarang
 local validLogs = {}
 local currentPos = hrp.Position
 for i, log in ipairs(logs) do
@@ -382,11 +369,10 @@ if #validLogs == 0 then
 	replaying = false
 	return
 end
--- Pilih log valid yang paling dekat dari posisi sekarang
     local minDist, bestIndex, bestStep = math.huge, nil, 1
     for _, entry in ipairs(validLogs) do
     	for j, pos in ipairs(entry.log) do
-    		if pos.Y > currentPos.Y then -- Hanya ambil titik di atas
+    		if pos.Y > currentPos.Y then 
     			local d = (pos - currentPos).Magnitude
 	    		if d < minDist then
 	    			minDist = d
@@ -437,7 +423,7 @@ end
 						print("[Fallback] MoveTo berhasil ke langkah " .. targetStep)
 					else
 						print("[Fallback] MoveTo gagal/tidak selesai dalam 3 detik, teleport paksa dengan CFrame...")
-						-- Teleport paksa via CFrame jika MoveTo gagal
+						
 						hrp.CFrame = CFrame.new(fallbackPos + Vector3.new(0, 3, 0))
 						task.wait(0.2)
 					end
@@ -504,7 +490,6 @@ recordButton.MouseButton1Click:Connect(function()
 	end
 end)
 
--- === Button Handler ===
 followButton.MouseButton1Click:Connect(function()
 	if not followEnabled then
 		targetName = usernameBox.Text
@@ -521,7 +506,7 @@ followButton.MouseButton1Click:Connect(function()
 
 		local char = player.Character
 		if char and char:FindFirstChild("Humanoid") then
-			-- Stop movement instantly
+
 			char.Humanoid:Move(Vector3.zero, false)
 		end
 
