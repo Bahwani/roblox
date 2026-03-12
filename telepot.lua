@@ -1,13 +1,10 @@
---// Services
 local Players = game:GetService("Players")
 local StarterGui = game:GetService("StarterGui")
 local player = Players.LocalPlayer
 local hrp = player.Character and player.Character:WaitForChild("HumanoidRootPart")
 
--- Flag global
 local running = true
 
---// Data Teleport
 local checkpoints = {
     PosisiAwal = {
         pos = Vector3.new(37.21, 17.03, 2844.50),
@@ -42,7 +39,6 @@ local checkpoints = {
     }	
 }
 
---// Teleport
 local function teleportAndLook(target, label)
     if hrp then
         hrp.CFrame = CFrame.new(target.pos, target.pos + target.dir)
@@ -54,7 +50,6 @@ local function teleportAndLook(target, label)
     end
 end
 
---// GUI Buatan
 local ScreenGui = Instance.new("ScreenGui", game.CoreGui)
 local MainFrame = Instance.new("Frame", ScreenGui)
 local TitleBar = Instance.new("Frame", MainFrame)
@@ -65,7 +60,6 @@ local Scroll = Instance.new("ScrollingFrame", MainFrame)
 local UIList = Instance.new("UIListLayout", Scroll)
 local UIPadding = Instance.new("UIPadding", Scroll)
 
--- Frame Utama
 MainFrame.Size = UDim2.new(0, 270, 0, 320)
 MainFrame.Position = UDim2.new(0.3, 0, 0.3, 0)
 MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
@@ -74,14 +68,12 @@ MainFrame.BorderSizePixel = 0
 MainFrame.Active = true
 MainFrame.Draggable = true
 
--- Rounded corner & outline
 local MainCorner = Instance.new("UICorner", MainFrame)
 MainCorner.CornerRadius = UDim.new(0, 10)
 local MainStroke = Instance.new("UIStroke", MainFrame)
 MainStroke.Color = Color3.fromRGB(80, 80, 80)
 MainStroke.Thickness = 1.5
 
--- Gradient
 local MainGradient = Instance.new("UIGradient", MainFrame)
 MainGradient.Color = ColorSequence.new{
     ColorSequenceKeypoint.new(0, Color3.fromRGB(30, 30, 30)),
@@ -89,7 +81,6 @@ MainGradient.Color = ColorSequence.new{
 }
 MainGradient.Rotation = 90
 
--- TitleBar
 TitleBar.Size = UDim2.new(1, 0, 0, 35)
 TitleBar.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
 TitleBar.BackgroundTransparency = 0.2 
@@ -106,7 +97,6 @@ Title.Font = Enum.Font.GothamBold
 Title.TextSize = 16
 Title.TextXAlignment = Enum.TextXAlignment.Left
 
--- Close Button
 CloseBtn.Size = UDim2.new(0, 35, 0, 35)
 CloseBtn.Position = UDim2.new(1, -35, 0, 0)
 CloseBtn.Text = "✕"
@@ -118,7 +108,6 @@ CloseBtn.TextSize = 18
 local CloseCorner = Instance.new("UICorner", CloseBtn)
 CloseCorner.CornerRadius = UDim.new(0, 6)
 
--- Minimize Button
 MinBtn.Size = UDim2.new(0, 35, 0, 35)
 MinBtn.Position = UDim2.new(1, -70, 0, 0)
 MinBtn.Text = "–"
@@ -130,7 +119,6 @@ MinBtn.TextSize = 18
 local MinCorner = Instance.new("UICorner", MinBtn)
 MinCorner.CornerRadius = UDim.new(0, 6)
 
--- Scroll Menu
 Scroll.Size = UDim2.new(1, 0, 1, -35)
 Scroll.Position = UDim2.new(0, 0, 0, 35)
 Scroll.CanvasSize = UDim2.new(0, 0, 0, 0)
@@ -142,7 +130,6 @@ UIPadding.PaddingTop = UDim.new(0, 8)
 UIPadding.PaddingLeft = UDim.new(0, 8)
 UIPadding.PaddingRight = UDim.new(0, 8)
 
--- Fungsi buat button biasa
 local function createButton(name, target)
     local Btn = Instance.new("TextButton", Scroll)
     Btn.Size = UDim2.new(1, -10, 0, 36)
@@ -170,19 +157,16 @@ local function createButton(name, target)
     end)
 end
 
---// CONFIG SYSTEM
 local HttpService = game:GetService("HttpService")
 local folderPath = "Peto"
 local filePath = folderPath.."/PetssMancing.json"
 
--- Default config
 local config = {
     Kohana = false,
     KohanaVolcano = false,
     CraterIsland = false
 }
 
--- Buat folder/file kalau belum ada
 if not isfolder(folderPath) then
     makefolder(folderPath)
 end
@@ -190,7 +174,6 @@ end
 if not isfile(filePath) then
     writefile(filePath, HttpService:JSONEncode(config))
 else
-    -- load config kalau ada
     local success, data = pcall(function()
         return HttpService:JSONDecode(readfile(filePath))
     end)
@@ -199,12 +182,10 @@ else
     end
 end
 
--- Fungsi save config
 local function saveConfig()
     writefile(filePath, HttpService:JSONEncode(config))
 end
 
---// Update toggle supaya auto-save
 local function createToggle(name, teleportList, key)
     local Frame = Instance.new("Frame", Scroll)
     Frame.Size = UDim2.new(1, -10, 0, 36)
@@ -219,7 +200,6 @@ local function createToggle(name, teleportList, key)
     Label.TextColor3 = Color3.new(1, 1, 1)
     Label.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Switch background
     local Switch = Instance.new("TextButton", Frame)
     Switch.Size = UDim2.new(0, 50, 0, 24)
     Switch.Position = UDim2.new(1, -60, 0.5, -12)
@@ -233,7 +213,6 @@ local function createToggle(name, teleportList, key)
     stroke.Color = Color3.fromRGB(100, 100, 100)
     stroke.Thickness = 1.2
 
-    -- Bulatan
     local Knob = Instance.new("Frame", Switch)
     Knob.Size = UDim2.new(0, 20, 0, 20)
     Knob.Position = UDim2.new(0, 2, 0.5, -10)
@@ -242,9 +221,8 @@ local function createToggle(name, teleportList, key)
     local knobCorner = Instance.new("UICorner", Knob)
     knobCorner.CornerRadius = UDim.new(1, 0)
 
-    local active = config[key] or false -- load dari config
+    local active = config[key] or false 
 
-    -- Fungsi untuk update tampilan toggle
     local function updateToggleUI(state)
         if state then
             Switch.BackgroundColor3 = Color3.fromRGB(60, 160, 80)
@@ -255,7 +233,6 @@ local function createToggle(name, teleportList, key)
         end
     end
 
-    -- set UI sesuai config
     updateToggleUI(active)
 
     if active then
@@ -273,7 +250,7 @@ local function createToggle(name, teleportList, key)
     Switch.MouseButton1Click:Connect(function()
         active = not active
         config[key] = active
-        saveConfig() -- simpan ke file
+        saveConfig() 
 
         if active then
             Switch.BackgroundColor3 = Color3.fromRGB(60, 160, 80)
@@ -304,14 +281,12 @@ local function createToggle(name, teleportList, key)
     end)
 end
 
--- Tambah menu
 createButton("Posisi Awal", checkpoints.PosisiAwal)
 createToggle("Kohana", checkpoints.Kohana, "Kohana")
 createToggle("Kohana Volcano", checkpoints.KohanaVolcano, "KohanaVolcano")
 createToggle("Crater Island", checkpoints.Crater, "CraterIsland")
 createToggle("Ocean", checkpoints.Ocean, "Ocean")
 
--- Fungsi tombol
 CloseBtn.MouseButton1Click:Connect(function()
     running = false
     ScreenGui:Destroy()
