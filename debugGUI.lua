@@ -1,8 +1,6 @@
--- Ambil service dan player
 local Players = game:GetService("Players")
 local player = Players.LocalPlayer
 
--- ========== BUAT GUI LOG ==========
 local screenGui = Instance.new("ScreenGui")
 screenGui.Name = "DebugLogGui"
 screenGui.ResetOnSpawn = false
@@ -29,7 +27,6 @@ local uiList = Instance.new("UIListLayout")
 uiList.SortOrder = Enum.SortOrder.LayoutOrder
 uiList.Parent = scrollFrame
 
--- ========== FUNGSI TAMPILKAN LOG ==========
 local function logMessage(msg)
 	local label = Instance.new("TextLabel")
 	label.Size = UDim2.new(1, -5, 0, 20)
@@ -41,11 +38,9 @@ local function logMessage(msg)
 	label.Text = msg
 	label.Parent = scrollFrame
 	
-	-- Update tinggi canvas
 	scrollFrame.CanvasSize = UDim2.new(0, 0, 0, uiList.AbsoluteContentSize.Y + 10)
 end
 
--- ========== FUNGSI AMBIL POSISI ==========
 local function logPosition()
 	local character = player.Character or player.CharacterAdded:Wait()
 	local hrp = character:WaitForChild("HumanoidRootPart")
@@ -58,6 +53,5 @@ local function logPosition()
 	logMessage(output)
 end
 
--- ========== JALANKAN ==========
 logMessage("📍 Logger koordinat aktif.")
 logPosition()
