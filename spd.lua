@@ -1,5 +1,5 @@
 getgenv().Settings = {
-	["Version Script"] = "1.03",
+	["Version Script"] = "1.04",
 	["Choose Build Style"] = "Luck", -- // "DMG"
 	["Trade Mode"] = {
 		["Enabled"] = false,
