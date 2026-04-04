@@ -1,10 +1,26 @@
 getgenv().Settings = {
 	["Version Script"] = "1.04",
-	["Choose Build Style"] = "Luck", -- // "DMG" 
+	["Choose Build Style"] = "Luck", -- // "DMG"
 	["Trade Mode"] = {
 		["Enabled"] = false,
+		["Filter"] = {
+			"Aura Crate",
+			"Secret Chest",
+			"Cosmetic Crate",
+			"Mythical Chest",
+			"Legendary Chest",
+			"Epic Chest",
+			"Rare Chest",
+			"Common Chest",
+			"Race Reroll",
+			"Trait Reroll",
+			"Clan Reroll",
+			"Dark Grail",
+			"Passive Shard",
+			"Tempest Relic",
+		},
 		["Trade Settings"] = {
-			["Main Account"] = "", -- // ชื่อรหัสที่จะยัดของเข้าตัว
+			["Main Account"] = "UserName", -- // ชื่อรหัสที่จะยัดของเข้าตัว
 			["Auto Change Account When Finish Trade"] = false, -- // เปลี่ยนไอดีออโต้ หลังจากเทรดเสร็จ
 		},
 	},
@@ -20,14 +36,17 @@ getgenv().Settings = {
 			["Enabled"] = true,
 			["List Name"] = {
 				"Kitsune",
-                "Servant",
-                "Swordblessed",
-                "Warlord",
+				"Servant",
+				"Swordblessed",
+				"warlord",
 			},
 		},
 		["Clan Reroll"] = {
 			["Enabled"] = true,
-			["List Name"] = "Pride",
+			["List Name"] = {
+				"Monarch",
+				"Eminence",
+			},
 		},
 		["Passive Reroll"] = {
 			["Enabled"] = true,
@@ -56,7 +75,7 @@ getgenv().Settings = {
 		["Enabled"] = true,
 		["Hop Server"] = true,
 		["Requirements"] = {
-			["Ichigo"] = false,
+			["Ichigo"] = true,
 			["Strongest In History"] = true,
 			["Level"] = 11500,
 			["Money"] = 1250000,
@@ -73,7 +92,7 @@ getgenv().Settings = {
 		},
 	},
 	["Saber Alter Quest"] = { -- // มันจะหาของให้เองทุกอย่าง แต่ แนะนำ ให้ ยัดเซ็ทของไว้ดีกว่า จะเร็วขึ้นมาก
-		["Enabled"] = true,
+		["Enabled"] = false,
 		["Hop Server"] = false,
 		["Requirements"] = {
 			["Level"] = 11500,
