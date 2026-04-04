@@ -20,9 +20,9 @@ getgenv().Settings = {
 			["Enabled"] = true,
 			["List Name"] = {
 				"Kitsune",
-        "Servant",
-        "Swordblessed",
-        "Warlord",
+                "Servant",
+                "Swordblessed",
+                "Warlord",
 			},
 		},
 		["Clan Reroll"] = {
