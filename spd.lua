@@ -72,7 +72,7 @@ getgenv().Settings = {
 		},
 	},
 	["Rank Quest"] = { --// ยัดเซ็ทแรงค์ก่อนเปิดไว้ก็ดี ถ้าไม่ยัดมันหาให้เองหมด Fully Rank 1-7
-		["Enabled"] = true,
+		["Enabled"] = false,
 		["Hop Server"] = false,
 		["Requirements"] = {
 			["Ichigo"] = true,
@@ -83,7 +83,7 @@ getgenv().Settings = {
 		},
 	},
 	["Strongest In History Quest"] = { -- // มันจะหาของให้เองทุกอย่าง แต่ แนะนำ ให้ ยัดเซ็ทของไว้ดีกว่า จะเร็วขึ้นมาก
-		["Enabled"] = false,
+		["Enabled"] = true,
 		["Hop Server"] = false,
 		["Requirements"] = {
 			["Level"] = 11500,
