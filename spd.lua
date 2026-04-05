@@ -38,7 +38,7 @@ getgenv().Settings = {
 				"Kitsune",
 				"Servant",
 				"Swordblessed",
-				"warlord",
+				"Warlord",
 			},
 		},
 		["Clan Reroll"] = {
@@ -73,7 +73,7 @@ getgenv().Settings = {
 	},
 	["Rank Quest"] = { --// ยัดเซ็ทแรงค์ก่อนเปิดไว้ก็ดี ถ้าไม่ยัดมันหาให้เองหมด Fully Rank 1-7
 		["Enabled"] = true,
-		["Hop Server"] = true,
+		["Hop Server"] = false,
 		["Requirements"] = {
 			["Ichigo"] = true,
 			["Strongest In History"] = true,
@@ -84,7 +84,7 @@ getgenv().Settings = {
 	},
 	["Strongest In History Quest"] = { -- // มันจะหาของให้เองทุกอย่าง แต่ แนะนำ ให้ ยัดเซ็ทของไว้ดีกว่า จะเร็วขึ้นมาก
 		["Enabled"] = true,
-		["Hop Server"] = true,
+		["Hop Server"] = false,
 		["Requirements"] = {
 			["Level"] = 11500,
 			["Money"] = 50,
@@ -111,7 +111,7 @@ getgenv().Settings = {
 	["Horst Manager"] = {
 		["Enabled"] = false,
 		["Change Account"] = {
-			["Enabled"] = true,
+			["Enabled"] = false,
 			["Requirements"] = { -- // เงื่อนไขการสลับไอดี
 				["Haki"] = true,
 				["Ichigo"] = true, -- // เปิดถ้าจะทำอิจิโกะก่อน ไม่งั้นมันจะเปลี่ยนไอดีทันที
