@@ -72,7 +72,7 @@ getgenv().Settings = {
 		},
 	},
 	["Rank Quest"] = { --// ยัดเซ็ทแรงค์ก่อนเปิดไว้ก็ดี ถ้าไม่ยัดมันหาให้เองหมด Fully Rank 1-7
-		["Enabled"] = false,
+		["Enabled"] = true,
 		["Hop Server"] = false,
 		["Requirements"] = {
 			["Ichigo"] = true,
