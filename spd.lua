@@ -83,7 +83,7 @@ getgenv().Settings = {
 		},
 	},
 	["Strongest In History Quest"] = { -- // มันจะหาของให้เองทุกอย่าง แต่ แนะนำ ให้ ยัดเซ็ทของไว้ดีกว่า จะเร็วขึ้นมาก
-		["Enabled"] = true,
+		["Enabled"] = false,
 		["Hop Server"] = false,
 		["Requirements"] = {
 			["Level"] = 11500,
