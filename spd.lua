@@ -2,7 +2,7 @@ getgenv().Settings = {
 	["Version Script"] = "1.04",
 	["Choose Build Style"] = "Luck", -- // "DMG"
 	["Trade Mode"] = {
-		["Enabled"] = false,
+		["Enabled"] = true,
 		["Filter"] = {
 			"Aura Crate",
 			"Secret Chest",
@@ -26,7 +26,7 @@ getgenv().Settings = {
 			"Adamantite",
 		},
 		["Trade Settings"] = {
-			["Main Account"] = "UserName", -- // ชื่อรหัสที่จะยัดของเข้าตัว
+			["Main Account"] = "voidisthebest79", -- // ชื่อรหัสที่จะยัดของเข้าตัว
 			["Auto Change Account When Finish Trade"] = false, -- // เปลี่ยนไอดีออโต้ หลังจากเทรดเสร็จ
 		},
 	},
