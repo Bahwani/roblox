@@ -19,6 +19,7 @@ getgenv().Settings = {
 			"Abyss Sigil",
 			"Upper Seal",
 			"Boss Key",
+			"Malevolent Key",
 			"Broken Sword",
 			"Adamantite",
 		},
