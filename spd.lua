@@ -2,7 +2,7 @@ getgenv().Settings = {
 	["Version Script"] = "1.04",
 	["Choose Build Style"] = "Luck", -- // "DMG"
 	["Trade Mode"] = {
-		["Enabled"] = true,
+		["Enabled"] = false,
 		["Filter"] = {
 			"Aura Crate",
 			"Secret Chest",
