@@ -24,6 +24,7 @@ getgenv().Settings = {
 			"Malevolent Key",
 			"Broken Sword",
 			"Adamantite",
+			"Frost Relic",
 		},
 		["Trade Settings"] = {
 			["Main Account"] = "voidisthebest79", -- // ชื่อรหัสที่จะยัดของเข้าตัว
