@@ -21,6 +21,7 @@ _G.FishItConfig = _G.FishItConfig or {
         },
         ["Item Name"] = {
             "Evolved Enchant Stone",
+            "Eggy Enchant Stone",
         },
     },
     ["Farm Coin Only"] = {
@@ -29,7 +30,7 @@ _G.FishItConfig = _G.FishItConfig or {
     },
     ["Selling"] = {
         ["Auto Sell"] = true,
-        ["Auto Sell Threshold"] = "Mythic",
+        ["Auto Sell Threshold"] = "Legendary",
         ["Auto Sell Every"] = 100,
     },
     ["Doing Quest"] = {
@@ -114,8 +115,8 @@ _G.FishItConfig = _G.FishItConfig or {
             ["Fisherman Island"] = {"Starter Rod"},
             ["Kohana Volcano"] = {"Grass Rod", "Midnight Rod"},
             ["Tropical Grove"] = {"Astral Rod"},
-            ["Kohana"] = {"Ghostfinn Rod"}, -- Treasure Room
-            ["Ancient Ruin"] = {"Element Rod"},
+            ["Easter Cave"] = {"Ghostfinn Rod"}, -- Treasure Room
+            ["Easter Cave"] = {"Element Rod"},
         },
         ["Endgame"] = "Element Rod",
     },
