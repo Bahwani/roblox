@@ -34,7 +34,7 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Auto Sell Every"] = 100,
     },
     ["Doing Quest"] = {
-        ["Auto Ghostfinn Rod"] = false,
+        ["Auto Ghostfinn Rod"] = true,
         ["Auto Element Rod"] = false,
         ["Unlock Ancient Ruin"] = false,
         ["Allowed Sacrifice"] = {
@@ -112,10 +112,10 @@ _G.FishItConfig = _G.FishItConfig or {
             "Angler Rod",
         },
         ["Location Rods"] = { -- Farm location and minimum rod to start on that location, also only 1 rod and only 1 location 
-            ["Easter Cave"] = {"Starter Rod"},
-            ["Easter Cave"] = {"Grass Rod", "Midnight Rod"},
-            ["Easter Cave"] = {"Astral Rod"},
-            ["Easter Cave"] = {"Ghostfinn Rod"}, -- Treasure Room
+            ["Fisherman Island"] = {"Starter Rod"},
+            ["Kohana Volcano"] = {"Grass Rod", "Midnight Rod"},
+            ["Treasure Room"] = {"Astral Rod"},
+            ["Treasure Room"] = {"Ghostfinn Rod"}, -- Treasure Room
             ["Treasure Room"] = {"Element Rod"},
         },
         ["Endgame"] = "Element Rod",
