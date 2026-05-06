@@ -30,7 +30,7 @@ _G.FishItConfig = _G.FishItConfig or {
     },
     ["Selling"] = {
         ["Auto Sell"] = true,
-        ["Auto Sell Threshold"] = "Legendary",
+        ["Auto Sell Threshold"] = "Mythic",
         ["Auto Sell Every"] = 100,
     },
     ["Doing Quest"] = {
@@ -83,7 +83,7 @@ _G.FishItConfig = _G.FishItConfig or {
     ["Enchant"] = {
         ["Auto Enchant"] = true,
         ["Roll Enchant"] = false, -- Roll enchant until get Leprechaun II
-        ["Minimum Rod"] = "Element Rod",
+        ["Minimum Rod"] = "Ghostfinn Rod",
         ["Enchant List"] = {
             "Cursed I",
             "Mutation Hunter II",
