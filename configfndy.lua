@@ -5,13 +5,14 @@ _G.FishItConfig = _G.FishItConfig or {
 
         ["Auto Favorite"] = true,
         ["Fish Name"] = {
+            "Sacred Guardian Squid",
             {Name = "Ruby", Variant = "Gemstone"},
         },
         ["Auto Accept Trade"] = true,
     },
     ["Auto Trade"] = {
         ["Enabled"] = true,
-        ["Whitelist Username"] = {"PetsSave_1"},
+        ["Whitelist Username"] = {"PetsSave_1", "PetsSave_2"},
         ["Category Fish"] = {
             "Secret",
         },
@@ -30,13 +31,13 @@ _G.FishItConfig = _G.FishItConfig or {
     },
     ["Selling"] = {
         ["Auto Sell"] = true,
-        ["Auto Sell Threshold"] = "Legendary",
+        ["Auto Sell Threshold"] = "Mythic",
         ["Auto Sell Every"] = 100,
     },
     ["Doing Quest"] = {
         ["Auto Ghostfinn Rod"] = true,
         ["Auto Element Rod"] = false,
-        ["Unlock Ancient Ruin"] = false,
+        ["Unlock Ancient Ruin"] = true,
         ["Allowed Sacrifice"] = {
             "Ghost Shark",
             "Cryoshade Glider",
@@ -114,15 +115,14 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Location Rods"] = { -- Farm location and minimum rod to start on that location, also only 1 rod and only 1 location 
             ["Fisherman Island"] = {"Starter Rod"},
             ["Kohana Volcano"] = {"Grass Rod", "Midnight Rod"},
-            ["Easter Cave"] = {"Astral Rod"},
-            ["Easter Cave"] = {"Ghostfinn Rod"}, -- Treasure Room
-            ["Treasure Room"] = {"Element Rod"},
+            ["Tropical Grove"] = {"Astral Rod", "Fluorescent Rod"},
+            ["Treasure Room"] = {"Element Rod", "Ghostfinn Rod", "Angler Rod", "Ares Rod"},
         },
-        ["Endgame"] = "Element Rod",
+        ["Endgame"] = "",
     },
 
     ["ExtremeFpsBoost"] = true,
-    ["UltimatePerformance"] = true,
+    ["UltimatePerformance"] = false,
     ["Disable3DRender"] = true,
     ["AutoRemovePlayer"] = true,
 
