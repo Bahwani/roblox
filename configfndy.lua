@@ -21,7 +21,6 @@ _G.FishItConfig = _G.FishItConfig or {
             {Name = "Ruby", Variant = "Gemstone"},
         },
         ["Item Name"] = {
-            "Evolved Enchant Stone",
             "Eggy Enchant Stone",
             "Runic Enchant Stone",
         },
