@@ -12,7 +12,7 @@ _G.FishItConfig = _G.FishItConfig or {
     },
     ["Auto Trade"] = {
         ["Enabled"] = true,
-        ["Whitelist Username"] = {"PetsSave_1", "PetsSave_2"},
+        ["Whitelist Username"] = {"PetsSave_1", "PetsSave_2", "PetsSave_3"},
         ["Category Fish"] = {
             "Secret",
         },
@@ -23,6 +23,7 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Item Name"] = {
             "Eggy Enchant Stone",
             "Runic Enchant Stone",
+            "Evolved Enchant Stone",
         },
     },
     ["Farm Coin Only"] = {
@@ -116,7 +117,7 @@ _G.FishItConfig = _G.FishItConfig or {
             ["Fisherman Island"] = {"Starter Rod"},
             ["Kohana Volcano"] = {"Grass Rod", "Midnight Rod"},
             ["Tropical Grove"] = {"Astral Rod", "Fluorescent Rod"},
-            ["Underwater City"] = {"Element Rod", "Ghostfinn Rod", "Angler Rod", "Ares Rod"},
+            ["Ancient Ruin"] = {"Element Rod", "Ghostfinn Rod", "Angler Rod", "Ares Rod"},
         },
         ["Endgame"] = "",
     },
