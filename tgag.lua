@@ -1,8 +1,3 @@
--- ============================================
--- GAG2 MAIL GUI - Speed Hub Style
--- Features: Sidebar, Minimize, Resize, Drag
--- ============================================
- 
 local RS = game:GetService("ReplicatedStorage")
 local Players = game:GetService("Players")
 local TweenService = game:GetService("TweenService")
@@ -11,7 +6,6 @@ local Net = require(RS.SharedModules.Networking)
 local SeedData = require(RS.SharedModules.SeedData)
 local LP = Players.LocalPlayer
  
--- Hapus GUI lama
 for _, g in pairs({
     game:GetService("CoreGui"):FindFirstChild("GAG2Mail"),
     LP.PlayerGui:FindFirstChild("GAG2Mail")
@@ -19,20 +13,12 @@ for _, g in pairs({
     if g then g:Destroy() end
 end
  
--- ============================================
--- SCREEN GUI
--- ============================================
- 
 local SGui = Instance.new("ScreenGui")
 SGui.Name = "GAG2Mail"
 SGui.ResetOnSpawn = false
 SGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 pcall(function() SGui.Parent = game:GetService("CoreGui") end)
 if not SGui.Parent then SGui.Parent = LP.PlayerGui end
- 
--- ============================================
--- CONSTANTS
--- ============================================
  
 local WIN_W       = 500
 local WIN_H       = 420
@@ -68,11 +54,6 @@ local C = {
     darkBg      = Color3.fromRGB(14, 14, 18),
 }
  
- 
--- ============================================
--- MAIN WINDOW
--- ============================================
- 
 local Win = Instance.new("Frame")
 Win.Name = "Window"
 Win.Size = UDim2.new(0, WIN_W, 0, WIN_H)
@@ -89,10 +70,6 @@ winStroke.Color = C.border
 winStroke.Thickness = 1
 winStroke.Parent = Win
  
--- ============================================
--- TITLE BAR
--- ============================================
- 
 local TBar = Instance.new("Frame")
 TBar.Name = "TitleBar"
 TBar.Size = UDim2.new(1, 0, 0, TITLE_H)
@@ -103,7 +80,6 @@ TBar.ZIndex = 20
 TBar.Parent = Win
 Instance.new("UICorner", TBar).CornerRadius = UDim.new(0, 8)
  
--- Cover bottom corners of titlebar (so it blends with window below)
 local tbarBottomCover = Instance.new("Frame")
 tbarBottomCover.Size = UDim2.new(1, 0, 0, 8)
 tbarBottomCover.Position = UDim2.new(0, 0, 1, -8)
@@ -112,7 +88,6 @@ tbarBottomCover.BorderSizePixel = 0
 tbarBottomCover.ZIndex = 20
 tbarBottomCover.Parent = TBar
  
--- Accent line under titlebar
 local accentLine = Instance.new("Frame")
 accentLine.Size = UDim2.new(1, 0, 0, 2)
 accentLine.Position = UDim2.new(0, 0, 1, -2)
@@ -156,7 +131,6 @@ TVersion.TextXAlignment = Enum.TextXAlignment.Left
 TVersion.ZIndex = 22
 TVersion.Parent = TBar
  
--- Window control buttons
 local function mkTitleBtn(xOff, bg, txt)
     local b = Instance.new("TextButton")
     b.Size = UDim2.new(0, 22, 0, 22)
@@ -176,10 +150,6 @@ end
 local CloseB    = mkTitleBtn(-30, C.close,    "✕")
 local MinimizeB = mkTitleBtn(-56, C.minimize, "—")
  
--- ============================================
--- BODY FRAME (below titlebar, holds sidebar + panel side by side)
--- ============================================
- 
 local Body = Instance.new("Frame")
 Body.Name = "Body"
 Body.Size = UDim2.new(1, 0, 1, -TITLE_H)
@@ -190,10 +160,6 @@ Body.ClipsDescendants = true
 Body.ZIndex = 11
 Body.Parent = Win
  
--- ============================================
--- SIDEBAR (left side of Body)
--- ============================================
- 
 local Sidebar = Instance.new("Frame")
 Sidebar.Name = "Sidebar"
 Sidebar.Size = UDim2.new(0, SIDEBAR_W, 1, 0)
@@ -203,12 +169,10 @@ Sidebar.BorderSizePixel = 0
 Sidebar.ZIndex = 12
 Sidebar.Parent = Body
  
--- Round bottom-left corner of sidebar
 local sideCorner = Instance.new("UICorner")
 sideCorner.CornerRadius = UDim.new(0, 8)
 sideCorner.Parent = Sidebar
  
--- Cover top corners so only bottom-left is rounded
 local sideTopCover = Instance.new("Frame")
 sideTopCover.Size = UDim2.new(1, 0, 0, 8)
 sideTopCover.Position = UDim2.new(0, 0, 0, 0)
@@ -217,7 +181,6 @@ sideTopCover.BorderSizePixel = 0
 sideTopCover.ZIndex = 12
 sideTopCover.Parent = Sidebar
  
--- Sidebar right border line
 local sideStroke = Instance.new("Frame")
 sideStroke.Size = UDim2.new(0, 1, 1, 0)
 sideStroke.Position = UDim2.new(1, -1, 0, 0)
@@ -226,7 +189,6 @@ sideStroke.BorderSizePixel = 0
 sideStroke.ZIndex = 13
 sideStroke.Parent = Sidebar
  
--- Sidebar brand at bottom
 local sideBottom = Instance.new("TextLabel")
 sideBottom.Size = UDim2.new(1, 0, 0, 30)
 sideBottom.Position = UDim2.new(0, 0, 1, -30)
@@ -238,8 +200,6 @@ sideBottom.Font = Enum.Font.Gotham
 sideBottom.ZIndex = 13
 sideBottom.Parent = Sidebar
  
--- Nav container (holds only the nav buttons, so the UIListLayout
--- does NOT try to lay out the decorative frames above)
 local NavContainer = Instance.new("Frame")
 NavContainer.Name = "NavContainer"
 NavContainer.Size = UDim2.new(1, 0, 1, -34)
@@ -248,10 +208,6 @@ NavContainer.BackgroundTransparency = 1
 NavContainer.BorderSizePixel = 0
 NavContainer.ZIndex = 13
 NavContainer.Parent = Sidebar
- 
--- ============================================
--- CONTENT PANEL (right side of Body)
--- ============================================
  
 local Panel = Instance.new("Frame")
 Panel.Name = "Panel"
@@ -263,12 +219,10 @@ Panel.ClipsDescendants = true
 Panel.ZIndex = 11
 Panel.Parent = Body
  
--- Round bottom-right corner of panel
 local panelCorner = Instance.new("UICorner")
 panelCorner.CornerRadius = UDim.new(0, 8)
 panelCorner.Parent = Panel
  
--- Cover top corners of panel
 local panelTopCover = Instance.new("Frame")
 panelTopCover.Size = UDim2.new(1, 0, 0, 8)
 panelTopCover.Position = UDim2.new(0, 0, 0, 0)
@@ -276,11 +230,6 @@ panelTopCover.BackgroundColor3 = C.panel
 panelTopCover.BorderSizePixel = 0
 panelTopCover.ZIndex = 11
 panelTopCover.Parent = Panel
- 
- 
--- ============================================
--- DRAG (Title Bar)
--- ============================================
  
 do
     local dragging, dragStart, startPos
@@ -306,10 +255,6 @@ do
         end
     end)
 end
- 
--- ============================================
--- RESIZE HANDLE (bottom-right corner, inside Win)
--- ============================================
  
 local ResizeHandle = Instance.new("TextButton")
 ResizeHandle.Name = "ResizeHandle"
@@ -346,10 +291,6 @@ do
     end)
 end
  
--- ============================================
--- MINIMIZE & CLOSE
--- ============================================
- 
 local isMinimized = false
 local prevHeight  = WIN_H
  
@@ -374,11 +315,6 @@ MinimizeB.MouseButton1Click:Connect(function()
 end)
  
 CloseB.MouseButton1Click:Connect(function() SGui:Destroy() end)
- 
- 
--- ============================================
--- SIDEBAR NAV ITEMS
--- ============================================
  
 local SideLayout = Instance.new("UIListLayout")
 SideLayout.SortOrder = Enum.SortOrder.LayoutOrder
@@ -466,11 +402,6 @@ mkNavBtn("📬", "Send Mail", "mail",     2)
 mkNavBtn("🎒", "Backpack",  "backpack", 3)
 mkNavBtn("⚙️",  "Settings",  "settings", 4)
  
- 
--- ============================================
--- PAGE BUILDER HELPER
--- ============================================
- 
 local function mkPage(key)
     local f = Instance.new("ScrollingFrame")
     f.Name                 = key
@@ -503,10 +434,6 @@ local function mkPage(key)
     pages[key] = f
     return f, layout
 end
- 
--- ============================================
--- UI COMPONENT HELPERS
--- ============================================
  
 local function addLabel(parent, txt, color, order)
     local l = Instance.new("TextLabel")
@@ -621,12 +548,7 @@ local function addDivider(parent, order)
     f.ZIndex           = 13
     f.Parent           = parent
 end
- 
- 
--- ============================================
--- PAGE: HOME
--- ============================================
- 
+
 do
     local page = mkPage("home")
  
@@ -720,11 +642,6 @@ do
     end
 end
  
- 
--- ============================================
--- PAGE: SEND MAIL
--- ============================================
- 
 local lookupResult = nil
 local selectedItem = nil
 local statusLabel  = nil
@@ -806,7 +723,6 @@ do
  
     addDivider(page, 2)
  
-    -- Recipient
     addLabel(page, "RECIPIENT", C.accent, 3)
     local _, usernameInput = addInput(page, "Enter username (e.g. Roblox)", 34, 4)
     local _, recipInfo     = addStatusBar(page, "⚠  Username not searched yet", C.textHint, 5)
@@ -832,7 +748,6 @@ do
  
     addDivider(page, 7)
  
-    -- Item Selector
     addLabel(page, "ITEM  (from backpack)", C.accent, 8)
  
     local itemContainer = Instance.new("Frame")
@@ -990,7 +905,6 @@ do
  
     addDivider(page, 16)
  
-    -- Send buttons
     addButton(page, "📬  Send Mail", C.accent, function()
         if not lookupResult then setStatus("⚠  Search a player first!", C.accent); return end
         if not selectedItem  then setStatus("⚠  Select an item first!",  C.accent); return end
@@ -1028,11 +942,6 @@ do
  
     refreshItemList()
 end
- 
- 
--- ============================================
--- PAGE: BACKPACK
--- ============================================
  
 do
     local page = mkPage("backpack")
@@ -1118,11 +1027,6 @@ do
     refreshBP()
 end
  
- 
--- ============================================
--- PAGE: SETTINGS
--- ============================================
- 
 do
     local page = mkPage("settings")
  
@@ -1175,10 +1079,6 @@ do
     addDivider(page, 10)
     addButton(page, "✕  Close GUI", C.close, function() SGui:Destroy() end, 11)
 end
- 
--- ============================================
--- AUTO-SELECT HOME PAGE
--- ============================================
  
 navBtns["home"].btn.BackgroundColor3 = C.sideActive
 navBtns["home"].lbl.TextColor3       = C.white
