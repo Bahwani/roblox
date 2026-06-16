@@ -4,13 +4,11 @@ _G.GAG2Config = {
         seeds = {
             "Rainbow",
             "Gold",
-            "Carrot",
-            "Tulip",
         },
         pets = {
-            "Bunny",
             "Racoon",
             "Unicorn",
+            "Golden Dragonfly",
         },
         gears = {
             "Rare Sprinkler",
