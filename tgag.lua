@@ -5,7 +5,7 @@ local Players = game:GetService("Players")
 local LP      = Players.LocalPlayer
 local Net     = require(RS.SharedModules.Networking)
 
-local CHECK_INTERVAL = 3600
+local CHECK_INTERVAL = 21600
 local MAX_PER_BATCH = 20
 
 
