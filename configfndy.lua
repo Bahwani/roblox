@@ -73,7 +73,7 @@ _G.FishItConfig = _G.FishItConfig or {
         },
     },
     ["Event"] = {
-        ["Start Farm"] = true,
+        ["Start Farm"] = false,
         ["Minimum Rod"] = "Ghostfinn Rod",
         ["Event List"] = {
             "Megalodon Hunt",
@@ -114,7 +114,7 @@ _G.FishItConfig = _G.FishItConfig or {
             ["Fisherman Island"] = {"Starter Rod"},
             ["Kohana Volcano"] = {"Grass Rod", "Midnight Rod"},
             ["Tropical Grove"] = {"Astral Rod", "Fluorescent Rod"},
-            ["Ancient Ruin"] = {"Element Rod", "Ghostfinn Rod", "Angler Rod", "Ares Rod"},
+            ["Underwater City"] = {"Element Rod", "Ghostfinn Rod", "Angler Rod", "Ares Rod"},
         },
         ["Endgame"] = "",
     },
