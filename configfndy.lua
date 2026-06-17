@@ -81,13 +81,13 @@ _G.FishItConfig = _G.FishItConfig or {
     },
     ["Enchant"] = {
         ["Auto Enchant"] = true,
+        ["Farm Until Enchant"] = true,
         ["Roll Enchant"] = false, -- Roll enchant until get Leprechaun II
-        ["Minimum Rod"] = "Element Rod",
+        ["Minimum Rod"] = "Ghostfinn Rod",
         ["Enchant List"] = {
             "Cursed I",
             "Mutation Hunter II",
             "Mutation Hunter I",
-            "Reeler I",
         },
     },
     ["Bait List"] = {
@@ -110,7 +110,7 @@ _G.FishItConfig = _G.FishItConfig or {
             "Ares Rod",
             "Angler Rod",
         },
-        ["Location Rods"] = { -- Farm location and minimum rod to start on that location, also only 1 rod and only 1 location
+        ["Location Rods"] = { -- Farm location and minimum rod to start on that location, also only 1 rod and only 1 location 
             ["Fisherman Island"] = {"Starter Rod"},
             ["Kohana Volcano"] = {"Grass Rod", "Midnight Rod"},
             ["Tropical Grove"] = {"Astral Rod", "Fluorescent Rod"},
