@@ -96,9 +96,10 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Auto Enchant"] = true,
         ["Roll Enchant"] = false,
         ["Evolved Roll Enchant"] = true,
-        ["Farm Until Enchant"] = true,
+        ["Farm Until Enchant"] = false,
         ["Enchant List"] = {
             "Cursed I",
+            "Mutation Hunter I",
             "Mutation Hunter II",
             "Mutation Hunter III",
         },
