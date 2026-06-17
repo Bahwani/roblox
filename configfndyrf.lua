@@ -72,6 +72,19 @@ _G.FishItConfig = _G.FishItConfig or {
             "Storm",
         },
     },
+    ["Potions"] = {
+        ["Auto Use"] = true,
+        ["Minimum Rod"] = "Astral Rod",
+    },
+    ["Totems"] = {
+        ["Auto Use"] = true,
+        ["Minimum Rod"] = "Ghostfinn Rod",
+        ["Buy List"] = {
+            ["Luck Totem"] = 5,
+            "Mutation Totem",
+            "Shiny Totem",
+        },
+    },
     ["Event"] = {
         ["Start Farm"] = true,
         ["Minimum Rod"] = "Ghostfinn Rod",
@@ -81,14 +94,25 @@ _G.FishItConfig = _G.FishItConfig or {
     },
     ["Enchant"] = {
         ["Auto Enchant"] = true,
+        ["Roll Enchant"] = false,
+        ["Evolved Roll Enchant"] = true,
         ["Farm Until Enchant"] = true,
-        ["Roll Enchant"] = false, -- Roll enchant until get Leprechaun II
-        ["Minimum Rod"] = "Ghostfinn Rod",
         ["Enchant List"] = {
             "Cursed I",
             "Mutation Hunter II",
-            "Mutation Hunter I",
+            "Mutation Hunter III",
         },
+        ["Second Enchant"] = false,
+        ["Allowed Sacrifice"] = {
+            "Frostborn Shark",
+            "Cryoshade Glider",
+        },
+        ["Second Enchant List"] = {
+            "Reeler I",
+            "Prismatic I",
+            "Mutation Hunter II",
+        },
+        ["Minimum Rod"] = "Ghostfinn Rod",
     },
     ["Bait List"] = {
         ["Auto Buying"] = true,
