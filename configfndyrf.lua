@@ -81,13 +81,13 @@ _G.FishItConfig = _G.FishItConfig or {
     },
     ["Enchant"] = {
         ["Auto Enchant"] = true,
+        ["Farm Until Enchant"] = true,
         ["Roll Enchant"] = false, -- Roll enchant until get Leprechaun II
-        ["Minimum Rod"] = "Element Rod",
+        ["Minimum Rod"] = "Ghostfinn Rod",
         ["Enchant List"] = {
             "Cursed I",
             "Mutation Hunter II",
             "Mutation Hunter I",
-            "Reeler I",
         },
     },
     ["Bait List"] = {
