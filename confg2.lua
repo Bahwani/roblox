@@ -7,7 +7,7 @@ _G.GAG2Config = {
             "Dragon's Breath",
         },
         pets = {
-            "Racoon",
+            "Raccoon",
             "Unicorn",
             "Golden Dragonfly",
         },
