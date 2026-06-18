@@ -5,6 +5,7 @@ _G.GAG2Config = {
             "Rainbow",
             "Gold",
             "Dragon's Breath",
+            "Moon Bloom",
         },
         pets = {
             "Raccoon",
@@ -12,7 +13,7 @@ _G.GAG2Config = {
             "Golden Dragonfly",
         },
         gears = {
-            "Rare Sprinkler",
+            "Super Sprinkler",
             "Common Sprinkler",
         },
     }
