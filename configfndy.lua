@@ -6,6 +6,7 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Auto Favorite"] = true,
         ["Fish Name"] = {
             "Sacred Guardian Squid",
+            "Megalodon",
             {Name = "Ruby", Variant = "Gemstone"},
         },
         ["Auto Accept Trade"] = true,
@@ -14,7 +15,6 @@ _G.FishItConfig = _G.FishItConfig or {
         ["Enabled"] = true,
         ["Whitelist Username"] = {"PetsSave_1", "PetsSave_2", "PetsSave_3", "PetsSave_4", "PetsSave_5", "PetsSave_6"},
         ["Category Fish"] = {
-            "Secret",
         },
         ["Fish Name"] = {
             {Name = "Ruby", Variant = "Gemstone"},
