@@ -86,7 +86,7 @@ _G.FishItConfig = _G.FishItConfig or {
         },
     },
     ["Event"] = {
-        ["Start Farm"] = false,
+        ["Start Farm"] = true,
         ["Minimum Rod"] = "Ghostfinn Rod",
         ["Event List"] = {
             "Megalodon Hunt",
@@ -95,8 +95,8 @@ _G.FishItConfig = _G.FishItConfig or {
     ["Enchant"] = {
         ["Auto Enchant"] = true,
         ["Roll Enchant"] = false,
-        ["Evolved Roll Enchant"] = true,
-        ["Farm Until Enchant"] = false,
+        ["Evolved Roll Enchant"] = false,
+        ["Farm Until Enchant"] = true,
         ["Enchant List"] = {
             "Cursed I",
             "Mutation Hunter I",
