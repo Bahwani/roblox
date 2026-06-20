@@ -8,10 +8,10 @@ _G.GAGConfig = _G.GAGConfig or {
     ["Planting"] = {
         ["Plant Plan"]  = {},
         ["Layout"]      = "compact",
-        ["Don't Plant"] = {},        -- jangan menanam ini. contoh: { Carrot = true }
+        ["Don't Plant"] = { Rainbow = true, Gold = true },        -- jangan menanam ini. contoh: { Carrot = true }
         ["Keep Seeds"] = {
             ["Dragon's Breath"] = 5, ["Moon Bloom"] = 5,                                  -- bibit super langka (resale tinggi)
-            ["Gold"] = 50, ["Rainbow"] = 50,      -- bibit event
+            ["Gold"] = 5, ["Rainbow"] = 5,      -- bibit event
         },
     },
     ["Money"] = {
@@ -60,7 +60,7 @@ _G.GAGConfig = _G.GAGConfig or {
             { Category = "Pets",  Item = "Raccoon" },
             { Category = "Pets",  Item = "Unicorn" },
 
-            { Category = "Sprinklers", Item = "Super Sprinkler", Count = all },
+            { Category = "Sprinklers", Item = "Super Sprinkler", Count = "all" },
         },
     },
     ["Misc"] = {
