@@ -60,7 +60,7 @@ _G.GAGConfig = _G.GAGConfig or {
             { Category = "Pets",  Item = "Raccoon" },
             { Category = "Pets",  Item = "Unicorn" },
 
-            { Category = "Sprinklers", Item = "Super Sprinkler", Count = "all" },
+            { Category = "Sprinklers", Item = "Super Sprinkler" },
         },
     },
     ["Misc"] = {
