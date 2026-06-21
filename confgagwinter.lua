@@ -70,7 +70,7 @@ _G.GAGConfig = _G.GAGConfig or {
                                             -- lalu jalan
     },
     ["Performance"] = {
-        ["FPS Cap"]      = 15,    -- batas frame rate = juga memengaruhi logic/movement farming,
+        ["FPS Cap"]      = 30,    -- batas frame rate = juga memengaruhi logic/movement farming,
         ["Low Graphics"] = true,   -- turunkan kualitas render ke level minimum (tekstur/bayangan/efek) — hemat GPU & memory
         ["Remove Other Gardens"] = true,   -- (butuh Low Graphics aktif) hapus kebun milik player LAIN secara lokal =
                                               -- hemat memori besar, tapi kamu tidak akan melihat tetangga. false = tetap terlihat.
