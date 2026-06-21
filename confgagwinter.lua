@@ -64,15 +64,15 @@ _G.GAGConfig = _G.GAGConfig or {
         },
     },
     ["Misc"] = {
-        ["Auto Return To Garden"] = true,   -- jika kamu terpindah / tersangkut jauh, kembali otomatis ke kebun
-        ["Show Stats"]            = true,   -- tampilkan panel statistik farm di layar (pojok kiri bawah)
-        ["Smart Travel"]          = true,   -- untuk menuju pet/bibit yang JAUH, teleport dulu ke hub terdekat (Seeds/Sell/Garden),
-                                            -- lalu jalan
+        ["Auto Return To Garden"] = true,   
+        ["Show Stats"]            = true,  
+        ["Smart Travel"]          = true,   
+                                            
     },
     ["Performance"] = {
-        ["FPS Cap"]      = 30,    -- batas frame rate = juga memengaruhi logic/movement farming,
-        ["Low Graphics"] = true,   -- turunkan kualitas render ke level minimum (tekstur/bayangan/efek) — hemat GPU & memory
-        ["Remove Other Gardens"] = true,   -- (butuh Low Graphics aktif) hapus kebun milik player LAIN secara lokal =
-                                              -- hemat memori besar, tapi kamu tidak akan melihat tetangga. false = tetap terlihat.
+        ["FPS Cap"]      = 30,   
+        ["Low Graphics"] = true,   
+        ["Remove Other Gardens"] = true,   
+        ["Hide Crop Visuals"] = true,
     },
 }
