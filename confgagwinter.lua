@@ -1,7 +1,7 @@
 _G.GAGConfig = _G.GAGConfig or {
     ["Harvest"] = {
         ["Sell At"]       = 80,      -- jual ketika tas/backpack kamu sudah berisi buah sebanyak ini
-        ["Sell Every"]    = 30,      -- juga jual setiap N detik saat sedang memegang buah (uang stabil); 0 = mati/nonaktif
+        ["Sell Every"]    = 15,      -- juga jual setiap N detik saat sedang memegang buah (uang stabil); 0 = mati/nonaktif
         ["Only Harvest"]  = {},      -- jika diisi, panen HANYA yang ini. contoh: { Watermelon = true }
         ["Don't Harvest"] = {},      -- jangan panen ini (biarkan tumbuh). contoh: { Carrot = true }
     },
