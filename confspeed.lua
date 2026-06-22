@@ -78,7 +78,6 @@ getgenv().Config = {
   -- GEAR SYSTEM (BUY + USAGE PRIORITY)
   --////////////////////////////////////////////////////
   ["Buy Gears"] = {
-    ["Super Watering Can"] = 9999,
     ["Super Sprinkler"] = 9999,
   },
 
