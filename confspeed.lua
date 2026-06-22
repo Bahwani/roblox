@@ -4,20 +4,20 @@ getgenv().Config = {
   -- CORE FARM FEATURES (MAIN LOOP SYSTEMS)
   --////////////////////////////////////////////////////
   ["Main Features"] = {
-    ["Auto Plant"] = true, -- automatically plants seeds based on Seeds To Plant
-    ["Auto Sell"] = true, -- auto sells harvested fruits after timer / capacity
-    ["Auto Buy Seed"] = true, -- buys seeds from shop automatically
-    ["Auto Buy Gear"] = true, -- buys tools like sprinklers, cans, etc
-    ["Auto Use Gear"] = true -- automatically equips/uses bought gear
+    ["Auto Plant"] = false, -- automatically plants seeds based on Seeds To Plant
+    ["Auto Sell"] = false, -- auto sells harvested fruits after timer / capacity
+    ["Auto Buy Seed"] = false, -- buys seeds from shop automatically
+    ["Auto Buy Gear"] = false, -- buys tools like sprinklers, cans, etc
+    ["Auto Use Gear"] = false -- automatically equips/uses bought gear
   },
 
-  ["Auto Expand Garden"] = true, -- expands plot when conditions are met
+  ["Auto Expand Garden"] = false, -- expands plot when conditions are met
 
   --////////////////////////////////////////////////////
   -- PERFORMANCE / FPS CONTROL
   --////////////////////////////////////////////////////
   ["Optimization"] = {
-    ["Workspace Cleaner"] = true, -- removes unnecessary parts for better performance
+    ["Workspace Cleaner"] = false, -- removes unnecessary parts for better performance
     ["Black Screen"] = false, -- disables rendering for performance boost
     ["FPS Cap"] = 60, -- sets max FPS (60 recommended)
     ["Auto Set FPS"] = true, -- auto adjusts FPS cap based on device
@@ -28,11 +28,11 @@ getgenv().Config = {
   -- SECONDARY SYSTEMS (PET / UTILITY / QUALITY OF LIFE)
   --////////////////////////////////////////////////////
   ["Other Features"] = {
-    ["Auto Shovel"] = true, -- removes unwanted plants automatically
-    ["Auto Catch Pet"] = true, -- auto catches new pets spawned in world
-    ["Auto Equip Pets"] = true, -- equips best pets automatically
-    ["Auto Optimize Pets"] = true, -- optimizes pet stats/loadout
-    ["Auto Upgrade Pet Slots"] = true, -- increases pet capacity automatically
+    ["Auto Shovel"] = false, -- removes unwanted plants automatically
+    ["Auto Catch Pet"] = false, -- auto catches new pets spawned in world
+    ["Auto Equip Pets"] = false, -- equips best pets automatically
+    ["Auto Optimize Pets"] = false, -- optimizes pet stats/loadout
+    ["Auto Upgrade Pet Slots"] = false, -- increases pet capacity automatically
     ["Auto Tutorial"] = true -- skips or completes tutorial steps
   },
 
@@ -49,8 +49,8 @@ getgenv().Config = {
   --////////////////////////////////////////////////////
   -- FARMING BEHAVIOR SETTINGS
   --////////////////////////////////////////////////////
-  ["Auto Pickup Mutation Seeds"] = true, -- picks special mutation seeds instantly
-  ["Teleport To Seed Packs"] = true, -- teleports to seed pack drops
+  ["Auto Pickup Mutation Seeds"] = false, -- picks special mutation seeds instantly
+  ["Teleport To Seed Packs"] = false, -- teleports to seed pack drops
   ["Auto Plant Mutation Seeds"] = false, -- enables planting rare mutation seeds
 
   ["Sell After"] = 30, -- seconds before selling harvested items
