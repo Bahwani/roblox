@@ -4,11 +4,11 @@ getgenv().Config = {
   -- CORE FARM FEATURES (MAIN LOOP SYSTEMS)
   --////////////////////////////////////////////////////
   ["Main Features"] = {
-    ["Auto Plant"] = false, -- automatically plants seeds based on Seeds To Plant
-    ["Auto Sell"] = false, -- auto sells harvested fruits after timer / capacity
-    ["Auto Buy Seed"] = false, -- buys seeds from shop automatically
-    ["Auto Buy Gear"] = false, -- buys tools like sprinklers, cans, etc
-    ["Auto Use Gear"] = false -- automatically equips/uses bought gear
+    ["Auto Plant"] = true, -- automatically plants seeds based on Seeds To Plant
+    ["Auto Sell"] = true, -- auto sells harvested fruits after timer / capacity
+    ["Auto Buy Seed"] = true, -- buys seeds from shop automatically
+    ["Auto Buy Gear"] = true, -- buys tools like sprinklers, cans, etc
+    ["Auto Use Gear"] = true -- automatically equips/uses bought gear
   },
 
   ["Auto Expand Garden"] = false, -- expands plot when conditions are met
@@ -28,8 +28,8 @@ getgenv().Config = {
   -- SECONDARY SYSTEMS (PET / UTILITY / QUALITY OF LIFE)
   --////////////////////////////////////////////////////
   ["Other Features"] = {
-    ["Auto Shovel"] = false, -- removes unwanted plants automatically
-    ["Auto Catch Pet"] = false, -- auto catches new pets spawned in world
+    ["Auto Shovel"] = true, -- removes unwanted plants automatically
+    ["Auto Catch Pet"] = true, -- auto catches new pets spawned in world
     ["Auto Equip Pets"] = false, -- equips best pets automatically
     ["Auto Optimize Pets"] = false, -- optimizes pet stats/loadout
     ["Auto Upgrade Pet Slots"] = false, -- increases pet capacity automatically
@@ -49,11 +49,11 @@ getgenv().Config = {
   --////////////////////////////////////////////////////
   -- FARMING BEHAVIOR SETTINGS
   --////////////////////////////////////////////////////
-  ["Auto Pickup Mutation Seeds"] = false, -- picks special mutation seeds instantly
-  ["Teleport To Seed Packs"] = false, -- teleports to seed pack drops
+  ["Auto Pickup Mutation Seeds"] = true, -- picks special mutation seeds instantly
+  ["Teleport To Seed Packs"] = true, -- teleports to seed pack drops
   ["Auto Plant Mutation Seeds"] = false, -- enables planting rare mutation seeds
 
-  ["Sell After"] = 30, -- seconds before selling harvested items
+  ["Sell After"] = 15, -- seconds before selling harvested items
 
   ["Mutation Seeds To Plant"] = {}, -- whitelist for mutation planting
   ["Gear To Buy"] = {}, -- custom gear whitelist
@@ -82,7 +82,6 @@ getgenv().Config = {
   },
 
   ["Use Sprinkler"] = {
-    "Legendary Sprinkler",
     "Rare Sprinkler",
     "Uncommon Sprinkler",
     "Common Sprinkler",
@@ -127,7 +126,7 @@ getgenv().Config = {
   -- GARDEN UPGRADES
   --////////////////////////////////////////////////////
   ["Expand Plot"] = 1, -- number of plots to expand at once
-  ["Max Pet Slots"] = 1, -- 0 = base (3 slots), +1 = 4 slots, etc
+  ["Max Pet Slots"] = 0, -- 0 = base (3 slots), +1 = 4 slots, etc
 
   --////////////////////////////////////////////////////
   -- WEBHOOK SYSTEM (NOTIFICATIONS)
