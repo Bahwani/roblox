@@ -51,16 +51,9 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Auto Claim"] = true,       -- klaim otomatis item yang dikirim ke mailbox (item gratis / hadiah)
         ["Send To"] = "voidisthebest79",            -- username tujuan. KOSONG = kirim dimatikan/off.
         ["Send"] = {
-            -- contoh: kirim per-item dengan format Category + Item
-            { Category = "Seeds", Item = "Moon Bloom" },
-            { Category = "Seeds", Item = "Dragon's Breath" },
-            { Category = "Seeds", Item = "Rainbow" },
-            { Category = "Seeds", Item = "Gold" },
-
-            { Category = "Pets",  Item = "Raccoon" },
-            { Category = "Pets",  Item = "Unicorn" },
-
-            { Category = "Sprinklers", Item = "Super Sprinkler" },
+            "Moon Bloom", "Dragon's Breath", "Gold", "Rainbow",
+            "Deer", "GoldenDragonfly", "Unicorn", "Robin", "Raccoon",
+            "Super Sprinkler", "Legendary Sprinkler", "Super Watering Can", 
         },
     },
     ["Misc"] = {
