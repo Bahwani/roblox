@@ -11,10 +11,10 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Plant Plan"]  = {},                 -- e.g. { Apple = 50, ["Dragon Fruit"] = 20 }  (keep N planted, then auto-fill)
         ["Only Plant"]  = {},                 -- e.g. { "Bamboo", "Apple" }  (plant ONLY these)
         ["Layout"]      = "compact",          -- "compact" / "spread"
-        ["Don't Plant"] = { "Rainbow", "Gold", "Dragon's Breath", "Moon Bloom" },                 -- e.g. { "Carrot", "Green Bean" }
+        ["Don't Plant"] = { "Rainbow", "Gold", "Dragon's Breath", "Moon Bloom", "Venom Spitter" },                 -- e.g. { "Carrot", "Green Bean" }
         ["Don't Buy"]   = {},                 -- e.g. { "Mango", "Coconut" }
         ["Keep Seeds"]  = {                   -- e.g. { ["Moon Bloom"] = 5, Gold = 15 }  (keep N UNPLANTED)
-            ["Dragon's Breath"] = 5, ["Moon Bloom"] = 5,
+            ["Dragon's Breath"] = 5, ["Moon Bloom"] = 5, ["Venom Spitter"] = 5,
             ["Gold"] = 15, ["Rainbow"] = 5,
         },
     },
@@ -52,7 +52,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Auto Claim"] = true,                -- true / false
         ["Send To"]    = "voidisthebest79",                  -- username to funnel items to ("" = off)
         ["Send"]       = {                    -- e.g. { "Gold", "Deer", { Item = "Deer", Count = 5 } }  (equipped pets never sent)
-            "Moon Bloom", "Dragon's Breath", "Gold", "Rainbow",
+            "Moon Bloom", "Dragon's Breath", "Gold", "Rainbow", "Venom Spitter",
             "Unicorn", "Raccoon",
             "Super Sprinkler", "Legendary Sprinkler", "Super Watering Can",
         },
