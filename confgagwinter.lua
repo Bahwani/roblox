@@ -66,7 +66,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Fast Travel"]           = false,    -- true / false  (on = noclip-SLIDE travel: same speed at ANY fps; falls back to walking if yanked. off = plain walking)
     },
     ["Performance"] = {
-        ["FPS Cap"]              = 5,        -- number (0 = uncapped; also the farm's logic/movement rate)
+        ["FPS Cap"]              = 0,        -- number (0 = uncapped; also the farm's logic/movement rate)
         ["Low Graphics"]         = true,      -- true / false
         ["Remove Other Gardens"] = true,      -- true / false  (needs Low Graphics)
         ["Hide Crop Visuals"]    = true,      -- true / false  (hide your own plants; they still grow & harvest)
