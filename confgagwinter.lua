@@ -73,6 +73,6 @@ _G.GAGConfig = _G.GAGConfig or {
     },
     ["Debug"] = {
         ["Log To File"] = false,   -- true / false  (writes GAG_LOG_<name>.txt — a timestamped log of what the farm did + WHY it skipped something)
-        ["Console"]     = true,   -- true / false  (also print log lines to the executor console). Or a list to filter, e.g. { "REPLACE", "ERROR" }
+        ["Console"]     = false,   -- true / false  (also print log lines to the executor console). Or a list to filter, e.g. { "REPLACE", "ERROR" }
     },
 }
