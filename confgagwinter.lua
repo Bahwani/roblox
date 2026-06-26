@@ -67,8 +67,8 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Auto Daily Deal"]       = true,     -- true / false
         ["Walk Speed"]            = 35,       -- number 16..35  (travel speed; 30 = stable. Lower toward 25 if Fast Travel ever snaps you back)
         ["Slide Speed"]           = 35,       -- number 10..150  (noclip SLIDE speed for Fast Travel excursions; default 30. Higher = faster but closer to the ~180/s anti-cheat snap ceiling)
-        ["Fast Travel"]           = false,    -- true / false  (on = noclip-SLIDE travel: same speed at ANY fps; falls back to walking if yanked. off = plain walking)
-        ["Teleport"]              = false,   -- true / false  (on = grab pets + event seeds by TELEPORTING straight onto each one and fast-firing — much faster than slide/walk. Separate from Fast Travel)
+        ["Fast Travel"]           = true,    -- true / false  (on = noclip-SLIDE travel: same speed at ANY fps; falls back to walking if yanked. off = plain walking)
+        ["Teleport"]              = true,   -- true / false  (on = grab pets + event seeds by TELEPORTING straight onto each one and fast-firing — much faster than slide/walk. Separate from Fast Travel)
     },
     ["Friends"] = {
         ["Auto Accept"] = false,              -- true / false  (accept incoming friend requests from players in the server)
