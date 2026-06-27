@@ -76,9 +76,9 @@ _G.GAGConfig = _G.GAGConfig or {
     },
     ["Performance"] = {
         ["FPS Cap"]              = 15,        -- number (0 = uncapped; also the farm's logic/movement rate)
-        ["Low Graphics"]         = false,      -- true / false
-        ["Remove Other Gardens"] = false,      -- true / false  (needs Low Graphics)
-        ["Hide Crop Visuals"]    = false,      -- true / false  (hide your own plants; they still grow & harvest)
+        ["Low Graphics"]         = true,      -- true / false
+        ["Remove Other Gardens"] = true,      -- true / false  (needs Low Graphics)
+        ["Hide Crop Visuals"]    = true,      -- true / false  (hide your own plants; they still grow & harvest)
     },
     ["Debug"] = {
         ["Log To File"] = false,   -- true / false  (writes GAG_LOG_<name>.txt — a timestamped log of what the farm did + WHY it skipped something)
