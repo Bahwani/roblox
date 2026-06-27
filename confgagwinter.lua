@@ -5,7 +5,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Sell Every"]    = 20,               -- seconds (0 = off)
         ["Only Harvest"]  = {},               -- e.g. { "Watermelon", "Apple" }
         ["Don't Harvest"] = {},               -- e.g. { "Carrot", "Tomato" }
-        ["Wait For Mutation"] = { "Mushroom", "Bamboo" },           -- e.g. { "Mushroom", "Bamboo" }  (don't harvest these until they get ANY mutation — wait for a weather event to mutate them; they're also kept from the shovel while waiting)
+        ["Wait For Mutation"] = {},           -- e.g. { "Mushroom", "Bamboo" }  (don't harvest these until they get ANY mutation — wait for a weather event to mutate them; they're also kept from the shovel while waiting)
     },
     ["Planting"] = {
         ["Auto Plant"]  = true,               -- true / false  (false = never buy/plant; also stops expand/replace)
