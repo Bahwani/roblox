@@ -75,7 +75,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Auto Send"]   = false,              -- true / false  (send friend requests to players in the server — some accounts must be friends to mail/trade)
     },
     ["Performance"] = {
-        ["FPS Cap"]              = 15,        -- number (0 = uncapped; also the farm's logic/movement rate)
+        ["FPS Cap"]              = 30,        -- number (0 = uncapped; also the farm's logic/movement rate)
         ["Low Graphics"]         = true,      -- true / false
         ["Remove Other Gardens"] = true,      -- true / false  (needs Low Graphics)
         ["Hide Crop Visuals"]    = true,      -- true / false  (hide your own plants; they still grow & harvest)
