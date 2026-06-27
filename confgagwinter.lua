@@ -14,7 +14,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Minimum Seed"] = "",                -- e.g. "Bamboo"  (never BUY/PLANT a seed cheaper than this tier — stops it filling with Carrot/Strawberry/Blueberry junk. "" = no floor, fill with anything)
         ["Layout"]      = "compact",          -- "compact" / "spread"
         ["Don't Plant"] = { "Rainbow", "Gold", "Mega", "Dragon's Breath", "Moon Bloom", "Venom Spitter" },                 -- e.g. { "Carrot", "Green Bean" }
-        ["Don't Buy"]   = { "Strawberry", "Blueberry", "Tulip", "Tomato", "Apple", "Corn", "Cactus", "Pineapple", "Green Bean", "Banana", "Grape", "Coconut", "Mango", "Dragon Fruit", "Acorn", "Cherry", "Sun Flower" },                 -- e.g. { "Mango", "Coconut" }
+        ["Don't Buy"]   = { "Strawberry", "Blueberry", "Tulip", "Tomato", "Apple", "Corn", "Cactus", "Pineapple", "Green Bean", "Banana", "Grape", "Coconut", "Mango", "Dragon Fruit", "Acorn", "Cherry", "Sunflower" },                 -- e.g. { "Mango", "Coconut" }
         ["Keep Seeds"]  = {                   -- e.g. { ["Moon Bloom"] = 5, Gold = 15 }  (keep N UNPLANTED)
             ["Dragon's Breath"] = 5, ["Moon Bloom"] = 5, ["Venom Spitter"] = 5,
             ["Gold"] = 15, ["Rainbow"] = 5, ["Mega"] = 5,
