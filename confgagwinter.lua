@@ -14,7 +14,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Minimum Seed"] = "",                -- e.g. "Bamboo"  (never BUY/PLANT a seed cheaper than this tier — stops it filling with Carrot/Strawberry/Blueberry junk. "" = no floor, fill with anything)
         ["Layout"]      = "compact",          -- "compact" / "spread"
         ["Don't Plant"] = { "Rainbow", "Gold", "Mega", "Dragon's Breath", "Moon Bloom", "Venom Spitter" },                 -- e.g. { "Carrot", "Green Bean" }
-        ["Don't Buy"]   = {},                 -- e.g. { "Mango", "Coconut" }
+        ["Don't Buy"]   = { "Strawberry", "Blueberry", "Tulip", "Tomato", "Apple", "Corn", "Cactus", "Pineapple", "Green Bean", "Banana", "Grape", "Coconut", "Mango", "Dragon Fruit", "Acorn", "Cherry", "Sun Flower" },                 -- e.g. { "Mango", "Coconut" }
         ["Keep Seeds"]  = {                   -- e.g. { ["Moon Bloom"] = 5, Gold = 15 }  (keep N UNPLANTED)
             ["Dragon's Breath"] = 5, ["Moon Bloom"] = 5, ["Venom Spitter"] = 5,
             ["Gold"] = 15, ["Rainbow"] = 5, ["Mega"] = 5,
@@ -43,7 +43,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Keep Cash"]            = 15000,           -- number
         ["Sprinkler Coverage"]   = "concentrate",   -- "concentrate" / "value" / "spread"
         ["Place Sprinklers"]     = { ["best"] = 4 },          -- e.g. { ["best"] = 4 } or { ["Rare Sprinkler"] = 2 }
-        ["Best Sprinkler Up To"] = "Rare Sprinkler",          -- "Common/Uncommon/Rare/Super/Legendary Sprinkler"
+        ["Best Sprinkler Up To"] = "Uncommon Sprinkler",          -- "Common/Uncommon/Rare/Super/Legendary Sprinkler"
         ["Keep Gear"]            = { ["Supersize Mushroom"] = 1 },   -- e.g. { ["Trowel"] = 1 }  (buy & hold N)
         ["Buy Gear"]             = { "Super Sprinkler", "Super Watering Can" },   -- e.g. { "Trowel" }  (buy & keep, never placed)
     },
@@ -54,7 +54,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Auto Claim"] = true,                -- true / false
         ["Send To"]    = "voidisthebest79",                  -- username to funnel items to ("" = off)
         ["Send"]       = {                    -- e.g. { "Gold", "Deer", { Item = "Deer", Count = 5 } }  (equipped pets never sent)
-            "Moon Bloom", "Dragon's Breath", { Item = "Gold", Count = 5 }, "Rainbow", "Mega", "Venom Spitter",
+            "Moon Bloom", "Dragon's Breath", { Item = "Gold", Count = 10 }, "Rainbow", "Mega", "Venom Spitter",
             "Unicorn", "Raccoon",
             "Super Sprinkler", "Legendary Sprinkler", "Super Watering Can",
         },
