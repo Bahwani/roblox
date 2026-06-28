@@ -17,8 +17,8 @@ getgenv().GAG2 = {
     ["Venus Fly Trap"] =800,["Pomegranate"] = 800,["Poison Apple"] = 800,
 },
     DestroyPlants = {
-        "Carrot", "Strawberry", "Blueberry", "Tulip", "Tomato", "Apple", "Bamboo","Corn",
-        "Cactus", "Pineapple", "Mushroom", "Green Bean", "Banana", "Grape", "Coconut",
+        "Carrot", "Strawberry", "Blueberry", "Tulip", "Tomato", "Apple", "Corn",
+        "Cactus", "Pineapple", "Green Bean", "Banana", "Grape", "Coconut",
         "Mango", "Dragon Fruit", "Acorn", "Cherry", "Sunflower",
     },
 
@@ -52,8 +52,8 @@ getgenv().GAG2 = {
         ["Rare Sprinkler"] = 2,
         ["Legendary Sprinkler"] = 2,
     },
-    DestroyUntilMinPlants = 200,
-    LimitPlants = 220,
+    DestroyUntilMinPlants = 185,
+    LimitPlants = 200,
     PlantOverLimit = {"Bamboo","Mushroom",},
     ExpandLimit = 3,
     MaxPetSlots = 4,
