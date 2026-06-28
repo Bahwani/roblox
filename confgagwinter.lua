@@ -22,7 +22,7 @@ _G.GAGConfig = _G.GAGConfig or {
     },
     ["Money"] = {
         ["Keep Cash"]          = 15000,    -- always keep at least this much money
-        ["Auto Expand Plot"]   = true,     -- buy plot expansions automatically
+        ["Auto Expand Plot"]   = false,     -- buy plot expansions automatically
         ["Max Expansions"]     = 3,        -- cap how many expansions to auto-BUY this run. 0 = no limit; default 3 = stop after 3 (raise for a bigger plot)
         ["Expand If Over"]     = 1500000,  -- only spend on an expansion when your cash is above this
         ["Auto Replace Plants"] = true,    -- when the plot is full, dig up low-value plants and plant better ones
