@@ -2,7 +2,7 @@ getgenv().GAG2 = {
     Fps = 5,
     AutoBuySeed = true,
     ["seed dont buy"] = {
-        -- "Carrot", "Tomato",
+        "Strawberry", "Blueberry", "Tomato", "Corn", "Apple",-- "Carrot", "Tomato",
     },
     BuyGearShop = {
         "Common Sprinkler", "Uncommon Sprinkler","Common Watering Can", "Rare Sprinkler","Super Sprinkler","Super Watering Can","Legendary Sprinkler",
@@ -13,8 +13,8 @@ getgenv().GAG2 = {
     ["Tomato"] = 200, ["Apple"] = 200, ["Bamboo"] = 200, ["Corn"] = 200,
     ["Cactus"] = 200, ["Pineapple"] = 200, ["Mushroom"] = 200, ["Green Bean"] = 200,
     ["Banana"] = 200, ["Grape"] = 200, ["Coconut"] = 200, ["Mango"] = 200,
-    ["Dragon Fruit"] = 200, ["Acorn"] = 200, ["Cherry"] = 200, ["Sunflower"] = 200,["Gold"] = 200,
-    ["Venus Fly Trap"] =800,["Pomegranate"] = 800,["Poison Apple"] = 800,["Venom Spitter"] = 800,
+    ["Dragon Fruit"] = 200, ["Acorn"] = 200, ["Cherry"] = 200, ["Sunflower"] = 200,
+    ["Venus Fly Trap"] =800,["Pomegranate"] = 800,["Poison Apple"] = 800,
 },
     DestroyPlants = {
         "Carrot", "Strawberry", "Blueberry", "Tulip", "Tomato", "Apple", "Bamboo","Corn",
@@ -64,6 +64,7 @@ getgenv().GAG2 = {
         ["Black Dragon"] = 1,
         ["Ice Serpent"] = 1,
         ["Bear"] = "All",
+        ["Venom Spitter"] = "All",
         ["Moon Bloom"] = "All",
         ["Dragon's Breath"] = "All",
         ["Hypno Bloom"] = "All",
