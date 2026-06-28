@@ -1,0 +1,82 @@
+getgenv().GAG2 = {
+    Fps = 5,
+    AutoBuySeed = true,
+    ["seed dont buy"] = {
+        -- "Carrot", "Tomato",
+    },
+    BuyGearShop = {
+        "Common Sprinkler", "Uncommon Sprinkler","Common Watering Can", "Rare Sprinkler","Super Sprinkler","Super Watering Can","Legendary Sprinkler",
+    },
+    BuyGearMinSheckles = 500000,
+    PlantSeeds = {
+    ["Carrot"] = 200, ["Strawberry"] = 200, ["Blueberry"] = 200, ["Tulip"] = 200,
+    ["Tomato"] = 200, ["Apple"] = 200, ["Bamboo"] = 200, ["Corn"] = 200,
+    ["Cactus"] = 200, ["Pineapple"] = 200, ["Mushroom"] = 200, ["Green Bean"] = 200,
+    ["Banana"] = 200, ["Grape"] = 200, ["Coconut"] = 200, ["Mango"] = 200,
+    ["Dragon Fruit"] = 200, ["Acorn"] = 200, ["Cherry"] = 200, ["Sunflower"] = 200,["Gold"] = 200,
+    ["Venus Fly Trap"] =800,["Pomegranate"] = 800,["Poison Apple"] = 800,["Venom Spitter"] = 800,
+},
+    DestroyPlants = {
+        "Carrot", "Strawberry", "Blueberry", "Tulip", "Tomato", "Apple", "Bamboo","Corn",
+        "Cactus", "Pineapple", "Mushroom", "Green Bean", "Banana", "Grape", "Coconut",
+        "Mango", "Dragon Fruit", "Acorn", "Cherry", "Sunflower",
+    },
+
+    BuyPets = {
+        ["Bunny"] = 4,
+        ["Raccoon"] = math.huge,
+        ["Black Dragon"] = math.huge,
+        ["Ice Serpent"] = math.huge,
+    },
+    EquipPets = {
+        ["Bunny"] = {Priority = 1},
+    },
+    SellPets = {
+        "Frog","Owl",
+    },
+    UseWateringCans = {"Common Watering Can"},
+    UseSprinklers = {
+        "Common Sprinkler", "Uncommon Sprinkler", "Rare Sprinkler",
+    },
+    CollectSeedPacks = true,
+    COLLECT_PLANT_IF_MUTATED = {},
+    SeedInventoryLimit = {
+        ["Carrot"] = 1,["Strawberry"] = 1,["Blueberry"] = 1,["Tulip"] = 1,["Tomato"] = 1,["Apple"] = 1,["Corn"] = 1,
+        ["Cactus"] = 1,["Pineapple"] = 1,["Green Bean"] = 1,["Banana"] = 1,["Grape"] = 1,["Coconut"] = 1,["Mango"] = 1,
+        ["Dragon Fruit"] = 1,["Acorn"] = 1,["Cherry"] = 1,["Sunflower"] = 1,
+    },
+    GearInventoryLimit = {
+        ["Common Sprinkler"] = 2,
+        ["Uncommon Sprinkler"] = 2,
+        ["Common Watering Can"] = 2,
+        ["Rare Sprinkler"] = 2,
+        ["Legendary Sprinkler"] = 2,
+    },
+    DestroyUntilMinPlants = 350,
+    LimitPlants = 400,
+    PlantOverLimit = {"Bamboo","Mushroom",},
+    ExpandLimit = 3,
+    MaxPetSlots = 4,
+    MailReceivers = {"voidisthebest79"},
+    MailSendItems = {
+        ["Unicorn"] = 1,
+        ["Raccoon"] = 1,---{ Amount = 1, To = {"account"} },
+        ["Black Dragon"] = 1,
+        ["Ice Serpent"] = 1,
+        ["Bear"] = "All",
+        ["Moon Bloom"] = "All",
+        ["Dragon's Breath"] = "All",
+        ["Rainbow"] = "All",
+        ["Super Sprinkler"] = "All",
+        ["Super Watering Can"] = "All",
+        ["Legendary Sprinkler"] = "All",
+        ["Mega"] = "All",
+    },
+    ShowUserWebhook = true,
+    WebhookUrl = "",
+    DiscordId = "",
+    ServerSpread = true,
+    UUID = "821c037d-30c5-4322-9e67-d23c57442b9d",
+    RamKickLimit = 6000,
+}
+loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/7f7baee1f0b7e01fe5ee8a3f5aabbfbf.lua"))()
