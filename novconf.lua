@@ -80,6 +80,6 @@ getgenv().GAG2 = {
     DiscordId = "",
     ServerSpread = true,
     UUID = "821c037d-30c5-4322-9e67-d23c57442b9d",
-    RamKickLimit = 10000,
+    RamKickLimit = 12000,
 }
 loadstring(game:HttpGet("https://api.luarmor.net/files/v4/loaders/7f7baee1f0b7e01fe5ee8a3f5aabbfbf.lua"))()
