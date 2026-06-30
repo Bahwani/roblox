@@ -54,7 +54,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Auto Claim"] = true,                -- true / false
         ["Send To"]    = "voidisthebest79",                  -- username to funnel items to ("" = off)
         ["Send"]       = {                    -- e.g. { "Gold", "Deer", { Item = "Deer", Count = 5 } }  (equipped pets never sent) { Item = "Gold", Count = 10 },
-            "Moon Bloom", "Dragon's Breath", "Rainbow", "Mega", "Hypno Bloom", { Item = "Gold", Count = 50 },
+            "Moon Bloom", "Dragon's Breath", "Rainbow", "Mega", "Hypno Bloom", { Item = "Gold", Count = 20 },
             "Unicorn", "Raccoon",
             "Super Sprinkler", "Legendary Sprinkler", "Super Watering Can",
         },
