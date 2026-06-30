@@ -9,9 +9,7 @@ getgenv().GAG2 = {
     },
     BuyGearMinSheckles = 500000,
     PlantSeeds = {
-    ["Carrot"] = 200, ["Strawberry"] = 200, ["Blueberry"] = 200, ["Tulip"] = 200,
-    ["Tomato"] = 200, ["Apple"] = 200, ["Bamboo"] = 200, ["Corn"] = 200,
-    ["Cactus"] = 200, ["Pineapple"] = 200, ["Mushroom"] = 200, ["Green Bean"] = 200,
+    ["Carrot"] = 200, ["Bamboo"] = 200, ["Mushroom"] = 200, ["Green Bean"] = 200,
     ["Banana"] = 200, ["Grape"] = 200, ["Coconut"] = 200, ["Mango"] = 200,
     ["Dragon Fruit"] = 200, ["Acorn"] = 200, ["Cherry"] = 200, ["Sunflower"] = 200,
     ["Venus Fly Trap"] =800,["Pomegranate"] = 800,["Poison Apple"] = 800,
