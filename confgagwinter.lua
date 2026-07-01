@@ -13,7 +13,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Only Plant"]  = {},                 -- e.g. { "Bamboo", "Apple" }  (plant ONLY these)
         ["Minimum Seed"] = "",                -- e.g. "Bamboo"  (never BUY/PLANT a seed cheaper than this tier — stops it filling with Carrot/Strawberry/Blueberry junk. "" = no floor, fill with anything)
         ["Layout"]      = "compact",          -- "compact" / "spread"
-        ["Don't Plant"] = { "Rainbow", "Mega", "Dragon's Breath", "Moon Bloom", "Hypno Bloom", "Strawberry", "Blueberry", "Tomato", "Apple", "Corn" },                 -- e.g. { "Cactus", "Pineapple", "Green Bean", "Banana", "Grape", "Coconut", "Mango", "Dragon Fruit", "Acorn", "Cherry" } 
+        ["Don't Plant"] = { "Carrot", "Rainbow", "Mega", "Dragon's Breath", "Moon Bloom", "Hypno Bloom", "Strawberry", "Blueberry", "Tomato", "Apple", "Corn" },                 -- e.g. { "Cactus", "Pineapple", "Green Bean", "Banana", "Grape", "Coconut", "Mango", "Dragon Fruit", "Acorn", "Cherry" } 
         ["Don't Buy"]   = { "Strawberry", "Blueberry", "Tulip", "Tomato", "Apple", "Corn" },                 -- e.g. { "Cactus", "Pineapple", "Green Bean", "Banana", "Grape", "Coconut", "Mango" }
         ["Keep Seeds"]  = {                   -- e.g. { ["Moon Bloom"] = 5, Gold = 15 }  (keep N UNPLANTED)
             ["Dragon's Breath"] = 5, ["Moon Bloom"] = 5, ["Venom Spitter"] = 5,
@@ -57,7 +57,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Auto Claim"] = true,                -- true / false
         ["Send To"]    = "voidisthebest79",                  -- username to funnel items to ("" = off)
         ["Send"]       = {                    -- e.g. { "Gold", "Deer", { Item = "Deer", Count = 5 } }  (equipped pets never sent) { Item = "Gold", Count = 10 },
-            "Moon Bloom", "Dragon's Breath", "Rainbow", "Mega", "Hypno Bloom", { Item = "Gold", Count = 20 },
+            "Moon Bloom", "Dragon's Breath", "Rainbow", "Mega", "Hypno Bloom", { Item = "Gold", Count = 20 }, { Item = "Carrot", Count = 200 },
             "Unicorn", "Raccoon",
             "Super Sprinkler", "Legendary Sprinkler", "Super Watering Can",
         },
