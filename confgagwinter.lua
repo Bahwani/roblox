@@ -17,7 +17,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Don't Buy"]   = { "Strawberry", "Blueberry", "Tulip", "Tomato", "Apple", "Corn" },                 -- e.g. { "Cactus", "Pineapple", "Green Bean", "Banana", "Grape", "Coconut", "Mango" }
         ["Keep Seeds"]  = {                   -- e.g. { ["Moon Bloom"] = 5, Gold = 15 }  (keep N UNPLANTED)
             ["Dragon's Breath"] = 5, ["Moon Bloom"] = 5, ["Venom Spitter"] = 5,
-            ["Gold"] = 2, ["Rainbow"] = 5, ["Mega"] = 5, ["Carrot"] = 500
+            ["Gold"] = 2, ["Rainbow"] = 5, ["Mega"] = 5, ["Carrot"] = 400
         },
         ["Plant Limit"] = 150,                  -- number (0 = off). Cap TOTAL plants at this: never plant past it, AND if you're ALREADY over (e.g. 800), shovel the lowest-tier plants DOWN to it to cut lag / stop the game force-closing. Set ~200. Never shovels mutated (Gold/Rainbow/Mega), Mega-size, Plant-Plan or never-sell plants.
         ["Never Shovel"] = {},                -- e.g. { "Dragon Fruit", "Mango" }  (extra plants the Plant Limit shovel must NEVER remove — for your high-tier crops)
@@ -57,7 +57,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Auto Claim"] = true,                -- true / false
         ["Send To"]    = "voidisthebest79",                  -- username to funnel items to ("" = off)
         ["Send"]       = {                    -- e.g. { "Gold", "Deer", { Item = "Deer", Count = 5 } }  (equipped pets never sent) { Item = "Gold", Count = 10 },
-            "Moon Bloom", "Dragon's Breath", "Rainbow", "Hypno Bloom", { Item = "Mega", Count = 3 }, { Item = "Gold", Count = 20 }, { Item = "Carrot", Count = 500 },
+            "Moon Bloom", "Dragon's Breath", "Rainbow", "Hypno Bloom", { Item = "Mega", Count = 3 }, { Item = "Gold", Count = 20 }, { Item = "Carrot", Count = 400 },
             "Unicorn", "Raccoon",
             "Super Sprinkler", { Item = "Legendary Sprinkler", Count = 5 }, { Item = "Super Watering Can", Count = 3 },
         },
