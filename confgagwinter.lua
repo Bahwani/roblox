@@ -10,7 +10,7 @@ _G.GAGConfig = _G.GAGConfig or {
     ["Planting"] = {
         ["Auto Plant"]  = true,               -- true / false  (false = never buy/plant; also stops expand/replace)
         ["Plant Plan"]  = {},                 -- e.g. { Apple = 50, ["Dragon Fruit"] = 20 }  (keep N planted, then auto-fill)
-        ["Only Plant"]  = { "Bamboo", "Mushroom" },                 -- e.g. { "Bamboo", "Apple" }  (plant ONLY these)
+        ["Only Plant"]  = { "Gold" },                 -- e.g. { "Bamboo", "Apple" }  (plant ONLY these)
         ["Minimum Seed"] = "",                -- e.g. "Bamboo"  (never BUY/PLANT a seed cheaper than this tier — stops it filling with Carrot/Strawberry/Blueberry junk. "" = no floor, fill with anything)
         ["Layout"]      = "compact",          -- "compact" / "spread"
         ["Don't Plant"] = { "Carrot", "Rainbow", "Mega", "Dragon's Breath", "Moon Bloom", "Hypno Bloom", "Strawberry", "Blueberry", "Tomato", "Apple", "Corn" },                 -- e.g. { "Cactus", "Pineapple", "Green Bean", "Banana", "Grape", "Coconut", "Mango", "Dragon Fruit", "Acorn", "Cherry" } 
@@ -28,7 +28,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Auto Expand Plot"]   = false,     -- buy plot expansions automatically
         ["Max Expansions"]     = 3,        -- cap how many expansions to auto-BUY this run. 0 = no limit; default 3 = stop after 3 (raise for a bigger plot)
         ["Expand If Over"]     = 1500000,  -- only spend on an expansion when your cash is above this
-        ["Auto Replace Plants"] = true,    -- when the plot is full, dig up low-value plants and plant better ones
+        ["Auto Replace Plants"] = false,    -- when the plot is full, dig up low-value plants and plant better ones
     },
     ["Never Sell"] = {                        -- protect fruit from being sold
         ["By Mutation"] = {},                 -- e.g. { "Rainbow", "Gold" }
@@ -48,7 +48,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Place Sprinklers"]     = { ["best"] = 4 },          -- e.g. { ["best"] = 4 } or { ["Rare Sprinkler"] = 2 }
         ["Best Sprinkler Up To"] = "Uncommon Sprinkler",          -- "Common/Uncommon/Rare/Super/Legendary Sprinkler"
         ["Keep Gear"]            = { ["Supersize Mushroom"] = 1 },   -- e.g. { ["Trowel"] = 1 }  (buy & hold N)
-        ["Buy Gear"]             = { "Super Sprinkler", "Super Watering Can", "Legendary Sprinkler" },   -- e.g. { "Trowel" }  (buy & keep, never placed)
+        ["Buy Gear"]             = { "Super Sprinkler", "Super Watering Can" },   -- e.g. { "Trowel" }  (buy & keep, never placed)
     },
     ["Event Seeds"] = {
         ["Auto Claim"] = true,       -- automatically grab seed packs that drop during events
@@ -57,7 +57,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Auto Claim"] = true,                -- true / false
         ["Send To"]    = "voidisthebest79",                  -- username to funnel items to ("" = off)
         ["Send"]       = {                    -- e.g. { "Gold", "Deer", { Item = "Deer", Count = 5 } }  (equipped pets never sent) { Item = "Gold", Count = 10 },
-            "Moon Bloom", "Dragon's Breath", "Rainbow", "Hypno Bloom", { Item = "Mega", Count = 3 }, { Item = "Gold", Count = 20 }, 
+            "Moon Bloom", "Dragon's Breath", { Item = "Rainbow", Count = 3 }, "Hypno Bloom", { Item = "Mega", Count = 3 }, { Item = "Gold", Count = 20 }, 
             "Unicorn", "Raccoon",
             "Super Sprinkler", { Item = "Legendary Sprinkler", Count = 5 }, { Item = "Super Watering Can", Count = 3 },
         },
