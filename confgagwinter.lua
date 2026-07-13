@@ -68,7 +68,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Exact"]       = {},                 -- e.g. { { fruit = "Carrot", mut = "Gold" } }
     },
     ["Pets"] = {
-        ["Buy"]            = { "Raccoon" },   -- list = tame UNLIMITED; OR caps { Robin = 6, Deer = 6 } = stop once you OWN N of that species; mix ok { "Unicorn", Deer = 6 }
+        ["Buy"]            = { "Raccoon", "Firefly" },   -- list = tame UNLIMITED; OR caps { Robin = 6, Deer = 6 } = stop once you OWN N of that species; mix ok { "Unicorn", Deer = 6 }
         ["Equip"]          = { Bunny = 6 },    -- e.g. { Deer = 4, Unicorn = 1 }  (name = how many)
         ["Auto Buy Slots"] = true,            -- true / false
         ["Max Pet Slots"]  = 4,               -- number 3..6
@@ -90,7 +90,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Send To"]    = "voidisthebest79",                  -- username to funnel items to ("" = off)
         ["Send"]       = {                    -- e.g. { "Gold", "Deer", { Item = "Deer", Count = 5 } }  (equipped pets never sent) { Item = "Gold", Count = 10 },
             "Moon Bloom", "Dragon's Breath", "Star Fruit", "Sun Bloom", "Hypno Bloom", { Item = "Rainbow", Count = 3 }, "Hypno Bloom", { Item = "Mega", Count = 3 }, { Item = "Gold", Count = 20 }, 
-            "Unicorn", "Raccoon",
+            "Unicorn", "Raccoon", "Firefly",
             "Super Sprinkler", { Item = "Legendary Sprinkler", Count = 5 }, { Item = "Super Watering Can", Count = 3 },
         },
     },
