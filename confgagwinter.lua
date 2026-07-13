@@ -17,11 +17,43 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Don't Buy"]   = {},                 -- e.g. { "Cactus", "Pineapple", "Green Bean", "Banana", "Grape", "Coconut", "Mango" }
         ["Keep Seeds"]  = {                   -- e.g. { ["Moon Bloom"] = 5, Gold = 15 }  (keep N UNPLANTED)
             ["Dragon's Breath"] = 5, ["Moon Bloom"] = 5, ["Venom Spitter"] = 5,
-            ["Gold"] = 2, ["Rainbow"] = 5, ["Mega"] = 5, ["Star Fruit"] = 5,
+            ["Gold"] = 2, ["Rainbow"] = 5, ["Mega"] = 5, ["Star Fruit"] = 5, ["Sun Bloom"] = 5,
         },
         ["Plant Limit"] = 30,                  -- number (0 = off). Cap TOTAL plants at this: never plant past it, AND if you're ALREADY over (e.g. 800), shovel the lowest-tier plants DOWN to it to cut lag / stop the game force-closing. Set ~200. Never shovels mutated (Gold/Rainbow/Mega), Mega-size, Plant-Plan or never-sell plants.
         ["Never Shovel"] = {},                -- e.g. { "Dragon Fruit", "Mango" }  (extra plants the Plant Limit shovel must NEVER remove — for your high-tier crops)
         ["Shovel Up To"] = "Epic",                -- e.g. "Rare"  (a RARITY TIER — Common/Uncommon/Rare/Epic — removes ONLY that tier and below. "" = no extra ceiling. LEGENDARY/Mythic/Super are ALWAYS protected regardless. Single-harvest crops are HARVESTED when ripe, never shoveled — no wasted fruit)
+        ["Buy Seeds"]    = {
+            ["Carrot"] = 9999,
+            ["Strawberry"] = 9999,
+            ["Blueberry"] = 9999,
+            ["Tulip"] = 9999,
+            ["Tomato"] = 9999,
+            ["Apple"] = 9999,
+            ["Bamboo"] = 9999,
+            ["Corn"] = 9999,
+            ["Cactus"] = 9999,
+            ["Pineapple"] = 9999,
+            ["Mushroom"] = 9999,
+            ["Green Bean"] = 9999,
+            ["Banana"] = 9999,
+            ["Grape"] = 9999,
+            ["Coconut"] = 9999,
+            ["Mango"] = 9999,
+            ["Dragon Fruit"] = 9999,
+            ["Acorn"] = 9999,
+            ["Cherry"] = 9999,
+            ["Sunflower"] = 9999,
+            ["Fire Fern"] = 9999,
+            ["Venus Fly Trap"] = 9999,
+            ["Pomegranate"] = 9999,
+            ["Poison Apple"] = 9999,
+            ["Venom Spitter"] = 3,
+            ["Moon Bloom"] = 3,
+            ["Sun Bloom"] = 3,
+            ["Hypno Bloom"] = 3,
+            ["Dragon's Breath"] = 3,
+            ["Star Fruit"] = 3
+        },                -- MAP seed = number. buy & HOLD N of each for MAILING (not planted). EACH SEED NEEDS A NUMBER -> just "Dragon's Breath" is WRONG. e.g. { ["Bamboo"] = 500, ["Dragon's Breath"] = 10 }. Any SHOP seed (incl. Moon Bloom / Dragon's Breath when stocked); Gold/Rainbow/Mega can't be bought. Buys ANYTHING in stock it can afford, cheapest first — IGNORES Keep Cash (will spend down to 0 to stock mail seeds). Runs even with Auto Plant = false. (If a seed is ALSO in Plant Plan / Only Plant it STILL gets planted too — plant intent wins.)
     },
     ["Money"] = {
         ["Keep Cash"]          = 15000,    -- always keep at least this much money
@@ -57,7 +89,7 @@ _G.GAGConfig = _G.GAGConfig or {
         ["Auto Claim"] = true,                -- true / false
         ["Send To"]    = "voidisthebest79",                  -- username to funnel items to ("" = off)
         ["Send"]       = {                    -- e.g. { "Gold", "Deer", { Item = "Deer", Count = 5 } }  (equipped pets never sent) { Item = "Gold", Count = 10 },
-            "Moon Bloom", "Dragon's Breath", "Star Fruit", { Item = "Rainbow", Count = 3 }, "Hypno Bloom", { Item = "Mega", Count = 3 }, { Item = "Gold", Count = 20 }, 
+            "Moon Bloom", "Dragon's Breath", "Star Fruit", "Sun Bloom", "Hypno Bloom", { Item = "Rainbow", Count = 3 }, "Hypno Bloom", { Item = "Mega", Count = 3 }, { Item = "Gold", Count = 20 }, 
             "Unicorn", "Raccoon",
             "Super Sprinkler", { Item = "Legendary Sprinkler", Count = 5 }, { Item = "Super Watering Can", Count = 3 },
         },
