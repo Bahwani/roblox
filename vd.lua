@@ -2,13 +2,44 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 local TextChatService = game:GetService("TextChatService")
 local UserInputService = game:GetService("UserInputService")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 
 local ESPEnabled = false
-local ShowNames = true -- Status awal nama player (true = muncul, false = sembunyii)
+local ShowNames = true -- Status awal nama player (true = muncul, false = sembunyi)
 local isMobile = UserInputService.TouchEnabled
 
+-- Forward declaration untuk tombol mobile agar bisa diakses di fungsi toggle
+local nameToggleButton = nil 
+
 -- ==========================================
--- 1. FUNGSI DETEKSI ROLE (KILLER/SURVIVOR)
+-- 1. AUTO SKILL CHECK SECTION (GENERATOR)
+-- ==========================================
+local function forceCloseUI()
+    pcall(function()
+        local gui = LocalPlayer.PlayerGui:FindFirstChild("SkillCheckPromptGui")
+        if gui and gui:FindFirstChild("Check") then
+            gui.Check.Visible = false
+        end
+        local action = LocalPlayer.PlayerGui:FindFirstChild("Survivor-mob")
+        if action then
+            action.Controls.action.check.Visible = false
+        end
+    end)
+end
+
+local genEvent = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Generator"):WaitForChild("SkillCheckEvent")
+genEvent.OnClientEvent:Connect(function(id1, id2)
+    task.wait(0.9) -- Delay agar dapat Great/Perfect
+    local remote = ReplicatedStorage.Remotes.Generator:FindFirstChild("SkillCheckResultEvent")
+    if remote then
+        remote:FireServer("success", 1, id1, id2)
+        forceCloseUI()
+        print("Auto SkillCheck Generator: Success!")
+    end
+end)
+
+-- ==========================================
+-- 2. FUNGSI DETEKSI ROLE (KILLER/SURVIVOR)
 -- ==========================================
 local function getRole(player)
     local channels = TextChatService:FindFirstChild("TextChannels")
@@ -23,7 +54,7 @@ local function getRole(player)
 end
 
 -- ==========================================
--- 2. CORE ESP SYSTEM
+-- 3. CORE ESP SYSTEM
 -- ==========================================
 local function applyESP(player, char)
     if player == LocalPlayer then return end
@@ -41,7 +72,7 @@ local function applyESP(player, char)
     -- Buat BillboardGui (Nama & Jarak)
     local bill = head:FindFirstChild("ESPBill") or Instance.new("BillboardGui")
     bill.Name = "ESPBill"
-    bill.Size = UDim2.new(0, 150, 0, 35) -- Sedikit disesuaikan tingginya
+    bill.Size = UDim2.new(0, 150, 0, 35)
     bill.StudsOffset = Vector3.new(0, 3, 0)
     bill.AlwaysOnTop = true
     bill.Parent = head
@@ -50,11 +81,11 @@ local function applyESP(player, char)
     text.Name = "ESPText"
     text.Size = UDim2.new(1, 0, 1, 0)
     text.BackgroundTransparency = 1
-    text.TextScaled = false -- Dimatikan agar ukuran teks tidak membesar otomatis
-    text.TextSize = 13 -- Ukuran font tetap konsisten & rapi
+    text.TextScaled = false
+    text.TextSize = 13
     text.Font = Enum.Font.SourceSansBold
     text.TextStrokeTransparency = 0
-    text.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) -- Outline hitam biar makin jelas dibaca
+    text.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
     text.RichText = true
     text.Parent = bill
 
@@ -73,7 +104,6 @@ local function applyESP(player, char)
                 local myRoot = LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
                 local targetRoot = char:FindFirstChild("HumanoidRootPart")
                 
-                -- Cek format teks (sembunyikan nama jika ShowNames = false)
                 local nameDisplay = ShowNames and player.Name or ""
                 local separator = ShowNames and "\n" or ""
 
@@ -87,7 +117,7 @@ local function applyESP(player, char)
                 hl.Enabled = false
                 bill.Enabled = false
             end
-            task.wait(0.3) -- Update tiap 0.3s agar responsif
+            task.wait(0.3)
         end
     end)
 end
@@ -104,7 +134,7 @@ for _, p in pairs(Players:GetPlayers()) do setupPlayer(p) end
 Players.PlayerAdded:Connect(setupPlayer)
 
 -- ==========================================
--- 3. GUI TOGGLE (CROSSHAIR KECIL + KEYBIND)
+-- 4. GUI TOGGLE (CROSSHAIR KECIL + KEYBIND)
 -- ==========================================
 local gui = Instance.new("ScreenGui")
 gui.Name = "ESPToggleUI"
@@ -142,6 +172,11 @@ local function toggle()
     local col = ESPEnabled and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 0, 0)
     v.BackgroundColor3 = col
     h.BackgroundColor3 = col
+    
+    -- Menampilkan/menyembunyikan tombol mobile sesuai status ESP
+    if nameToggleButton then
+        nameToggleButton.Visible = ESPEnabled
+    end
 end
 
 -- Fungsi Toggle Tampilan Nama
@@ -152,24 +187,23 @@ end
 button.MouseButton1Click:Connect(toggle)
 
 -- ==========================================
--- 4. KHUSUS MOBILE: TOMBOL HIDE/SHOW NAMA (KIRI TENGAH)
+-- 5. KHUSUS MOBILE: TOMBOL HIDE/SHOW NAMA (DRAGGABLE)
 -- ==========================================
 if isMobile then
-    local nameToggleButton = Instance.new("TextButton")
+    nameToggleButton = Instance.new("TextButton")
     nameToggleButton.Name = "MobileNameToggle"
     nameToggleButton.Size = UDim2.new(0, 90, 0, 35)
     nameToggleButton.AnchorPoint = Vector2.new(0, 0.5)
-    -- Dipindahkan ke kiri tengah layar agar tidak mengganggu kontrol kanan/tengah
-    nameToggleButton.Position = UDim2.new(0, 15, 0.5, -17)
+    nameToggleButton.Position = UDim2.new(0, 15, 0.5, -17) -- Kiri tengah default
     nameToggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     nameToggleButton.BackgroundTransparency = 0.3
     nameToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     nameToggleButton.Text = "Nama: ON"
     nameToggleButton.Font = Enum.Font.SourceSansBold
     nameToggleButton.TextSize = 14
+    nameToggleButton.Visible = false -- Tersembunyi di awal sampai ESP diaktifkan
     nameToggleButton.Parent = gui
 
-    -- Efek Sudut Melengkung
     local uiCorner = Instance.new("UICorner")
     uiCorner.CornerRadius = UDim.new(0, 8)
     uiCorner.Parent = nameToggleButton
@@ -179,16 +213,52 @@ if isMobile then
         toggleNames()
         if ShowNames then
             nameToggleButton.Text = "Nama: ON"
-            nameToggleButton.TextColor3 = Color3.fromRGB(80, 255, 80) -- Hijau saat aktif
+            nameToggleButton.TextColor3 = Color3.fromRGB(80, 255, 80)
         else
             nameToggleButton.Text = "Nama: OFF"
-            nameToggleButton.TextColor3 = Color3.fromRGB(255, 80, 80) -- Merah saat mati
+            nameToggleButton.TextColor3 = Color3.fromRGB(255, 80, 80)
+        end
+    end)
+
+    -- SCRIPT DRAG (Biar bisa digeser di mobile)
+    local dragging = false
+    local dragInput, dragStart, startPos
+
+    nameToggleButton.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = nameToggleButton.Position
+
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
+
+    nameToggleButton.InputChanged:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+            dragInput = input
+        end
+    end)
+
+    UserInputService.InputChanged:Connect(function(input)
+        if input == dragInput and dragging then
+            local delta = input.Position - dragStart
+            nameToggleButton.Position = UDim2.new(
+                startPos.X.Scale, 
+                startPos.X.Offset + delta.X, 
+                startPos.Y.Scale, 
+                startPos.Y.Offset + delta.Y
+            )
         end
     end)
 end
 
 -- ==========================================
--- 5. DETEKSI KEYBOARD (UNTUK PC)
+-- 6. DETEKSI KEYBOARD (UNTUK PC)
 -- ==========================================
 UserInputService.InputBegan:Connect(function(input, proc)
     if proc then return end
@@ -200,4 +270,4 @@ UserInputService.InputBegan:Connect(function(input, proc)
     end
 end)
 
-print("ESP Loaded!")
+print("Dual-Script Loaded: Auto Gen + ESP!")
