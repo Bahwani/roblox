@@ -4,7 +4,7 @@ local TextChatService = game:GetService("TextChatService")
 local UserInputService = game:GetService("UserInputService")
 
 local ESPEnabled = false
-local ShowNames = true -- Status awal nama player (true = muncul, false = sembunyi)
+local ShowNames = true -- Status awal nama player (true = muncul, false = sembunyii)
 local isMobile = UserInputService.TouchEnabled
 
 -- ==========================================
@@ -41,7 +41,7 @@ local function applyESP(player, char)
     -- Buat BillboardGui (Nama & Jarak)
     local bill = head:FindFirstChild("ESPBill") or Instance.new("BillboardGui")
     bill.Name = "ESPBill"
-    bill.Size = UDim2.new(0, 150, 0, 30)
+    bill.Size = UDim2.new(0, 150, 0, 35) -- Sedikit disesuaikan tingginya
     bill.StudsOffset = Vector3.new(0, 3, 0)
     bill.AlwaysOnTop = true
     bill.Parent = head
@@ -50,9 +50,12 @@ local function applyESP(player, char)
     text.Name = "ESPText"
     text.Size = UDim2.new(1, 0, 1, 0)
     text.BackgroundTransparency = 1
-    text.TextScaled = true
+    text.TextScaled = false -- Dimatikan agar ukuran teks tidak membesar otomatis
+    text.TextSize = 13 -- Ukuran font tetap konsisten & rapi
     text.Font = Enum.Font.SourceSansBold
     text.TextStrokeTransparency = 0
+    text.TextStrokeColor3 = Color3.fromRGB(0, 0, 0) -- Outline hitam biar makin jelas dibaca
+    text.RichText = true
     text.Parent = bill
 
     -- Loop Update Status & Jarak
@@ -84,7 +87,7 @@ local function applyESP(player, char)
                 hl.Enabled = false
                 bill.Enabled = false
             end
-            task.wait(0.3) -- Update tiap 0.3s agar perubahan nama langsung terasa responsif
+            task.wait(0.3) -- Update tiap 0.3s agar responsif
         end
     end)
 end
@@ -149,14 +152,15 @@ end
 button.MouseButton1Click:Connect(toggle)
 
 -- ==========================================
--- 4. KHUSUS MOBILE: TOMBOL HIDE/SHOW NAMA
+-- 4. KHUSUS MOBILE: TOMBOL HIDE/SHOW NAMA (KIRI TENGAH)
 -- ==========================================
 if isMobile then
     local nameToggleButton = Instance.new("TextButton")
     nameToggleButton.Name = "MobileNameToggle"
     nameToggleButton.Size = UDim2.new(0, 90, 0, 35)
-    -- Diletakkan di kanan bawah layar agar tidak mengganggu pandangan tengah
-    nameToggleButton.Position = UDim2.new(0.85, -45, 0.8, -17)
+    nameToggleButton.AnchorPoint = Vector2.new(0, 0.5)
+    -- Dipindahkan ke kiri tengah layar agar tidak mengganggu kontrol kanan/tengah
+    nameToggleButton.Position = UDim2.new(0, 15, 0.5, -17)
     nameToggleButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     nameToggleButton.BackgroundTransparency = 0.3
     nameToggleButton.TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -165,7 +169,7 @@ if isMobile then
     nameToggleButton.TextSize = 14
     nameToggleButton.Parent = gui
 
-    -- Efek Sudut Melengkung (Biar Aesthetic)
+    -- Efek Sudut Melengkung
     local uiCorner = Instance.new("UICorner")
     uiCorner.CornerRadius = UDim.new(0, 8)
     uiCorner.Parent = nameToggleButton
@@ -175,7 +179,7 @@ if isMobile then
         toggleNames()
         if ShowNames then
             nameToggleButton.Text = "Nama: ON"
-            nameToggleButton.TextColor3 = Color3.fromRGB(80, 255, 80) -- Hijau saat menyala
+            nameToggleButton.TextColor3 = Color3.fromRGB(80, 255, 80) -- Hijau saat aktif
         else
             nameToggleButton.Text = "Nama: OFF"
             nameToggleButton.TextColor3 = Color3.fromRGB(255, 80, 80) -- Merah saat mati
