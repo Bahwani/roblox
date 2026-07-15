@@ -11,36 +11,6 @@ local isMobile = UserInputService.TouchEnabled
 -- Forward declaration untuk tombol mobile agar bisa diakses di fungsi toggle
 local nameToggleButton = nil 
 
--- ==========================================
--- 1. AUTO SKILL CHECK SECTION (GENERATOR)
--- ==========================================
-local function forceCloseUI()
-    pcall(function()
-        local gui = LocalPlayer.PlayerGui:FindFirstChild("SkillCheckPromptGui")
-        if gui and gui:FindFirstChild("Check") then
-            gui.Check.Visible = false
-        end
-        local action = LocalPlayer.PlayerGui:FindFirstChild("Survivor-mob")
-        if action then
-            action.Controls.action.check.Visible = false
-        end
-    end)
-end
-
-local genEvent = ReplicatedStorage:WaitForChild("Remotes"):WaitForChild("Generator"):WaitForChild("SkillCheckEvent")
-genEvent.OnClientEvent:Connect(function(id1, id2)
-    task.wait(0.9) -- Delay agar dapat Great/Perfect
-    local remote = ReplicatedStorage.Remotes.Generator:FindFirstChild("SkillCheckResultEvent")
-    if remote then
-        remote:FireServer("success", 1, id1, id2)
-        forceCloseUI()
-        print("Auto SkillCheck Generator: Success!")
-    end
-end)
-
--- ==========================================
--- 2. FUNGSI DETEKSI ROLE (KILLER/SURVIVOR)
--- ==========================================
 local function getRole(player)
     local channels = TextChatService:FindFirstChild("TextChannels")
     if not channels then return "Spectator" end
